@@ -1,9 +1,10 @@
-﻿function New-PetState {
+﻿. (Join-Path $PSScriptRoot 'Pet.Room.Model.ps1')
+function New-PetState {
     return @{
         version=2; character='kaling'; characterOutfits=@{kaling='uniform';ren='original'}; left=$null; top=$null; scale=1.5; mode='stay'; look=$true
         bubbles=$true; stories=$true; quiet=$false; autoHide=$true; clickThrough=$false
         focusMinutes=25; shortMinutes=5; longMinutes=15; mood='calm'; outfit='uniform'
-        pomo=@{phase='focus'; status='ready'; remaining=1500.0; rounds=0; total=0}
+        pomo=@{phase='focus'; status='ready'; remaining=1500.0; rounds=0; total=0};home=(New-HomeState)
     }
 }
 function Read-PetState([string]$Directory) {
@@ -33,6 +34,7 @@ function Read-PetState([string]$Directory) {
             if($data.characterOutfits.kaling -in @('uniform','pajamas','hoodie')){$state.characterOutfits.kaling=$data.characterOutfits.kaling}
             if($state.character -eq 'ren'){$state.outfit='original'}elseif($data.character -eq 'ren' -or $data.character -notin @('kaling',$null)){$state.outfit=$state.characterOutfits.kaling}
         }
+        $state.home=Read-HomeState $data.home
         $p=$data.pomo
         if($p.phase -notin @('focus','short','long') -or $p.status -notin @('ready','running','paused')){throw 'Invalid timer state'}
         foreach($name in @('remaining','rounds','total')){

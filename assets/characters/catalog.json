@@ -33,6 +33,11 @@
             4,
             4,
             4,
+            4,
+            4,
+            4,
+            4,
+            4,
             4
           ],
           "atlas": "assets/outfits/uniform/atlas.png",
@@ -163,6 +168,36 @@
               "row": 20,
               "frameMs": 280,
               "holdLast": false
+            },
+            {
+              "id": "smug",
+              "row": 21,
+              "frameMs": 550,
+              "holdLast": false
+            },
+            {
+              "id": "pillow",
+              "row": 22,
+              "frameMs": 600,
+              "holdLast": false
+            },
+            {
+              "id": "quilt",
+              "row": 23,
+              "frameMs": 600,
+              "holdLast": true
+            },
+            {
+              "id": "balltap",
+              "row": 24,
+              "frameMs": 300,
+              "holdLast": false
+            },
+            {
+              "id": "boxduck",
+              "row": 25,
+              "frameMs": 300,
+              "holdLast": false
             }
           ]
         },
@@ -182,6 +217,11 @@
             4,
             8,
             8,
+            4,
+            4,
+            4,
+            4,
+            4,
             4,
             4,
             4,
@@ -321,6 +361,36 @@
               "row": 20,
               "frameMs": 280,
               "holdLast": false
+            },
+            {
+              "id": "smug",
+              "row": 21,
+              "frameMs": 550,
+              "holdLast": false
+            },
+            {
+              "id": "pillow",
+              "row": 22,
+              "frameMs": 600,
+              "holdLast": false
+            },
+            {
+              "id": "quilt",
+              "row": 23,
+              "frameMs": 600,
+              "holdLast": true
+            },
+            {
+              "id": "balltap",
+              "row": 24,
+              "frameMs": 300,
+              "holdLast": false
+            },
+            {
+              "id": "boxduck",
+              "row": 25,
+              "frameMs": 300,
+              "holdLast": false
             }
           ]
         },
@@ -340,6 +410,11 @@
             4,
             8,
             8,
+            4,
+            4,
+            4,
+            4,
+            4,
             4,
             4,
             4,
@@ -478,6 +553,36 @@
               "id": "peek",
               "row": 20,
               "frameMs": 280,
+              "holdLast": false
+            },
+            {
+              "id": "smug",
+              "row": 21,
+              "frameMs": 550,
+              "holdLast": false
+            },
+            {
+              "id": "pillow",
+              "row": 22,
+              "frameMs": 600,
+              "holdLast": false
+            },
+            {
+              "id": "quilt",
+              "row": 23,
+              "frameMs": 600,
+              "holdLast": true
+            },
+            {
+              "id": "balltap",
+              "row": 24,
+              "frameMs": 300,
+              "holdLast": false
+            },
+            {
+              "id": "boxduck",
+              "row": 25,
+              "frameMs": 300,
               "holdLast": false
             }
           ]

@@ -63,5 +63,23 @@ Assert ($read.character -eq 'ren' -and $read.outfit -eq 'original' -and $read.ch
 $read.character='missing';Write-PetState $read $OutputDirectory;$read=Read-PetState $OutputDirectory
 Assert ($read.character -eq 'kaling') 'unknown character falls back safely'
 Assert (Test-Path (Join-Path $OutputDirectory 'settings.json.bak')) 'v2 writes retain backup'
+$old=New-PetState;$old.Remove('home');$old.outfit='hoodie';$old.mode='wander';Write-PetState $old $OutputDirectory
+$read=Read-PetState $OutputDirectory
+Assert ($read.outfit -eq 'hoodie' -and $read.mode -eq 'wander' -and $read.home.ball.u -eq .77) 'v1.2 settings gain house defaults without losing outfit or mode'
+$read.home=@{left=-600;top=42;ball=@{u=.20;v=.33};box=@{u=.45;v=.35}};Write-PetState $read $OutputDirectory
+$again=Read-PetState $OutputDirectory
+Assert ($again.home.left -eq -600 -and $again.home.ball.u -eq .20 -and $again.home.box.u -eq .45) 'house and both moved toys round-trip together'
+$badHome=Read-HomeState @{left=[double]::NaN;top=$true;ball=@{u=-1;v=3};box=@{u=.18;v=.7}}
+Assert ($null -eq $badHome.left -and $null -eq $badHome.top -and $badHome.ball.u -eq .77 -and $badHome.box.v -eq .33) 'invalid house coordinates fall back field by field'
+$overlap=Read-HomeState @{ball=@{u=.45;v=.45};box=@{u=.45;v=.45}}
+Assert (Test-RoomDrop 'ball' $overlap.ball.u $overlap.ball.v $overlap) 'overlapping saved toys recover safely'
+foreach($uv in @(@(.06,.06),@(.94,.94),@(.45,.38))){$point=Get-RoomPoint $uv[0] $uv[1];$back=Get-RoomUV $point.x $point.y;Assert ([math]::Abs($back.u-$uv[0]) -lt .000001 -and [math]::Abs($back.v-$uv[1]) -lt .000001) 'room projection round-trip'}
+foreach($uv in @(@(-.1,.5),@(.5,1.1),@(.18,.65),@(.75,.20),@(.75,.65),@(.21,.10))){Assert (-not (Test-RoomFloor $uv[0] $uv[1])) 'walls and fixed furniture reject toy placement'}
+Assert (-not (Test-RoomDrop 'ball' .20 .33 (New-HomeState))) 'toy overlap rejected'
+Assert (-not (Test-RoomDrop 'box' .08 .40 (New-HomeState))) 'box footprint cannot hang over room edge'
+Assert (-not (Test-RoomDrop 'box' .35 .65 (New-HomeState))) 'box footprint cannot overlap bed even when center is free'
+Assert (-not (Test-RoomDrop 'ball' .92 .92 (New-HomeState))) 'ball radius stays within floor boundary'
+$targets=@(@{u=.45;v=.45},@{u=.38;v=.63},@{u=.70;v=.40},@{u=.40;v=.18},@{u=.54;v=.67},@{u=.77;v=.90},@{u=.20;v=.33},@{u=.06;v=.40},@{u=.94;v=.94})
+foreach($start in $targets){foreach($goal in $targets){$path=@(Get-RoomPath $start $goal);$valid=$path.Count -gt 0;$previous=$start;foreach($node in $path){$valid=$valid -and (Test-RoomSegment $previous $node);$previous=$node};Assert $valid 'furniture routes avoid every obstacle including endpoint connectors'}}
 @{ok=$true;checks=@($checks);count=$checks.Count} | ConvertTo-Json -Depth 4 | Set-Content (Join-Path $OutputDirectory 'state-tests.json') -Encoding UTF8
 Write-Output "PASS: $($checks.Count) state checks"

@@ -21,11 +21,12 @@ function Select-Character([string]$Id) {
     $next=@($characterCatalog.characters | Where-Object id -eq $Id)[0]
     if(-not $next){throw 'Unknown character'}
     if($wardrobeWindow){$wardrobeWindow.Close()}
+    if($room.open){Cancel-RoomActivity}
     Mark-Activity;Hide-Bubble;$script:pendingClick=$null;$script:cooldownUntil=0
     $script:state.characterOutfits[$state.character]=$state.outfit
     $script:state.character=$Id;$script:character=$next;$script:catalog=$next
     Select-Outfit $state.characterOutfits[$Id]
-    $w.Title=$next.displayName+' · 陪伴日常';Update-Badge;Update-CharacterMenus
+    $w.Title=$next.displayName+' · 陪伴日常';if($room.open){$room.window.Title=$next.displayName+'的小屋';Render-Room};Update-Badge;Update-CharacterMenus
     Show-Bubble (Get-CharacterText 'hello' '你好！今天也一起度過吧。')
 }
 function Get-OutfitAssets([string]$Id) {
@@ -54,14 +55,17 @@ function Select-Outfit([string]$Id,[switch]$Celebrate) {
         $timings=@();for($c=0;$c -lt $counts[$r];$c++){$timings+=$speed};$script:durations+=,$timings
     }
     if($script:loaded){
+        if($room.open){Cancel-RoomActivity}
         Mark-Activity
         if($Celebrate){Set-Animation 18 1440;Show-Bubble ('換上'+$assets.entry.displayName+'，陪你開始新的日常！')}else{Set-Animation 0 0}
+        if($room.open){$room.phase='reaction';$room.until=$room.time+1.44;Render-Room}
         Save-Settings
         if($script:wardrobeButtons){foreach($key in $script:wardrobeButtons.Keys){$script:wardrobeButtons[$key].Content=if($key -eq $Id){'正在穿這套'}else{'穿上這套'};$script:wardrobeButtons[$key].IsEnabled=$key -ne $Id}}
     }
 }
 function Show-Wardrobe {
     if($script:wardrobeWindow){[void]$script:wardrobeWindow.Activate();return}
+    if($room.open){Cancel-RoomActivity}
     Mark-Activity;Set-Animation 0 0
     $script:wardrobeWindow=[System.Windows.Window]::new();$dialog=$script:wardrobeWindow
     $dialog.Title=$character.displayName+'衣櫃';$dialog.Width=640;$dialog.Height=420;$dialog.ResizeMode='NoResize';$dialog.WindowStartupLocation='CenterScreen';$dialog.Background='#FFF5F8'

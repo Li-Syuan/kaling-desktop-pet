@@ -1,4 +1,4 @@
-﻿# One activity owner. The future room controller can acquire this same slot.
+﻿# Desktop attacks and room actions are mutually exclusive; entering the room cancels the desktop activity.
 $script:activity=@{kind='idle';generation=0}
 $script:trayAttackItems=@();$script:fxWindow=$null;$script:fxFrames=@{};$script:attackItems=@();$script:characterItems=@()
 function Stop-Activity {
@@ -11,7 +11,7 @@ function Stop-Activity {
     if($fxWindow){$fxWindow.Hide()}
 }
 function Test-AttackAllowed {
-    return $state.character -eq 'ren' -and -not $state.quiet -and $state.pomo.status -ne 'running' -and -not $manualHidden -and -not $fullscreenHidden -and -not $drag -and -not $closing -and -not $wardrobeWindow -and -not $settingsWindow
+    return -not $room.open -and $state.character -eq 'ren' -and -not $state.quiet -and $state.pomo.status -ne 'running' -and -not $manualHidden -and -not $fullscreenHidden -and -not $drag -and -not $closing -and -not $wardrobeWindow -and -not $settingsWindow
 }
 function Update-CharacterMenus {
     foreach($item in $attackItems){$item.IsEnabled=Test-AttackAllowed}
