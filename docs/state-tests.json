@@ -1,5 +1,5 @@
 ﻿{
-    "count":  29,
+    "count":  32,
     "ok":  true,
     "checks":  [
                    "default focus duration",
@@ -30,6 +30,9 @@
                    "disconnected monitor position clamped",
                    "negative-coordinate monitor preserved",
                    "late-night story",
-                   "morning story"
+                   "morning story",
+                   "outfit survives restart",
+                   "unknown outfit falls back to uniform",
+                   "v1.1 settings migrate without losing preferences"
                ]
 }

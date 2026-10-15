@@ -1,0 +1,195 @@
+{
+  "generator": "built-in imagegen",
+  "version": "1.2.0",
+  "jobs": [
+    {
+      "id": "uniform-extra-a",
+      "outfit": "uniform",
+      "group": "extra-a",
+      "rows": [
+        "pet",
+        "cookie",
+        "pudding",
+        "tea",
+        "sit"
+      ],
+      "columns": 4,
+      "prompt": "Use case: stylized-concept. Asset: production animation sprite sheet for the Kaling Windows pet. Image 1 is the canonical identity/outfit reference. Change only pose/expression as specified.\nExactly FOUR equal columns and 5 equal rows, 20 complete separate character sprites. Canvas 1536 x 1920 pixels; each invisible cell is 384 x 384. Strict regular aligned grid with generous transparent gutters. No visible cell borders or labels.\nPreserve the attached reference character and outfit exactly: red hair, face, hair bows, gold eye on viewer-left and cyan eye on viewer-right. Same garments, colors, footwear, head size and body proportions in EVERY frame.\nROW 1, left to right four chronological frames: enjoying head petting, no external hand: eyes gently close and smile, head tilts left happily, shy pink blush and tiny shoulder raise, contented head tilt right. Four visibly different but connected poses.\nROW 2, left to right four chronological frames: eating cookie: both hands hold a round cookie below mouth, raise cookie to mouth, take a small bite, lower partly bitten cookie with happy puffed cheeks. Cookie touches hands, no crumbs.\nROW 3, left to right four chronological frames: eating pudding: one hand holds a small pudding cup and other a spoon, scoop, spoon at mouth, delighted chewing. Cup stays in same hand. No crumbs.\nROW 4, left to right four chronological frames: drinking tea: both hands around a small pale cup, raise it toward lips, sip, lower cup with contented eyes. Cup always attached to hands; no steam.\nROW 5, left to right four chronological frames: sitting and swinging feet: seated upright as if on an invisible ledge, left foot forward, both feet down, right foot forward, feet down again. Keep head and torso same size as standing reference; seated head sits lower. No chair/ledge drawn.\nEvery sprite must be wholly within its own cell with 20px transparent margins. Keep constant character scale across all cells; a sitting sprite must be shorter rather than scaled larger. Standing feet baseline is y=350 within each cell; only jumping/lifted poses leave it. Transparent background with true alpha. No floor shadows, scenery, text, grid, sparkles, motion trails, detached symbols or extra characters.",
+      "reference": "uniform/portrait.png"
+    },
+    {
+      "id": "uniform-extra-b",
+      "outfit": "uniform",
+      "group": "extra-b",
+      "rows": [
+        "sleep",
+        "stretch",
+        "spin",
+        "lift",
+        "peek"
+      ],
+      "columns": 4,
+      "prompt": "Use case: stylized-concept. Asset: production animation sprite sheet for the Kaling Windows pet. Image 1 is the canonical identity/outfit reference. Change only pose/expression as specified.\nExactly FOUR equal columns and 5 equal rows, 20 complete separate character sprites. Canvas 1536 x 1920 pixels; each invisible cell is 384 x 384. Strict regular aligned grid with generous transparent gutters. No visible cell borders or labels.\nPreserve the attached reference character and outfit exactly: red hair, face, hair bows, gold eye on viewer-left and cyan eye on viewer-right. Same garments, colors, footwear, head size and body proportions in EVERY frame.\nROW 1, left to right four chronological frames: hugging knees and falling asleep: seated hugging knees, eyelids droop and head nods, eyes close and head rests on knees, peacefully asleep. Last two poses very similar, no Z letters, pillow, blanket or bubbles.\nROW 2, left to right four chronological frames: waking and stretching: hands rub sleepy eyes, arms lift overhead, full gentle stretch with eyes closed, relaxed arms lowered. No detached effects.\nROW 3, left to right four chronological frames: happy full-body turn, constant size: front-facing arms slightly out, right profile, back view showing long red hair and the same outfit, left profile. Four views form a full turn when looped.\nROW 4, left to right four chronological frames: being gently picked up, no external hand: arms slightly out and legs dangling, left leg swings forward, legs hang neutral, right leg swings forward. Feet visibly suspended; no ground, no distress.\nROW 5, left to right four chronological frames: playful peeking toward screen RIGHT: whole body leans right with hands close to chest, lean farther and curious head tilt, shy eyes blink, smile and slightly retract. Fully visible body, no wall or screen edge drawn.\nEvery sprite must be wholly within its own cell with 20px transparent margins. Keep constant character scale across all cells; a sitting sprite must be shorter rather than scaled larger. Standing feet baseline is y=350 within each cell; only jumping/lifted poses leave it. Transparent background with true alpha. No floor shadows, scenery, text, grid, sparkles, motion trails, detached symbols or extra characters.",
+      "reference": "uniform/portrait.png"
+    },
+    {
+      "id": "pajamas-basic-a",
+      "outfit": "pajamas",
+      "group": "basic-a",
+      "rows": [
+        "idle",
+        "right",
+        "left",
+        "wave"
+      ],
+      "columns": 4,
+      "prompt": "Use case: stylized-concept. Asset: production animation sprite sheet for the Kaling Windows pet. Image 1 is the canonical identity/outfit reference. Change only pose/expression as specified.\nExactly FOUR equal columns and 4 equal rows, 16 complete separate character sprites. Canvas 1536 x 1536 pixels; each invisible cell is 384 x 384. Strict regular aligned grid with generous transparent gutters. No visible cell borders or labels.\nPreserve the attached reference character and outfit exactly: red hair, face, hair bows, gold eye on viewer-left and cyan eye on viewer-right. Same garments, colors, footwear, head size and body proportions in EVERY frame.\nROW 1, left to right four chronological frames: standing relaxed: neutral smile, tiny inhale, blink, relaxed exhale. Very subtle calm breathing.\nROW 2, left to right four chronological frames: walking toward screen RIGHT, right-facing three-quarter/profile body: left foot forward, passing pose, right foot forward, passing pose. Clear alternating legs; never face left.\nROW 3, left to right four chronological frames: walking toward screen LEFT, left-facing three-quarter/profile body: right foot forward, passing pose, left foot forward, passing pose. Clear alternating legs; never face right.\nROW 4, left to right four chronological frames: front-facing wave: hand low, hand raised, palm tilts outward, palm tilts inward. Same hand throughout.\nEvery sprite must be wholly within its own cell with 20px transparent margins. Keep constant character scale across all cells; a sitting sprite must be shorter rather than scaled larger. Standing feet baseline is y=350 within each cell; only jumping/lifted poses leave it. Transparent background with true alpha. No floor shadows, scenery, text, grid, sparkles, motion trails, detached symbols or extra characters.",
+      "reference": "pajamas/portrait.png"
+    },
+    {
+      "id": "pajamas-basic-b",
+      "outfit": "pajamas",
+      "group": "basic-b",
+      "rows": [
+        "jump",
+        "sad",
+        "waiting",
+        "thinking",
+        "review"
+      ],
+      "columns": 4,
+      "prompt": "Use case: stylized-concept. Asset: production animation sprite sheet for the Kaling Windows pet. Image 1 is the canonical identity/outfit reference. Change only pose/expression as specified.\nExactly FOUR equal columns and 5 equal rows, 20 complete separate character sprites. Canvas 1536 x 1920 pixels; each invisible cell is 384 x 384. Strict regular aligned grid with generous transparent gutters. No visible cell borders or labels.\nPreserve the attached reference character and outfit exactly: red hair, face, hair bows, gold eye on viewer-left and cyan eye on viewer-right. Same garments, colors, footwear, head size and body proportions in EVERY frame.\nROW 1, left to right four chronological frames: jump: knees bend at ground baseline, body rising, body at apex 50 pixels above baseline, feet softly land at original baseline. No floor/shadow.\nROW 2, left to right four chronological frames: dejected: eyes lower, head lowers slightly, brief sad blink, soft recovery. Remain standing with no loose tears or symbols.\nROW 3, left to right four chronological frames: expectantly waiting for input: hands clasp, slight head tilt left, blink, head tilt right. Distinct from idle.\nROW 4, left to right four chronological frames: focused thinking: hand near chin, brows concentrate, small thoughtful head tilt, nod. Not physical running.\nROW 5, left to right four chronological frames: careful checking: gentle forward lean, eyes look down-left, down-right, then soft approving nod. No new props.\nEvery sprite must be wholly within its own cell with 20px transparent margins. Keep constant character scale across all cells; a sitting sprite must be shorter rather than scaled larger. Standing feet baseline is y=350 within each cell; only jumping/lifted poses leave it. Transparent background with true alpha. No floor shadows, scenery, text, grid, sparkles, motion trails, detached symbols or extra characters.",
+      "reference": "pajamas/portrait.png"
+    },
+    {
+      "id": "pajamas-extra-a",
+      "outfit": "pajamas",
+      "group": "extra-a",
+      "rows": [
+        "pet",
+        "cookie",
+        "pudding",
+        "tea",
+        "sit"
+      ],
+      "columns": 4,
+      "prompt": "Use case: stylized-concept. Asset: production animation sprite sheet for the Kaling Windows pet. Image 1 is the canonical identity/outfit reference. Change only pose/expression as specified.\nExactly FOUR equal columns and 5 equal rows, 20 complete separate character sprites. Canvas 1536 x 1920 pixels; each invisible cell is 384 x 384. Strict regular aligned grid with generous transparent gutters. No visible cell borders or labels.\nPreserve the attached reference character and outfit exactly: red hair, face, hair bows, gold eye on viewer-left and cyan eye on viewer-right. Same garments, colors, footwear, head size and body proportions in EVERY frame.\nROW 1, left to right four chronological frames: enjoying head petting, no external hand: eyes gently close and smile, head tilts left happily, shy pink blush and tiny shoulder raise, contented head tilt right. Four visibly different but connected poses.\nROW 2, left to right four chronological frames: eating cookie: both hands hold a round cookie below mouth, raise cookie to mouth, take a small bite, lower partly bitten cookie with happy puffed cheeks. Cookie touches hands, no crumbs.\nROW 3, left to right four chronological frames: eating pudding: one hand holds a small pudding cup and other a spoon, scoop, spoon at mouth, delighted chewing. Cup stays in same hand. No crumbs.\nROW 4, left to right four chronological frames: drinking tea: both hands around a small pale cup, raise it toward lips, sip, lower cup with contented eyes. Cup always attached to hands; no steam.\nROW 5, left to right four chronological frames: sitting and swinging feet: seated upright as if on an invisible ledge, left foot forward, both feet down, right foot forward, feet down again. Keep head and torso same size as standing reference; seated head sits lower. No chair/ledge drawn.\nEvery sprite must be wholly within its own cell with 20px transparent margins. Keep constant character scale across all cells; a sitting sprite must be shorter rather than scaled larger. Standing feet baseline is y=350 within each cell; only jumping/lifted poses leave it. Transparent background with true alpha. No floor shadows, scenery, text, grid, sparkles, motion trails, detached symbols or extra characters.",
+      "reference": "pajamas/portrait.png"
+    },
+    {
+      "id": "pajamas-extra-b",
+      "outfit": "pajamas",
+      "group": "extra-b",
+      "rows": [
+        "sleep",
+        "stretch",
+        "spin",
+        "lift",
+        "peek"
+      ],
+      "columns": 4,
+      "prompt": "Use case: stylized-concept. Asset: production animation sprite sheet for the Kaling Windows pet. Image 1 is the canonical identity/outfit reference. Change only pose/expression as specified.\nExactly FOUR equal columns and 5 equal rows, 20 complete separate character sprites. Canvas 1536 x 1920 pixels; each invisible cell is 384 x 384. Strict regular aligned grid with generous transparent gutters. No visible cell borders or labels.\nPreserve the attached reference character and outfit exactly: red hair, face, hair bows, gold eye on viewer-left and cyan eye on viewer-right. Same garments, colors, footwear, head size and body proportions in EVERY frame.\nROW 1, left to right four chronological frames: hugging knees and falling asleep: seated hugging knees, eyelids droop and head nods, eyes close and head rests on knees, peacefully asleep. Last two poses very similar, no Z letters, pillow, blanket or bubbles.\nROW 2, left to right four chronological frames: waking and stretching: hands rub sleepy eyes, arms lift overhead, full gentle stretch with eyes closed, relaxed arms lowered. No detached effects.\nROW 3, left to right four chronological frames: happy full-body turn, constant size: front-facing arms slightly out, right profile, back view showing long red hair and the same outfit, left profile. Four views form a full turn when looped.\nROW 4, left to right four chronological frames: being gently picked up, no external hand: arms slightly out and legs dangling, left leg swings forward, legs hang neutral, right leg swings forward. Feet visibly suspended; no ground, no distress.\nROW 5, left to right four chronological frames: playful peeking toward screen RIGHT: whole body leans right with hands close to chest, lean farther and curious head tilt, shy eyes blink, smile and slightly retract. Fully visible body, no wall or screen edge drawn.\nEvery sprite must be wholly within its own cell with 20px transparent margins. Keep constant character scale across all cells; a sitting sprite must be shorter rather than scaled larger. Standing feet baseline is y=350 within each cell; only jumping/lifted poses leave it. Transparent background with true alpha. No floor shadows, scenery, text, grid, sparkles, motion trails, detached symbols or extra characters.",
+      "reference": "pajamas/portrait.png"
+    },
+    {
+      "id": "pajamas-look",
+      "outfit": "pajamas",
+      "group": "look",
+      "rows": [
+        "look-0",
+        "look-1",
+        "look-2",
+        "look-3"
+      ],
+      "columns": 4,
+      "prompt": "Use case: stylized-concept. Asset: production animation sprite sheet for the Kaling Windows pet. Image 1 is the canonical identity/outfit reference. Change only pose/expression as specified.\nExactly FOUR equal columns and 4 equal rows, 16 complete separate character sprites. Canvas 1536 x 1536 pixels; each invisible cell is 384 x 384. Strict regular aligned grid with generous transparent gutters. No visible cell borders or labels.\nPreserve the attached reference character and outfit exactly: red hair, face, hair bows, gold eye on viewer-left and cyan eye on viewer-right. Same garments, colors, footwear, head size and body proportions in EVERY frame.\nROW 1, left to right four chronological frames: four full-body front-facing standing poses, identical body: eyes/head look up (0 degrees), up-slight-right (22.5), diagonal up-right (45), mostly-right-slight-up (67.5).\nROW 2, left to right four chronological frames: same front-facing standing body: eyes/head look right (90), right-slight-down (112.5), diagonal down-right (135), mostly-down-slight-right (157.5).\nROW 3, left to right four chronological frames: same front-facing standing body: eyes/head look down (180), down-slight-left (202.5), diagonal down-left (225), mostly-left-slight-down (247.5).\nROW 4, left to right four chronological frames: same front-facing standing body: eyes/head look left (270), left-slight-up (292.5), diagonal up-left (315), mostly-up-slight-left (337.5).\nEvery sprite must be wholly within its own cell with 20px transparent margins. Keep constant character scale across all cells; a sitting sprite must be shorter rather than scaled larger. Standing feet baseline is y=350 within each cell; only jumping/lifted poses leave it. Transparent background with true alpha. No floor shadows, scenery, text, grid, sparkles, motion trails, detached symbols or extra characters.",
+      "reference": "pajamas/portrait.png"
+    },
+    {
+      "id": "hoodie-basic-a",
+      "outfit": "hoodie",
+      "group": "basic-a",
+      "rows": [
+        "idle",
+        "right",
+        "left",
+        "wave"
+      ],
+      "columns": 4,
+      "prompt": "Use case: stylized-concept. Asset: production animation sprite sheet for the Kaling Windows pet. Image 1 is the canonical identity/outfit reference. Change only pose/expression as specified.\nExactly FOUR equal columns and 4 equal rows, 16 complete separate character sprites. Canvas 1536 x 1536 pixels; each invisible cell is 384 x 384. Strict regular aligned grid with generous transparent gutters. No visible cell borders or labels.\nPreserve the attached reference character and outfit exactly: red hair, face, hair bows, gold eye on viewer-left and cyan eye on viewer-right. Same garments, colors, footwear, head size and body proportions in EVERY frame.\nROW 1, left to right four chronological frames: standing relaxed: neutral smile, tiny inhale, blink, relaxed exhale. Very subtle calm breathing.\nROW 2, left to right four chronological frames: walking toward screen RIGHT, right-facing three-quarter/profile body: left foot forward, passing pose, right foot forward, passing pose. Clear alternating legs; never face left.\nROW 3, left to right four chronological frames: walking toward screen LEFT, left-facing three-quarter/profile body: right foot forward, passing pose, left foot forward, passing pose. Clear alternating legs; never face right.\nROW 4, left to right four chronological frames: front-facing wave: hand low, hand raised, palm tilts outward, palm tilts inward. Same hand throughout.\nEvery sprite must be wholly within its own cell with 20px transparent margins. Keep constant character scale across all cells; a sitting sprite must be shorter rather than scaled larger. Standing feet baseline is y=350 within each cell; only jumping/lifted poses leave it. Transparent background with true alpha. No floor shadows, scenery, text, grid, sparkles, motion trails, detached symbols or extra characters.",
+      "reference": "hoodie/portrait.png"
+    },
+    {
+      "id": "hoodie-basic-b",
+      "outfit": "hoodie",
+      "group": "basic-b",
+      "rows": [
+        "jump",
+        "sad",
+        "waiting",
+        "thinking",
+        "review"
+      ],
+      "columns": 4,
+      "prompt": "Use case: stylized-concept. Asset: production animation sprite sheet for the Kaling Windows pet. Image 1 is the canonical identity/outfit reference. Change only pose/expression as specified.\nExactly FOUR equal columns and 5 equal rows, 20 complete separate character sprites. Canvas 1536 x 1920 pixels; each invisible cell is 384 x 384. Strict regular aligned grid with generous transparent gutters. No visible cell borders or labels.\nPreserve the attached reference character and outfit exactly: red hair, face, hair bows, gold eye on viewer-left and cyan eye on viewer-right. Same garments, colors, footwear, head size and body proportions in EVERY frame.\nROW 1, left to right four chronological frames: jump: knees bend at ground baseline, body rising, body at apex 50 pixels above baseline, feet softly land at original baseline. No floor/shadow.\nROW 2, left to right four chronological frames: dejected: eyes lower, head lowers slightly, brief sad blink, soft recovery. Remain standing with no loose tears or symbols.\nROW 3, left to right four chronological frames: expectantly waiting for input: hands clasp, slight head tilt left, blink, head tilt right. Distinct from idle.\nROW 4, left to right four chronological frames: focused thinking: hand near chin, brows concentrate, small thoughtful head tilt, nod. Not physical running.\nROW 5, left to right four chronological frames: careful checking: gentle forward lean, eyes look down-left, down-right, then soft approving nod. No new props.\nEvery sprite must be wholly within its own cell with 20px transparent margins. Keep constant character scale across all cells; a sitting sprite must be shorter rather than scaled larger. Standing feet baseline is y=350 within each cell; only jumping/lifted poses leave it. Transparent background with true alpha. No floor shadows, scenery, text, grid, sparkles, motion trails, detached symbols or extra characters.",
+      "reference": "hoodie/portrait.png"
+    },
+    {
+      "id": "hoodie-extra-a",
+      "outfit": "hoodie",
+      "group": "extra-a",
+      "rows": [
+        "pet",
+        "cookie",
+        "pudding",
+        "tea",
+        "sit"
+      ],
+      "columns": 4,
+      "prompt": "Use case: stylized-concept. Asset: production animation sprite sheet for the Kaling Windows pet. Image 1 is the canonical identity/outfit reference. Change only pose/expression as specified.\nExactly FOUR equal columns and 5 equal rows, 20 complete separate character sprites. Canvas 1536 x 1920 pixels; each invisible cell is 384 x 384. Strict regular aligned grid with generous transparent gutters. No visible cell borders or labels.\nPreserve the attached reference character and outfit exactly: red hair, face, hair bows, gold eye on viewer-left and cyan eye on viewer-right. Same garments, colors, footwear, head size and body proportions in EVERY frame.\nROW 1, left to right four chronological frames: enjoying head petting, no external hand: eyes gently close and smile, head tilts left happily, shy pink blush and tiny shoulder raise, contented head tilt right. Four visibly different but connected poses.\nROW 2, left to right four chronological frames: eating cookie: both hands hold a round cookie below mouth, raise cookie to mouth, take a small bite, lower partly bitten cookie with happy puffed cheeks. Cookie touches hands, no crumbs.\nROW 3, left to right four chronological frames: eating pudding: one hand holds a small pudding cup and other a spoon, scoop, spoon at mouth, delighted chewing. Cup stays in same hand. No crumbs.\nROW 4, left to right four chronological frames: drinking tea: both hands around a small pale cup, raise it toward lips, sip, lower cup with contented eyes. Cup always attached to hands; no steam.\nROW 5, left to right four chronological frames: sitting and swinging feet: seated upright as if on an invisible ledge, left foot forward, both feet down, right foot forward, feet down again. Keep head and torso same size as standing reference; seated head sits lower. No chair/ledge drawn.\nEvery sprite must be wholly within its own cell with 20px transparent margins. Keep constant character scale across all cells; a sitting sprite must be shorter rather than scaled larger. Standing feet baseline is y=350 within each cell; only jumping/lifted poses leave it. Transparent background with true alpha. No floor shadows, scenery, text, grid, sparkles, motion trails, detached symbols or extra characters.",
+      "reference": "hoodie/portrait.png"
+    },
+    {
+      "id": "hoodie-extra-b",
+      "outfit": "hoodie",
+      "group": "extra-b",
+      "rows": [
+        "sleep",
+        "stretch",
+        "spin",
+        "lift",
+        "peek"
+      ],
+      "columns": 4,
+      "prompt": "Use case: stylized-concept. Asset: production animation sprite sheet for the Kaling Windows pet. Image 1 is the canonical identity/outfit reference. Change only pose/expression as specified.\nExactly FOUR equal columns and 5 equal rows, 20 complete separate character sprites. Canvas 1536 x 1920 pixels; each invisible cell is 384 x 384. Strict regular aligned grid with generous transparent gutters. No visible cell borders or labels.\nPreserve the attached reference character and outfit exactly: red hair, face, hair bows, gold eye on viewer-left and cyan eye on viewer-right. Same garments, colors, footwear, head size and body proportions in EVERY frame.\nROW 1, left to right four chronological frames: hugging knees and falling asleep: seated hugging knees, eyelids droop and head nods, eyes close and head rests on knees, peacefully asleep. Last two poses very similar, no Z letters, pillow, blanket or bubbles.\nROW 2, left to right four chronological frames: waking and stretching: hands rub sleepy eyes, arms lift overhead, full gentle stretch with eyes closed, relaxed arms lowered. No detached effects.\nROW 3, left to right four chronological frames: happy full-body turn, constant size: front-facing arms slightly out, right profile, back view showing long red hair and the same outfit, left profile. Four views form a full turn when looped.\nROW 4, left to right four chronological frames: being gently picked up, no external hand: arms slightly out and legs dangling, left leg swings forward, legs hang neutral, right leg swings forward. Feet visibly suspended; no ground, no distress.\nROW 5, left to right four chronological frames: playful peeking toward screen RIGHT: whole body leans right with hands close to chest, lean farther and curious head tilt, shy eyes blink, smile and slightly retract. Fully visible body, no wall or screen edge drawn.\nEvery sprite must be wholly within its own cell with 20px transparent margins. Keep constant character scale across all cells; a sitting sprite must be shorter rather than scaled larger. Standing feet baseline is y=350 within each cell; only jumping/lifted poses leave it. Transparent background with true alpha. No floor shadows, scenery, text, grid, sparkles, motion trails, detached symbols or extra characters.",
+      "reference": "hoodie/portrait.png"
+    },
+    {
+      "id": "hoodie-look",
+      "outfit": "hoodie",
+      "group": "look",
+      "rows": [
+        "look-0",
+        "look-1",
+        "look-2",
+        "look-3"
+      ],
+      "columns": 4,
+      "prompt": "Use case: stylized-concept. Asset: production animation sprite sheet for the Kaling Windows pet. Image 1 is the canonical identity/outfit reference. Change only pose/expression as specified.\nExactly FOUR equal columns and 4 equal rows, 16 complete separate character sprites. Canvas 1536 x 1536 pixels; each invisible cell is 384 x 384. Strict regular aligned grid with generous transparent gutters. No visible cell borders or labels.\nPreserve the attached reference character and outfit exactly: red hair, face, hair bows, gold eye on viewer-left and cyan eye on viewer-right. Same garments, colors, footwear, head size and body proportions in EVERY frame.\nROW 1, left to right four chronological frames: four full-body front-facing standing poses, identical body: eyes/head look up (0 degrees), up-slight-right (22.5), diagonal up-right (45), mostly-right-slight-up (67.5).\nROW 2, left to right four chronological frames: same front-facing standing body: eyes/head look right (90), right-slight-down (112.5), diagonal down-right (135), mostly-down-slight-right (157.5).\nROW 3, left to right four chronological frames: same front-facing standing body: eyes/head look down (180), down-slight-left (202.5), diagonal down-left (225), mostly-left-slight-down (247.5).\nROW 4, left to right four chronological frames: same front-facing standing body: eyes/head look left (270), left-slight-up (292.5), diagonal up-left (315), mostly-up-slight-left (337.5).\nEvery sprite must be wholly within its own cell with 20px transparent margins. Keep constant character scale across all cells; a sitting sprite must be shorter rather than scaled larger. Standing feet baseline is y=350 within each cell; only jumping/lifted poses leave it. Transparent background with true alpha. No floor shadows, scenery, text, grid, sparkles, motion trails, detached symbols or extra characters.",
+      "reference": "hoodie/portrait.png"
+    }
+  ],
+  "referenceNote": "Public portraits are downsampled copies of the canonical outfit references. Generated sheets were extracted by complete alpha components and packed into 192x208 cells.",
+  "repairs": [
+    {
+      "asset": "hoodie / review / frame 2",
+      "change": "Correct viewer-left iris to gold and viewer-right iris to cyan, then restore transparent margin above cat ears. Pose and outfit preserved.",
+      "generator": "built-in imagegen"
+    },
+    {
+      "asset": "hoodie / spin / frames 2 and 4",
+      "change": "Screen-right profile has gold visible iris; screen-left profile has cyan visible iris. Preserve pose and outfit, remove fragments of adjacent sprites.",
+      "generator": "built-in imagegen"
+    }
+  ]
+}

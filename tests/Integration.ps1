@@ -16,23 +16,60 @@ function Invoke-IntegrationTests {
         $stream=[IO.File]::Create((Join-Path $dataDirectory $Name));try{$encoder.Save($stream)}finally{$stream.Dispose()}
     }
     function Pump-For([int]$Milliseconds){$end=$clock.ElapsedMilliseconds+$Milliseconds;while($clock.ElapsedMilliseconds -lt $end){Pump;Start-Sleep -Milliseconds 15}}
-    Check ($frames.Count -eq 73) '73 animation frames loaded'
+    Check ($frames.Count -eq 113) 'uniform loads 113 frames'
+    $seen=@{}
+    foreach($outfit in @('uniform','pajamas','hoodie')){
+        Select-Outfit $outfit
+        Check ($state.outfit -eq $outfit) "select $outfit"
+        Check ($frames.Count -eq $(if($outfit -eq 'uniform'){113}else{92})) "$outfit frame coverage"
+        for($r=11;$r -le 20;$r++){Set-Animation $r;Check ($img.Source.PixelWidth -eq 192 -and $counts[$r] -eq 4) "$outfit new animation $r"}
+        $seen[$outfit]=$frames['0,0']
+    }
+    Check (-not [object]::ReferenceEquals($seen.uniform,$seen.pajamas) -and -not [object]::ReferenceEquals($seen.pajamas,$seen.hoodie)) 'outfits use distinct generated textures'
+    Show-Wardrobe;Pump
+    $wardrobeButtons.pajamas.RaiseEvent([System.Windows.RoutedEventArgs]::new([System.Windows.Controls.Button]::ClickEvent))
+    Check ($state.outfit -eq 'pajamas' -and $row -eq 18 -and -not $wardrobeButtons.pajamas.IsEnabled) 'wardrobe button changes costume and celebrates'
+    $wardrobeWindow.UpdateLayout();Pump
+    $wardrobeRender=[System.Windows.Media.Imaging.RenderTargetBitmap]::new([int]$wardrobeWindow.ActualWidth,[int]$wardrobeWindow.ActualHeight,96,96,[System.Windows.Media.PixelFormats]::Pbgra32)
+    $wardrobeRender.Render($wardrobeWindow);$encoder=[System.Windows.Media.Imaging.PngBitmapEncoder]::new();$encoder.Frames.Add([System.Windows.Media.Imaging.BitmapFrame]::Create($wardrobeRender))
+    $stream=[IO.File]::Create((Join-Path $dataDirectory 'wardrobe.png'));try{$encoder.Save($stream)}finally{$stream.Dispose()}
+    $wardrobeWindow.Close();Select-Outfit 'uniform'
     for($r=0;$r -lt 9;$r++){Set-Animation $r;Check ($img.Source.PixelWidth -eq 192) "animation row $r"}
     for($d=0;$d -lt 16;$d++){$img.Source=$frames["$(9+[math]::Floor($d/8)),$($d%8)"];Check ($img.Source.PixelHeight -eq 208) "gaze $d"}
     $script:cooldownUntil=0;$null=Invoke-Interaction 'pet'
-    Check ($state.mood -eq 'happy' -and $bubbleText.Text -match '摸摸') 'petting response'
+    Check ($state.mood -eq 'happy' -and $row -eq 11 -and $bubble.Visibility -eq 'Visible') 'petting uses new expression animation'
     Check (-not (Invoke-Interaction 'cookie')) 'interaction cooldown blocks spam'
-    foreach($index in 0..2){$script:cooldownUntil=0;$feed.Items[$index].RaiseEvent([System.Windows.RoutedEventArgs]::new([System.Windows.Controls.MenuItem]::ClickEvent));Check ($bubble.Visibility -eq 'Visible') "food menu $index"}
+    foreach($index in 0..2){$script:cooldownUntil=0;$feed.Items[$index].RaiseEvent([System.Windows.RoutedEventArgs]::new([System.Windows.Controls.MenuItem]::ClickEvent));Check ($bubble.Visibility -eq 'Visible' -and $row -eq (12+$index)) "food menu $index uses matching food animation"}
     $script:cooldownUntil=0;$null=Invoke-Interaction 'cookie';Capture 'feeding.png'
     $script:cooldownUntil=0
     Begin-Pointer ([System.Windows.Point]::new(100,100)) 0.2 $false;End-Pointer
     Check ($pendingClick.action -eq 'pet') 'single click delayed for double-click discrimination'
     Begin-Pointer ([System.Windows.Point]::new(100,100)) 0.2 $true;End-Pointer
     Check ($null -eq $pendingClick -and $row -eq 4) 'double-click cancels pending head interaction'
-    Begin-Pointer ([System.Windows.Point]::new(100,100)) 0.2 $false;Move-Pointer ([System.Windows.Point]::new(120,110));End-Pointer
+    Begin-Pointer ([System.Windows.Point]::new(100,100)) 0.2 $false;Move-Pointer ([System.Windows.Point]::new(120,110));Check ($row -eq 19) 'drag uses dangling lifted pose';End-Pointer
     Check ($null -eq $pendingClick -and $row -eq 0) 'drag moves without interaction'
+    $script:cooldownUntil=0;$null=Invoke-Interaction 'sleep';Check ($resting -eq 'sleeping' -and $row -eq 16) 'manual nap'
+    $script:cooldownUntil=0;Begin-Pointer ([System.Windows.Point]::new(100,100)) 0.2 $false;End-Pointer;Check ($pendingClick.action -eq 'wake') 'clicking asleep queues wake animation'
+    $script:pendingClick=$null;$script:cooldownUntil=$clock.ElapsedMilliseconds+1200;$null=Invoke-Interaction 'wake';Check ($row -eq 17) 'wake stretches immediately even during interaction cooldown'
+    $script:cooldownUntil=0;$null=Invoke-Interaction 'peek';$original=$peekReturn.left;Save-Settings
+    Check ($peeking -and $row -eq 20 -and [math]::Abs((Read-PetState $dataDirectory).left-$original) -lt 0.01) 'edge peek keeps saved position safe'
+    Exit-Peek;Check (-not $peeking -and $w.Left -eq $original) 'peek returns to original position'
+    $script:nextStory=[long]::MaxValue;$state.look=$false;$state.stories=$true;$state.quiet=$false;$state.mode='stay'
+    Mark-Activity;Set-Animation 0 0;$script:lastInteraction=$clock.ElapsedMilliseconds-121000;$timer.Start();Pump-For 150;$timer.Stop()
+    Check ($resting -eq 'sitting' -and $row -eq 15) 'two minutes of inactivity sits down'
+    $script:lastInteraction=$clock.ElapsedMilliseconds-301000;$script:actionUntil=0;$timer.Start();Pump-For 150;$timer.Stop()
+    Check ($resting -eq 'sleeping' -and $row -eq 16) 'five minutes of inactivity starts nap'
+    $script:frame=3;$script:nextFrame=0;$timer.Start();Pump-For 150;$timer.Stop()
+    Check ($frame -eq 3) 'sleep holds final pose instead of restarting awake'
+    Select-Outfit 'hoodie';Check ($resting -eq 'none' -and $row -eq 0) 'changing outfit wakes pet safely'
+    Save-Settings;Check ((Read-PetState $dataDirectory).outfit -eq 'hoodie') 'wardrobe choice survives save and reload'
+    Show-Wardrobe;$script:lastInteraction=$clock.ElapsedMilliseconds-301000;$script:actionUntil=0;$timer.Start();Pump-For 150;$timer.Stop()
+    Check ($resting -eq 'none') 'open wardrobe suppresses automatic nap';$wardrobeWindow.Close()
+    Mark-Activity;$state.quiet=$true;$script:lastInteraction=$clock.ElapsedMilliseconds-301000;$script:actionUntil=0;$timer.Start();Pump-For 150;$timer.Stop()
+    Check ($resting -eq 'none') 'quiet companionship suppresses automatic nap';$state.quiet=$false
+    Select-Outfit 'uniform';$script:cooldownUntil=0;$null=Invoke-Interaction 'sleep'
     $pomoMenu.Items[0].RaiseEvent([System.Windows.RoutedEventArgs]::new([System.Windows.Controls.MenuItem]::ClickEvent))
-    Check ($state.pomo.status -eq 'running' -and $badge.Visibility -eq 'Visible') 'start timer menu'
+    Check ($state.pomo.status -eq 'running' -and $badge.Visibility -eq 'Visible' -and $resting -eq 'none') 'start timer menu wakes pet'
     Capture 'focus.png'
     $pomoMenu.Items[1].RaiseEvent([System.Windows.RoutedEventArgs]::new([System.Windows.Controls.MenuItem]::ClickEvent))
     Check ($state.pomo.status -eq 'paused') 'pause timer menu'

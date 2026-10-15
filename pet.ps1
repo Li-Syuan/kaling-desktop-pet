@@ -19,18 +19,12 @@ if(-not $created){$mutex.Dispose();exit 0}
 Add-Type -AssemblyName PresentationFramework,PresentationCore,WindowsBase,System.Windows.Forms,System.Drawing
 Add-Type -Path (Join-Path $root 'lib\Pet.Native.cs')
 . (Join-Path $root 'lib\Pet.State.ps1')
+. (Join-Path $root 'lib\Pet.Assets.ps1')
 $script:state=Read-PetState $dataDirectory
 $script:app=[System.Windows.Application]::new();$app.ShutdownMode='OnExplicitShutdown'
 $script:clock=[Diagnostics.Stopwatch]::StartNew()
-$script:counts=@(6,8,8,4,5,8,6,6,6,8,8)
-$script:durations=@(@(280,110,110,140,140,320),@(120,120,120,120,120,120,120,220),@(120,120,120,120,120,120,120,220),@(140,140,140,280),@(140,140,140,140,280),@(140,140,140,140,140,140,140,240),@(150,150,150,150,150,260),@(120,120,120,120,120,220),@(150,150,150,150,150,280))
-$atlas=[System.Windows.Media.Imaging.BitmapImage]::new()
-$atlas.BeginInit();$atlas.CacheOption='OnLoad';$atlas.UriSource=[Uri](Join-Path $root 'spritesheet.png');$atlas.EndInit();$atlas.Freeze()
-if($atlas.PixelWidth -ne 1536 -or $atlas.PixelHeight -ne 2288){throw 'Invalid sprite atlas dimensions'}
-$script:frames=@{}
-for($r=0;$r -lt 11;$r++){for($c=0;$c -lt $counts[$r];$c++){
-    $b=[System.Windows.Media.Imaging.CroppedBitmap]::new($atlas,[System.Windows.Int32Rect]::new($c*192,$r*208,192,208));$b.Freeze();$frames["$r,$c"]=$b
-}}
+$script:outfitCache=@{};$script:catalog=Read-OutfitCatalog $root
+Select-Outfit $state.outfit
 $script:w=[System.Windows.Window]::new()
 $w.Title='咖凌 · 陪伴日常';$w.WindowStyle='None';$w.ResizeMode='NoResize';$w.AllowsTransparency=$true
 $w.Background=[System.Windows.Media.Brushes]::Transparent;$w.Topmost=$true;$w.ShowInTaskbar=$false;$w.ShowActivated=$false
@@ -52,9 +46,10 @@ $script:cooldownUntil=0L;$script:nextWalk=0L;$script:walkEnd=0L;$script:directio
 $script:nextStory=480000L;$script:lastTick=0L;$script:nextPoll=0L;$script:nextSave=10000L
 $script:manualHidden=$false;$script:fullscreenHidden=$false;$script:closing=$false;$script:loaded=$false;$script:settingsWindow=$null
 $script:hwnd=[IntPtr]::Zero;$script:hotkeys=@();$script:hotkeyErrors=@();$script:testFailed=$false;$script:savedError=$false
+$script:resting='none';$script:lastInteraction=0L;$script:peeking=$false;$script:peekReturn=$null;$script:wardrobeWindow=$null;$script:wardrobeButtons=$null
 
 function Save-Settings {
-    if($loaded){$state.left=$w.Left;$state.top=$w.Top}
+    if($loaded){if($peeking){$state.left=$peekReturn.left;$state.top=$peekReturn.top}else{$state.left=$w.Left;$state.top=$w.Top}}
     try{Write-PetState $state $dataDirectory;$script:savedError=$false}catch{
         $_ | Out-String | Add-Content -LiteralPath $log -Encoding UTF8
         if(-not $savedError){$script:savedError=$true;Show-Bubble '設定暫時無法儲存，請檢查資料夾權限。' -Important}
@@ -71,7 +66,7 @@ function Show-Bubble([string]$Text,[switch]$Important) {
 }
 function Hide-Bubble {$bubble.Visibility='Hidden';$script:bubbleUntil=0}
 function Keep-Visible {
-    if($hwnd -eq [IntPtr]::Zero){return}
+    if($hwnd -eq [IntPtr]::Zero -or $peeking){return}
     $area=[System.Windows.Forms.Screen]::FromHandle($hwnd).WorkingArea
     $m=([System.Windows.PresentationSource]::FromVisual($w)).CompositionTarget.TransformFromDevice
     $a=$m.Transform([System.Windows.Point]::new($area.Left,$area.Top));$b=$m.Transform([System.Windows.Point]::new($area.Right,$area.Bottom))
@@ -83,25 +78,44 @@ function Cursor-Position {
     return ([System.Windows.PresentationSource]::FromVisual($w)).CompositionTarget.TransformFromDevice.Transform([System.Windows.Point]::new($p.X,$p.Y))
 }
 function Resize-Pet([double]$Scale) {
+    if($loaded){Exit-Peek}
     $bottom=$w.Top+$w.Height;$state.scale=$Scale;$w.Width=192*$Scale;$w.Height=208*$Scale+120
     $panel.RowDefinitions[1].Height=[System.Windows.GridLength]::new(208*$Scale)
     if($loaded){$w.Top=$bottom-$w.Height;Keep-Visible;Save-Settings}
 }
+function Exit-Peek {
+    if($script:peeking){$script:peeking=$false;$w.Left=$peekReturn.left;$w.Top=$peekReturn.top;$script:peekReturn=$null;Keep-Visible}
+}
+function Mark-Activity {Exit-Peek;$script:resting='none';$script:lastInteraction=$clock.ElapsedMilliseconds}
+function Begin-Peek {
+    $script:peekReturn=@{left=$w.Left;top=$w.Top}
+    $area=[System.Windows.Forms.Screen]::FromHandle($hwnd).WorkingArea;$m=([System.Windows.PresentationSource]::FromVisual($w)).CompositionTarget.TransformFromDevice
+    $edge=$m.Transform([System.Windows.Point]::new($area.Left,$area.Top));$script:peeking=$true;$w.Left=$edge.X-$w.Width*0.25
+    Set-Animation 20 2240
+}
 function Invoke-Interaction([string]$Action) {
-    if($clock.ElapsedMilliseconds -lt $cooldownUntil){return $false}
+    if($clock.ElapsedMilliseconds -lt $cooldownUntil -and $Action -ne 'wake'){return $false}
+    Mark-Activity
     switch($Action){
-        'pet' {$state.mood='happy';Set-Animation 3 1800;Show-Bubble '♥ 謝謝摸摸，今天也一起加油！'}
+        'pet' {$state.mood='happy';Set-Animation 11 2640;Show-Bubble (@('♥ 謝謝摸摸，今天也一起加油！','嘿嘿，有點害羞呢。','再摸一下也可以喔。') | Get-Random)}
         'wave' {Set-Animation 3 1600;Show-Bubble '嗨！我一直都在這裡。'}
         'jump' {Set-Animation 4 840;Show-Bubble '嘿咻！活動一下！'}
-        'cookie' {$state.mood='happy';Set-Animation 3 2200;Show-Bubble '🍪 咔滋！這塊餅乾好香呀。'}
-        'pudding' {$state.mood='happy';Set-Animation 4 1680;Show-Bubble '🍮 甜甜的布丁，心情也變甜了！'}
-        'tea' {$state.mood='calm';Set-Animation 8 2500;Show-Bubble '🍵 喝口茶，我們慢慢來。'}
+        'cookie' {$state.mood='happy';Set-Animation 12 2400;Show-Bubble '🍪 咔滋！這塊餅乾好香呀。'}
+        'pudding' {$state.mood='happy';Set-Animation 13 2800;Show-Bubble '🍮 甜甜的布丁，心情也變甜了！'}
+        'tea' {$state.mood='calm';Set-Animation 14 3200;Show-Bubble '🍵 喝口茶，我們慢慢來。'}
+        'sit' {$script:resting='sitting';Set-Animation 15 1200;Show-Bubble '坐一下，晃晃腳陪著你。'}
+        'sleep' {$script:resting='sleeping';Set-Animation 16 2600;Show-Bubble '借我打個小盹，點一下就醒來。'}
+        'wake' {Set-Animation 17 2400;Show-Bubble '嗯…我醒了！你叫我嗎？'}
+        'stretch' {Set-Animation 17 2400;Show-Bubble '伸個懶腰，再繼續吧。'}
+        'spin' {Set-Animation 18 1440;Show-Bubble '開心轉一圈！'}
+        'peek' {Begin-Peek;Show-Bubble '被你發現了！'}
         default {return $false}
     }
     $script:cooldownUntil=$clock.ElapsedMilliseconds+$(if($Action -in @('cookie','pudding','tea')){3500}else{1200})
     Save-Settings;return $true
 }
 function Begin-Pointer($Point,[double]$Y,[bool]$Double) {
+    $script:wasSleepingOnPress=$resting -eq 'sleeping';Mark-Activity
     $script:press=$Point;$script:lastX=$Point.X;$script:origin=[System.Windows.Point]::new($w.Left,$w.Top)
     $script:pressY=$Y;$script:drag=$true;$script:moved=$false;$script:doublePress=$Double
     if($Double){$script:pendingClick=$null}
@@ -110,15 +124,16 @@ function Move-Pointer($Point) {
     if(-not $drag){return}
     $dx=$Point.X-$press.X;$dy=$Point.Y-$press.Y
     if([math]::Abs($dx)+[math]::Abs($dy) -gt 5){$script:moved=$true;$script:pendingClick=$null}
-    if($moved){$w.Left=$origin.X+$dx;$w.Top=$origin.Y+$dy;$r=if($Point.X -lt $lastX){2}else{1};if($row -ne $r){Set-Animation $r 500};$script:lastX=$Point.X}
+    if($moved){$w.Left=$origin.X+$dx;$w.Top=$origin.Y+$dy;if($row -ne 19){Set-Animation 19 500};$script:lastX=$Point.X}
 }
 function End-Pointer {
     if(-not $drag){return}
+    $script:lastInteraction=$clock.ElapsedMilliseconds
     $script:drag=$false;$img.ReleaseMouseCapture();Keep-Visible
     $kind=Get-ClickAction $moved $doublePress $pressY
     if($kind -eq 'drag'){$script:pendingClick=$null;Set-Animation 0 0;Save-Settings}
     elseif($kind -eq 'jump'){$script:pendingClick=$null;$null=Invoke-Interaction 'jump'}
-    else{$script:pendingClick=@{action=$kind;due=$clock.ElapsedMilliseconds+[KalingNative]::GetDoubleClickTime()}}
+    else{$script:pendingClick=@{action=$(if($wasSleepingOnPress){'wake'}else{$kind});due=$clock.ElapsedMilliseconds+[KalingNative]::GetDoubleClickTime()}}
 }
 function Update-Visibility {
     if($manualHidden -or $fullscreenHidden){Hide-Bubble;if($w.IsVisible){$w.Hide()}}
@@ -131,6 +146,7 @@ function Toggle-Through {
     Show-Bubble $(if($state.clickThrough){'滑鼠穿透已開啟。Ctrl+Alt+K 或系統匣可恢復。'}else{'滑鼠互動已恢復。'}) -Important
 }
 function Start-Timer {
+    Mark-Activity
     Start-Pomodoro $state;$script:lastTick=$clock.ElapsedMilliseconds;Hide-Bubble;Set-Animation 8 1200;Save-Settings;Update-Badge
 }
 function Pause-Timer {Pause-Pomodoro $state;Save-Settings;Update-Badge}
@@ -145,12 +161,12 @@ function Update-Badge {
 }
 function Handle-TimerEvent([string]$Event) {
     switch($Event){
-        'focus' {Set-Animation 4 1680;Show-Bubble '完成一輪！休息準備好了，右鍵開始吧。' -Important;Save-Settings}
-        {$_ -in @('short','long')} {Set-Animation 3 1800;Show-Bubble '休息結束，準備好再開始下一輪。' -Important;Save-Settings}
+        'focus' {Mark-Activity;Set-Animation 18 1440;Show-Bubble '完成一輪！休息準備好了，右鍵開始吧。' -Important;Save-Settings}
+        {$_ -in @('short','long')} {Mark-Activity;Set-Animation 17 2400;Show-Bubble '休息結束，準備好再開始下一輪。' -Important;Save-Settings}
         'suspended' {Show-Bubble '剛才暫停了一會兒，番茄鐘已保留進度。' -Important;Save-Settings}
     }
 }
-function Set-Mode([string]$Mode) {$state.mode=$Mode;$script:nextWalk=0;Set-Animation 0 0;Save-Settings}
+function Set-Mode([string]$Mode) {Mark-Activity;$state.mode=$Mode;$script:nextWalk=0;Set-Animation 0 0;Save-Settings}
 function Toggle-Preference([string]$Name,$Item) {$state[$Name]=-not $state[$Name];$Item.IsChecked=$state[$Name];if($Name -in @('quiet','bubbles')){Hide-Bubble};Save-Settings}
 function Show-TimerSettings {
     if($settingsWindow){[void]$settingsWindow.Activate();return}
@@ -182,12 +198,18 @@ $feed=Add-Menu '餵咖凌' $null
 $null=Add-Menu '🍪 餅乾' {$null=Invoke-Interaction 'cookie'} $feed
 $null=Add-Menu '🍮 布丁' {$null=Invoke-Interaction 'pudding'} $feed
 $null=Add-Menu '🍵 茶' {$null=Invoke-Interaction 'tea'} $feed
+$null=Add-Menu '咖凌衣櫃…' {Show-Wardrobe}
 $pomoMenu=Add-Menu '陪伴番茄鐘' $null
 $null=Add-Menu '開始／繼續這一輪' {Start-Timer} $pomoMenu
 $null=Add-Menu '暫停' {Pause-Timer} $pomoMenu
 $null=Add-Menu '取消本輪' {Cancel-Timer} $pomoMenu
 $null=Add-Menu '調整時間…' {Show-TimerSettings} $pomoMenu
 $actions=Add-Menu '動作' $null
+$null=Add-Menu '坐下晃腳' {$null=Invoke-Interaction 'sit'} $actions
+$null=Add-Menu '抱膝打瞌睡' {$null=Invoke-Interaction 'sleep'} $actions
+$null=Add-Menu '伸懶腰、揉眼睛' {$null=Invoke-Interaction 'stretch'} $actions
+$null=Add-Menu '開心轉一圈' {$null=Invoke-Interaction 'spin'} $actions
+$null=Add-Menu '躲貓貓、探頭' {$null=Invoke-Interaction 'peek'} $actions
 $null=Add-Menu '揮手' {$null=Invoke-Interaction 'wave'} $actions
 $null=Add-Menu '跳一下' {$null=Invoke-Interaction 'jump'} $actions
 $null=Add-Menu '等你一下' {Set-Animation 6 3500} $actions
@@ -217,8 +239,9 @@ $script:trayMenu=[System.Windows.Forms.ContextMenuStrip]::new()
 function Add-Tray([string]$Text,[scriptblock]$Action){$item=[System.Windows.Forms.ToolStripMenuItem]::new($Text);$item.Add_Click($Action);[void]$trayMenu.Items.Add($item);return $item}
 $null=Add-Tray '顯示／隱藏 · Ctrl+Alt+H' {Toggle-Visibility}
 $script:trayThrough=Add-Tray '開啟／關閉滑鼠穿透 · Ctrl+Alt+K' {Toggle-Through}
-$null=Add-Tray '叫咖凌回來（重設顯示與位置）' {$script:manualHidden=$false;$state.autoHide=$false;$autoHideItem.IsChecked=$false;if($state.clickThrough){Toggle-Through};$script:fullscreenHidden=$false;Update-Visibility;$a=[System.Windows.SystemParameters]::WorkArea;$w.Left=$a.Right-$w.Width-24;$w.Top=$a.Bottom-$w.Height-16;Keep-Visible;Save-Settings}
+$null=Add-Tray '叫咖凌回來（重設顯示與位置）' {Mark-Activity;$script:manualHidden=$false;$state.autoHide=$false;$autoHideItem.IsChecked=$false;if($state.clickThrough){Toggle-Through};$script:fullscreenHidden=$false;Update-Visibility;$a=[System.Windows.SystemParameters]::WorkArea;$w.Left=$a.Right-$w.Width-24;$w.Top=$a.Bottom-$w.Height-16;Keep-Visible;Save-Settings}
 $null=Add-Tray '開始／繼續番茄鐘' {Start-Timer}
+$null=Add-Tray '咖凌衣櫃…' {Show-Wardrobe}
 $null=Add-Tray '暫停番茄鐘' {Pause-Timer}
 $null=Add-Tray '取消本輪' {Cancel-Timer}
 $null=Add-Tray '調整番茄鐘時間…' {Show-TimerSettings}
@@ -253,6 +276,7 @@ $timer.Add_Tick({
         if(-not $loaded -or $closing){return}
         $now=$clock.ElapsedMilliseconds;$delta=($now-$lastTick)/1000.0;$script:lastTick=$now
         $event=Step-Pomodoro $state $delta;Handle-TimerEvent $event
+        if($peeking -and $now -ge $actionUntil){Exit-Peek}
         if($now -ge $nextPoll){
             $script:nextPoll=$now+500;$script:fullscreenHidden=$state.autoHide -and [KalingNative]::IsFullscreen([KalingNative]::GetForegroundWindow(),$hwnd)
             Update-Visibility;Update-Badge;if(-not $drag){Keep-Visible}
@@ -263,11 +287,14 @@ $timer.Add_Tick({
         if(-not $w.IsVisible -or $menu.IsOpen -or $trayMenu.Visible){return}
         $focus=$state.pomo.status -eq 'running'
         if(-not $drag -and $now -gt $actionUntil){
-            if($state.stories -and -not $state.quiet -and -not $focus -and -not $settingsWindow -and $now -ge $nextStory){
+            if($state.stories -and -not $state.quiet -and -not $focus -and $resting -ne 'sleeping' -and -not $settingsWindow -and -not $wardrobeWindow -and $now -ge $nextStory){
                 $story=Get-Story (Get-Date).Hour $state.mood;$state.mood=$story.mood;Set-Animation $story.row 2200;Show-Bubble $story.text;$script:nextStory=$now+(Get-Random -Minimum 480000 -Maximum 900001)
             }else{
                 $p=Cursor-Position;$dx=$p.X-($w.Left+$w.Width/2);$dy=$p.Y-($w.Top+88+($w.Height-120)*0.37);$moving=$false
-                if(-not $focus -and -not $state.quiet){
+                $canRest=-not $focus -and -not $state.quiet -and $state.stories -and -not $settingsWindow -and -not $wardrobeWindow
+                if($canRest -and $resting -eq 'none' -and $now-$lastInteraction -gt 120000){$script:resting='sitting'}
+                if($canRest -and $now-$lastInteraction -gt 300000 -and $resting -ne 'sleeping'){$script:resting='sleeping';Set-Animation 16 2600}
+                if(-not $focus -and -not $state.quiet -and $resting -eq 'none'){
                     if($state.mode -eq 'follow' -and [math]::Abs($dx) -gt $w.Width*0.7){$script:direction=[math]::Sign($dx);$w.Left+=$direction*2.5;$moving=$true}
                     elseif($state.mode -eq 'wander'){
                         if($now -gt $nextWalk){$script:direction=if((Get-Random -Maximum 2) -eq 0){-1}else{1};$script:nextWalk=$now+6000;$script:walkEnd=$now+1600}
@@ -275,17 +302,17 @@ $timer.Add_Tick({
                     }
                 }
                 if($moving){Keep-Visible;$r=if($direction -lt 0){2}else{1};if($row -ne $r){Set-Animation $r 0}}
-                elseif($state.look -and -not $focus -and -not $state.quiet -and [math]::Sqrt($dx*$dx+$dy*$dy) -gt 70 -and [math]::Sqrt($dx*$dx+$dy*$dy) -lt 750){
+                elseif($state.look -and -not $focus -and -not $state.quiet -and $resting -eq 'none' -and [math]::Sqrt($dx*$dx+$dy*$dy) -gt 70 -and [math]::Sqrt($dx*$dx+$dy*$dy) -lt 750){
                     $angle=([math]::Atan2($dx,-$dy)*180/[math]::PI+360)%360;$d=[int][math]::Floor(($angle+11.25)/22.5)%16;$img.Source=$frames["$(9+[math]::Floor($d/8)),$($d%8)"];return
-                }else{$r=if($focus -and $state.pomo.phase -eq 'focus'){8}else{0};if($row -ne $r){Set-Animation $r 0}}
+                }else{$r=if($focus -and $state.pomo.phase -eq 'focus'){8}elseif($resting -eq 'sleeping'){16}elseif($resting -eq 'sitting'){15}else{0};if($row -ne $r){Set-Animation $r 0}}
             }
         }
-        if($now -ge $nextFrame){$script:frame=($frame+1)%$counts[$row];$img.Source=$frames["$row,$frame"];$script:nextFrame=$now+$durations[$row][$frame]}
+        if($now -ge $nextFrame){$script:frame=if($row -eq 16){[math]::Min($frame+1,$counts[$row]-1)}else{($frame+1)%$counts[$row]};$img.Source=$frames["$row,$frame"];$script:nextFrame=$now+$durations[$row][$frame]}
     }catch{$_ | Out-String | Add-Content -LiteralPath $log -Encoding UTF8;Close-Pet}
 })
 $w.Add_Closing({$script:closing=$true;Pause-Pomodoro $state;Save-Settings})
 $w.Add_Closed({
-    $timer.Stop();if($settingsWindow){$settingsWindow.Close()}
+    $timer.Stop();if($settingsWindow){$settingsWindow.Close()};if($wardrobeWindow){$wardrobeWindow.Close()}
     foreach($id in $hotkeys){[void][KalingNative]::UnregisterHotKey($hwnd,$id)}
     if($hwndSource){$hwndSource.RemoveHook($hook)}
     $tray.Visible=$false;$tray.Dispose();$trayMenu.Dispose();$mutex.ReleaseMutex();$mutex.Dispose();$app.Shutdown()

@@ -47,5 +47,11 @@ $p=Limit-PetPosition -1600 -200 192 328 @{Left=-1920;Top=-300;Right=0;Bottom=780
 Assert ($p.left -eq -1600 -and $p.top -eq -200) 'negative-coordinate monitor preserved'
 Assert ((Get-Story 23 'happy').mood -eq 'sleepy') 'late-night story'
 Assert ((Get-Story 9 'happy').text -match '早安') 'morning story'
+$wardrobe=New-PetState;$wardrobe.outfit='pajamas';Write-PetState $wardrobe $OutputDirectory
+$read=Read-PetState $OutputDirectory;Assert ($read.outfit -eq 'pajamas') 'outfit survives restart'
+$wardrobe.outfit='missing';Write-PetState $wardrobe $OutputDirectory
+$read=Read-PetState $OutputDirectory;Assert ($read.outfit -eq 'uniform') 'unknown outfit falls back to uniform'
+$wardrobe.Remove('outfit');$wardrobe.focusMinutes=32;Write-PetState $wardrobe $OutputDirectory
+$read=Read-PetState $OutputDirectory;Assert ($read.outfit -eq 'uniform' -and $read.focusMinutes -eq 32) 'v1.1 settings migrate without losing preferences'
 @{ok=$true;checks=@($checks);count=$checks.Count} | ConvertTo-Json -Depth 4 | Set-Content (Join-Path $OutputDirectory 'state-tests.json') -Encoding UTF8
 Write-Output "PASS: $($checks.Count) state checks"

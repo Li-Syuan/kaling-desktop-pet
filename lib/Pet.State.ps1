@@ -2,7 +2,7 @@
     return @{
         version=1; left=$null; top=$null; scale=1.5; mode='stay'; look=$true
         bubbles=$true; stories=$true; quiet=$false; autoHide=$true; clickThrough=$false
-        focusMinutes=25; shortMinutes=5; longMinutes=15; mood='calm'
+        focusMinutes=25; shortMinutes=5; longMinutes=15; mood='calm'; outfit='uniform'
         pomo=@{phase='focus'; status='ready'; remaining=1500.0; rounds=0; total=0}
     }
 }
@@ -26,6 +26,7 @@ function Read-PetState([string]$Directory) {
         }
         if($data.mode -notin @('stay','wander','follow')){throw 'Invalid mode'};$state.mode=$data.mode
         if($data.mood -in @('calm','happy','focused','sleepy')){$state.mood=$data.mood}
+        if($data.outfit -in @('uniform','pajamas','hoodie')){$state.outfit=$data.outfit}
         $p=$data.pomo
         if($p.phase -notin @('focus','short','long') -or $p.status -notin @('ready','running','paused')){throw 'Invalid timer state'}
         foreach($name in @('remaining','rounds','total')){
