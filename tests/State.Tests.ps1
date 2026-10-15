@@ -53,6 +53,16 @@ $wardrobe.outfit='missing';Write-PetState $wardrobe $OutputDirectory
 $read=Read-PetState $OutputDirectory;Assert ($read.outfit -eq 'uniform') 'unknown outfit falls back to uniform'
 $wardrobe.Remove('outfit');$wardrobe.focusMinutes=32;Write-PetState $wardrobe $OutputDirectory
 $read=Read-PetState $OutputDirectory;Assert ($read.outfit -eq 'uniform' -and $read.focusMinutes -eq 32) 'v1.1 settings migrate without losing preferences'
+$legacy=New-PetState;$legacy.version=1;$legacy.outfit='pajamas';$legacy.Remove('character');$legacy.Remove('characterOutfits');$legacy.left=-700;$legacy.focusMinutes=37
+[IO.File]::WriteAllText((Join-Path $OutputDirectory 'settings.json'),($legacy | ConvertTo-Json -Depth 5),[Text.UTF8Encoding]::new($false))
+$read=Read-PetState $OutputDirectory
+Assert ($read.version -eq 2 -and $read.character -eq 'kaling' -and $read.outfit -eq 'pajamas' -and $read.characterOutfits.kaling -eq 'pajamas') 'v1 migrates character and outfit'
+Assert ($read.left -eq -700 -and $read.focusMinutes -eq 37) 'v1 migration retains geometry and preferences'
+$read.character='ren';$read.outfit='original';Write-PetState $read $OutputDirectory;$read=Read-PetState $OutputDirectory
+Assert ($read.character -eq 'ren' -and $read.outfit -eq 'original' -and $read.characterOutfits.kaling -eq 'pajamas') 'v2 restores Ren and inactive Kaling outfit'
+$read.character='missing';Write-PetState $read $OutputDirectory;$read=Read-PetState $OutputDirectory
+Assert ($read.character -eq 'kaling') 'unknown character falls back safely'
+Assert (Test-Path (Join-Path $OutputDirectory 'settings.json.bak')) 'v2 writes retain backup'
 $old=New-PetState;$old.Remove('home');$old.outfit='hoodie';$old.mode='wander';Write-PetState $old $OutputDirectory
 $read=Read-PetState $OutputDirectory
 Assert ($read.outfit -eq 'hoodie' -and $read.mode -eq 'wander' -and $read.home.ball.u -eq .77) 'v1.2 settings gain house defaults without losing outfit or mode'

@@ -1,0 +1,843 @@
+{
+  "schemaVersion": 1,
+  "cellWidth": 192,
+  "cellHeight": 208,
+  "characters": [
+    {
+      "id": "kaling",
+      "displayName": "咖凌",
+      "defaultOutfit": "uniform",
+      "outfits": [
+        {
+          "id": "uniform",
+          "displayName": "經典制服",
+          "description": "熟悉的粉格紋與蝴蝶結",
+          "counts": [
+            6,
+            8,
+            8,
+            4,
+            5,
+            8,
+            6,
+            6,
+            6,
+            8,
+            8,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "atlas": "assets/outfits/uniform/atlas.png",
+          "portrait": "assets/outfits/uniform/portrait.png",
+          "actions": [
+            {
+              "id": "idle",
+              "row": 0,
+              "frameMs": 220,
+              "holdLast": false
+            },
+            {
+              "id": "right",
+              "row": 1,
+              "frameMs": 160,
+              "holdLast": false
+            },
+            {
+              "id": "left",
+              "row": 2,
+              "frameMs": 160,
+              "holdLast": false
+            },
+            {
+              "id": "wave",
+              "row": 3,
+              "frameMs": 160,
+              "holdLast": false
+            },
+            {
+              "id": "jump",
+              "row": 4,
+              "frameMs": 170,
+              "holdLast": false
+            },
+            {
+              "id": "sad",
+              "row": 5,
+              "frameMs": 160,
+              "holdLast": false
+            },
+            {
+              "id": "waiting",
+              "row": 6,
+              "frameMs": 160,
+              "holdLast": false
+            },
+            {
+              "id": "thinking",
+              "row": 7,
+              "frameMs": 160,
+              "holdLast": false
+            },
+            {
+              "id": "review",
+              "row": 8,
+              "frameMs": 160,
+              "holdLast": false
+            },
+            {
+              "id": "gaze-a",
+              "row": 9,
+              "frameMs": 160,
+              "holdLast": false
+            },
+            {
+              "id": "gaze-b",
+              "row": 10,
+              "frameMs": 160,
+              "holdLast": false
+            },
+            {
+              "id": "pet",
+              "row": 11,
+              "frameMs": 330,
+              "holdLast": false
+            },
+            {
+              "id": "cookie",
+              "row": 12,
+              "frameMs": 300,
+              "holdLast": false
+            },
+            {
+              "id": "pudding",
+              "row": 13,
+              "frameMs": 350,
+              "holdLast": false
+            },
+            {
+              "id": "tea",
+              "row": 14,
+              "frameMs": 400,
+              "holdLast": false
+            },
+            {
+              "id": "sit",
+              "row": 15,
+              "frameMs": 300,
+              "holdLast": false
+            },
+            {
+              "id": "sleep",
+              "row": 16,
+              "frameMs": 650,
+              "holdLast": true
+            },
+            {
+              "id": "stretch",
+              "row": 17,
+              "frameMs": 300,
+              "holdLast": false
+            },
+            {
+              "id": "spin",
+              "row": 18,
+              "frameMs": 180,
+              "holdLast": false
+            },
+            {
+              "id": "lift",
+              "row": 19,
+              "frameMs": 200,
+              "holdLast": false
+            },
+            {
+              "id": "peek",
+              "row": 20,
+              "frameMs": 280,
+              "holdLast": false
+            },
+            {
+              "id": "smug",
+              "row": 21,
+              "frameMs": 550,
+              "holdLast": false
+            },
+            {
+              "id": "pillow",
+              "row": 22,
+              "frameMs": 600,
+              "holdLast": false
+            },
+            {
+              "id": "quilt",
+              "row": 23,
+              "frameMs": 600,
+              "holdLast": true
+            },
+            {
+              "id": "balltap",
+              "row": 24,
+              "frameMs": 300,
+              "holdLast": false
+            },
+            {
+              "id": "boxduck",
+              "row": 25,
+              "frameMs": 300,
+              "holdLast": false
+            }
+          ]
+        },
+        {
+          "id": "pajamas",
+          "displayName": "薰衣草睡衣",
+          "description": "柔軟居家，慢慢陪你",
+          "counts": [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            8,
+            8,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "atlas": "assets/outfits/pajamas/atlas.png",
+          "portrait": "assets/outfits/pajamas/portrait.png",
+          "actions": [
+            {
+              "id": "idle",
+              "row": 0,
+              "frameMs": 220,
+              "holdLast": false
+            },
+            {
+              "id": "right",
+              "row": 1,
+              "frameMs": 160,
+              "holdLast": false
+            },
+            {
+              "id": "left",
+              "row": 2,
+              "frameMs": 160,
+              "holdLast": false
+            },
+            {
+              "id": "wave",
+              "row": 3,
+              "frameMs": 160,
+              "holdLast": false
+            },
+            {
+              "id": "jump",
+              "row": 4,
+              "frameMs": 170,
+              "holdLast": false
+            },
+            {
+              "id": "sad",
+              "row": 5,
+              "frameMs": 160,
+              "holdLast": false
+            },
+            {
+              "id": "waiting",
+              "row": 6,
+              "frameMs": 160,
+              "holdLast": false
+            },
+            {
+              "id": "thinking",
+              "row": 7,
+              "frameMs": 160,
+              "holdLast": false
+            },
+            {
+              "id": "review",
+              "row": 8,
+              "frameMs": 160,
+              "holdLast": false
+            },
+            {
+              "id": "gaze-a",
+              "row": 9,
+              "frameMs": 160,
+              "holdLast": false
+            },
+            {
+              "id": "gaze-b",
+              "row": 10,
+              "frameMs": 160,
+              "holdLast": false
+            },
+            {
+              "id": "pet",
+              "row": 11,
+              "frameMs": 330,
+              "holdLast": false
+            },
+            {
+              "id": "cookie",
+              "row": 12,
+              "frameMs": 300,
+              "holdLast": false
+            },
+            {
+              "id": "pudding",
+              "row": 13,
+              "frameMs": 350,
+              "holdLast": false
+            },
+            {
+              "id": "tea",
+              "row": 14,
+              "frameMs": 400,
+              "holdLast": false
+            },
+            {
+              "id": "sit",
+              "row": 15,
+              "frameMs": 300,
+              "holdLast": false
+            },
+            {
+              "id": "sleep",
+              "row": 16,
+              "frameMs": 650,
+              "holdLast": true
+            },
+            {
+              "id": "stretch",
+              "row": 17,
+              "frameMs": 300,
+              "holdLast": false
+            },
+            {
+              "id": "spin",
+              "row": 18,
+              "frameMs": 180,
+              "holdLast": false
+            },
+            {
+              "id": "lift",
+              "row": 19,
+              "frameMs": 200,
+              "holdLast": false
+            },
+            {
+              "id": "peek",
+              "row": 20,
+              "frameMs": 280,
+              "holdLast": false
+            },
+            {
+              "id": "smug",
+              "row": 21,
+              "frameMs": 550,
+              "holdLast": false
+            },
+            {
+              "id": "pillow",
+              "row": 22,
+              "frameMs": 600,
+              "holdLast": false
+            },
+            {
+              "id": "quilt",
+              "row": 23,
+              "frameMs": 600,
+              "holdLast": true
+            },
+            {
+              "id": "balltap",
+              "row": 24,
+              "frameMs": 300,
+              "holdLast": false
+            },
+            {
+              "id": "boxduck",
+              "row": 25,
+              "frameMs": 300,
+              "holdLast": false
+            }
+          ]
+        },
+        {
+          "id": "hoodie",
+          "displayName": "奶油貓耳帽T",
+          "description": "今天也要可愛出門",
+          "counts": [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            8,
+            8,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "atlas": "assets/outfits/hoodie/atlas.png",
+          "portrait": "assets/outfits/hoodie/portrait.png",
+          "actions": [
+            {
+              "id": "idle",
+              "row": 0,
+              "frameMs": 220,
+              "holdLast": false
+            },
+            {
+              "id": "right",
+              "row": 1,
+              "frameMs": 160,
+              "holdLast": false
+            },
+            {
+              "id": "left",
+              "row": 2,
+              "frameMs": 160,
+              "holdLast": false
+            },
+            {
+              "id": "wave",
+              "row": 3,
+              "frameMs": 160,
+              "holdLast": false
+            },
+            {
+              "id": "jump",
+              "row": 4,
+              "frameMs": 170,
+              "holdLast": false
+            },
+            {
+              "id": "sad",
+              "row": 5,
+              "frameMs": 160,
+              "holdLast": false
+            },
+            {
+              "id": "waiting",
+              "row": 6,
+              "frameMs": 160,
+              "holdLast": false
+            },
+            {
+              "id": "thinking",
+              "row": 7,
+              "frameMs": 160,
+              "holdLast": false
+            },
+            {
+              "id": "review",
+              "row": 8,
+              "frameMs": 160,
+              "holdLast": false
+            },
+            {
+              "id": "gaze-a",
+              "row": 9,
+              "frameMs": 160,
+              "holdLast": false
+            },
+            {
+              "id": "gaze-b",
+              "row": 10,
+              "frameMs": 160,
+              "holdLast": false
+            },
+            {
+              "id": "pet",
+              "row": 11,
+              "frameMs": 330,
+              "holdLast": false
+            },
+            {
+              "id": "cookie",
+              "row": 12,
+              "frameMs": 300,
+              "holdLast": false
+            },
+            {
+              "id": "pudding",
+              "row": 13,
+              "frameMs": 350,
+              "holdLast": false
+            },
+            {
+              "id": "tea",
+              "row": 14,
+              "frameMs": 400,
+              "holdLast": false
+            },
+            {
+              "id": "sit",
+              "row": 15,
+              "frameMs": 300,
+              "holdLast": false
+            },
+            {
+              "id": "sleep",
+              "row": 16,
+              "frameMs": 650,
+              "holdLast": true
+            },
+            {
+              "id": "stretch",
+              "row": 17,
+              "frameMs": 300,
+              "holdLast": false
+            },
+            {
+              "id": "spin",
+              "row": 18,
+              "frameMs": 180,
+              "holdLast": false
+            },
+            {
+              "id": "lift",
+              "row": 19,
+              "frameMs": 200,
+              "holdLast": false
+            },
+            {
+              "id": "peek",
+              "row": 20,
+              "frameMs": 280,
+              "holdLast": false
+            },
+            {
+              "id": "smug",
+              "row": 21,
+              "frameMs": 550,
+              "holdLast": false
+            },
+            {
+              "id": "pillow",
+              "row": 22,
+              "frameMs": 600,
+              "holdLast": false
+            },
+            {
+              "id": "quilt",
+              "row": 23,
+              "frameMs": 600,
+              "holdLast": true
+            },
+            {
+              "id": "balltap",
+              "row": 24,
+              "frameMs": 300,
+              "holdLast": false
+            },
+            {
+              "id": "boxduck",
+              "row": 25,
+              "frameMs": 300,
+              "holdLast": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ren",
+      "displayName": "蓮",
+      "defaultOutfit": "original",
+      "outfits": [
+        {
+          "id": "original",
+          "displayName": "赤瞳流浪者",
+          "description": "白金衣裝・梅花劍",
+          "counts": [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            8,
+            8,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "atlas": "assets/characters/ren/atlas.png",
+          "portrait": "assets/characters/ren/portrait.png",
+          "actions": [
+            {
+              "id": "idle",
+              "row": 0,
+              "frameMs": 220,
+              "holdLast": false
+            },
+            {
+              "id": "right",
+              "row": 1,
+              "frameMs": 160,
+              "holdLast": false
+            },
+            {
+              "id": "left",
+              "row": 2,
+              "frameMs": 160,
+              "holdLast": false
+            },
+            {
+              "id": "wave",
+              "row": 3,
+              "frameMs": 160,
+              "holdLast": false
+            },
+            {
+              "id": "jump",
+              "row": 4,
+              "frameMs": 170,
+              "holdLast": false
+            },
+            {
+              "id": "sad",
+              "row": 5,
+              "frameMs": 160,
+              "holdLast": false
+            },
+            {
+              "id": "waiting",
+              "row": 6,
+              "frameMs": 160,
+              "holdLast": false
+            },
+            {
+              "id": "thinking",
+              "row": 7,
+              "frameMs": 160,
+              "holdLast": false
+            },
+            {
+              "id": "review",
+              "row": 8,
+              "frameMs": 160,
+              "holdLast": false
+            },
+            {
+              "id": "gaze-a",
+              "row": 9,
+              "frameMs": 160,
+              "holdLast": false
+            },
+            {
+              "id": "gaze-b",
+              "row": 10,
+              "frameMs": 160,
+              "holdLast": false
+            },
+            {
+              "id": "pet",
+              "row": 11,
+              "frameMs": 330,
+              "holdLast": false
+            },
+            {
+              "id": "cookie",
+              "row": 12,
+              "frameMs": 300,
+              "holdLast": false
+            },
+            {
+              "id": "pudding",
+              "row": 13,
+              "frameMs": 350,
+              "holdLast": false
+            },
+            {
+              "id": "tea",
+              "row": 14,
+              "frameMs": 400,
+              "holdLast": false
+            },
+            {
+              "id": "sit",
+              "row": 15,
+              "frameMs": 300,
+              "holdLast": false
+            },
+            {
+              "id": "sleep",
+              "row": 16,
+              "frameMs": 650,
+              "holdLast": true
+            },
+            {
+              "id": "stretch",
+              "row": 17,
+              "frameMs": 300,
+              "holdLast": false
+            },
+            {
+              "id": "spin",
+              "row": 18,
+              "frameMs": 180,
+              "holdLast": false
+            },
+            {
+              "id": "lift",
+              "row": 19,
+              "frameMs": 200,
+              "holdLast": false
+            },
+            {
+              "id": "peek",
+              "row": 20,
+              "frameMs": 280,
+              "holdLast": false
+            },
+            {
+              "id": "petal",
+              "row": 21,
+              "frameMs": 375,
+              "holdLast": false
+            },
+            {
+              "id": "combo",
+              "row": 22,
+              "frameMs": 625,
+              "holdLast": false
+            },
+            {
+              "id": "dragon",
+              "row": 23,
+              "frameMs": 1000,
+              "holdLast": false
+            }
+          ]
+        }
+      ],
+      "dialogue": {
+        "pet": "嗯……再一下就好。",
+        "wave": "我在。",
+        "jump": "走吧。",
+        "cookie": "謝謝。很好吃。",
+        "pudding": "甜的……不錯。",
+        "tea": "慢慢喝，不急。",
+        "sit": "休息一下，我陪你。",
+        "sleep": "稍微歇一會。",
+        "wake": "我醒了。",
+        "stretch": "嗯，繼續吧。",
+        "spin": "偶爾這樣，也不錯。",
+        "peek": "……被發現了。",
+        "focus": "這一輪完成了。歇一會吧。",
+        "rest": "準備好，再出發。",
+        "hello": "我叫蓮。今天也一起走吧。"
+      },
+      "stories": [
+        "我在這裡。你慢慢來。",
+        "風停了……適合喝杯茶。",
+        "不用急，一步一步就好。",
+        "今天也走了很遠呢。"
+      ],
+      "attacks": [
+        {
+          "id": "petal",
+          "name": "花瓣斬",
+          "row": 21,
+          "duration": 1500,
+          "cues": [
+            0.15,
+            0.32,
+            0.5,
+            0.72
+          ],
+          "fxRow": 0
+        },
+        {
+          "id": "combo",
+          "name": "殘影連斬",
+          "row": 22,
+          "duration": 2500,
+          "cues": [
+            0.16,
+            0.34,
+            0.52,
+            0.75
+          ],
+          "fxRow": 1
+        },
+        {
+          "id": "dragon",
+          "name": "龍影大招",
+          "row": 23,
+          "duration": 4000,
+          "cues": [
+            0.08,
+            0.26,
+            0.5,
+            0.76
+          ],
+          "fxRow": 2
+        }
+      ]
+    }
+  ]
+}

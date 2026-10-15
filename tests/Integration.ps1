@@ -153,6 +153,7 @@ public static class KalingTestNative {
         if(-not $activated){$script:fullscreenHidden=[KalingNative]::IsFullscreen($probe.Handle,$hwnd);Update-Visibility}
         Check ($w.IsVisible) 'exit fullscreen restores pet'
     }finally{$timer.Stop();$probe.Close();$probe.Dispose()}
+    if($PhysicalInputTest){
     # Real desktop input is sent only after hit-testing our own disposable probe process.
     $savedCursor=[KalingTestNative+Point]::new();[void][KalingTestNative]::GetCursorPos([ref]$savedCursor)
     $child=$null
@@ -187,6 +188,7 @@ public static class KalingTestNative {
         if($state.clickThrough){Toggle-Through}
         if($child -and -not $child.HasExited){[void][KalingTestNative]::PostMessage($probeHandle,0x10,[IntPtr]::Zero,[IntPtr]::Zero);[void]$child.WaitForExit(3000);if(-not $child.HasExited){$child.Kill()}}
     }
+    }else{$limitations.Add('Physical desktop input is opt-in (-PhysicalInputTest); no actual cross-process clicks sent in this run.')}
     Reset-Pomodoro $state;Start-Timer;$before=$state.pomo.remaining;$script:nextStory=0;$script:actionUntil=0;$state.stories=$true;Hide-Bubble
     $timer.Start();Pump-For 400;$timer.Stop()
     Check ($state.pomo.remaining -lt $before -and $bubble.Visibility -eq 'Hidden' -and $nextStory -eq 0) 'live timer advances while suppressing spontaneous story'
@@ -199,6 +201,9 @@ public static class KalingTestNative {
     Check ($restored.mode -eq 'follow' -and -not $restored.look -and -not $restored.stories -and $restored.scale -eq 1.5) 'UI preferences persist'
     $script:cooldownUntil=0;$null=Invoke-Interaction 'pet';Capture 'petting.png'
     . (Join-Path $root 'tests\Room.Tests.ps1')
+    Close-Room;Select-Character 'kaling'
+    . (Join-Path $root 'tests\Ren.Integration.ps1')
+    . (Join-Path $root 'tests\Merged.Integration.ps1')
     $limitations.Add('Physical mixed-DPI multi-monitor transitions are not covered by this single-desktop test.')
     $limitations.Add('Sleep is tested through elapsed-gap logic; physical suspend/resume is not forced.')
     @{ok=$true;count=$checks.Count;checks=@($checks);limitations=@($limitations)} | ConvertTo-Json -Depth 4 | Set-Content (Join-Path $dataDirectory 'integration.json') -Encoding UTF8

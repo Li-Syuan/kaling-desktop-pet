@@ -1,4 +1,9 @@
-﻿$script:room=@{open=$false;window=$null;hwnd=[IntPtr]::Zero;phase='idle';task='';u=.45;v=.45;path=@();step=0;until=0.0;time=0.0;idle=0.0;nextAuto=40.0;nextFrame=0.0;drag=$null;roll=$null;pose=$null;foodCount=0;petCount=0}
+﻿# House-specific poses use existing daily animations when a character has no dedicated art.
+function Resolve-RoomRow([int]$Row) {
+    if($state.character -eq 'ren' -and $Row -ge 21){return @{21=11;22=15;23=16;24=3;25=20}[$Row]}
+    return $Row
+}
+$script:room=@{open=$false;window=$null;hwnd=[IntPtr]::Zero;phase='idle';task='';u=.45;v=.45;path=@();step=0;until=0.0;time=0.0;idle=0.0;nextAuto=40.0;nextFrame=0.0;drag=$null;roll=$null;pose=$null;foodCount=0;petCount=0}
 function Get-RoomBitmap([string]$Name) {
     $b=[System.Windows.Media.Imaging.BitmapImage]::new();$b.BeginInit();$b.CacheOption='OnLoad';$b.UriSource=[Uri](Join-Path $root ('assets\room\'+$Name+'.png'));$b.EndInit();$b.Freeze();return $b
 }
@@ -8,7 +13,7 @@ function Add-RoomImage([string]$Name,[double]$Width,[double]$Height) {
 function Place-RoomVisual($Visual,[double]$X,[double]$Y,[int]$Z) {
     [System.Windows.Controls.Canvas]::SetLeft($Visual,$X);[System.Windows.Controls.Canvas]::SetTop($Visual,$Y);[System.Windows.Controls.Panel]::SetZIndex($Visual,$Z)
 }
-function Set-RoomMessage([string]$Text) {if($room.open){$room.message.Text=$Text}}
+function Set-RoomMessage([string]$Text) {if($room.open){$room.message.Text=$(if($state.character -eq 'ren'){'……'+$Text.Replace('嘿嘿，','').Replace('球球','球')}else{$Text})}}
 function Keep-RoomVisible {
     if(-not $room.window -or $room.hwnd -eq [IntPtr]::Zero){return}
     $a=[System.Windows.Forms.Screen]::FromHandle($room.hwnd).WorkingArea;$m=([System.Windows.PresentationSource]::FromVisual($room.window)).CompositionTarget.TransformFromDevice
@@ -35,6 +40,7 @@ function Cancel-RoomActivity {
     $room.idle=0;$room.nextAuto=$room.time+(Get-Random -Minimum 30 -Maximum 61);$script:resting='none';Set-Animation 0 0;Render-Room
 }
 function Start-RoomPhase([string]$Phase,[int]$Row,[double]$Seconds) {
+    $Row=Resolve-RoomRow $Row;if($state.character -eq 'ren' -and $Phase -eq 'waking'){$Row=20}
     $room.phase=$Phase;$room.until=$room.time+$Seconds;Set-Animation $Row ([int]($Seconds*1000));Render-Room
 }
 function Request-RoomAction([string]$Action,[switch]$Automatic) {
@@ -104,7 +110,7 @@ function Update-Room([double]$Delta) {
             'bed-enter' {Start-RoomPhase 'bed-sit' 15 1.0}
             'sofa-enter' {Start-RoomPhase 'sofa' 22 10}
             'bed-sit' {Start-RoomPhase 'bed-tuck' 23 2.4}
-            'bed-tuck' {$script:frame=3;$room.phase='bed-sleep';Set-RoomMessage '睡著了…點小床或咖凌叫醒她。'}
+            'bed-tuck' {$script:frame=3;$room.phase='bed-sleep';Set-RoomMessage '睡著了…點小床或角色叫醒。'}
             'waking' {$p=Get-RoomPoint $room.u $room.v;Move-RoomPose @{x=$p.x;y=$p.y;z=[int]$p.y};Start-RoomPhase 'getting-up' 17 .65}
             'getting-up' {$room.pose=$null;Start-RoomPhase 'stretch' 17 2.4}
             'sofa' {if($state.pomo.status -ne 'running' -and -not $state.quiet){Start-RoomPhase 'sofa-nap' 16 4}else{Cancel-RoomActivity}}
@@ -132,12 +138,12 @@ function Show-Room {
     if($room.open){if(-not $manualHidden -and -not $fullscreenHidden){$room.window.Show();[void]$room.window.Activate()};return}
     Mark-Activity;$script:pendingClick=$null;$script:drag=$false;$img.ReleaseMouseCapture();Hide-Bubble
     $room.open=$true;$room.u=.45;$room.v=.45;$room.phase='idle';$room.pose=$null;$room.time=0.0;$room.nextFrame=0.0;$room.nextAuto=40.0;$room.roll=$null
-    $dialog=[System.Windows.Window]::new();$room.window=$dialog;$dialog.Title='咖凌的小屋';$dialog.Width=880;$dialog.Height=745;$dialog.MinWidth=580;$dialog.MinHeight=500;$dialog.Background='#FFF7F8';$dialog.Topmost=$true;$dialog.FontFamily='Microsoft JhengHei UI';$dialog.ContextMenu=$menu
+    $dialog=[System.Windows.Window]::new();$room.window=$dialog;$dialog.Title=$character.displayName+'的小屋';$dialog.Width=880;$dialog.Height=745;$dialog.MinWidth=580;$dialog.MinHeight=500;$dialog.Background='#FFF7F8';$dialog.Topmost=$true;$dialog.FontFamily='Microsoft JhengHei UI';$dialog.ContextMenu=$menu
     $area=[System.Windows.SystemParameters]::WorkArea;$dialog.Width=[math]::Min(880,$area.Width-24);$dialog.Height=[math]::Min(745,$area.Height-24)
     $layout=[System.Windows.Controls.DockPanel]::new();$dialog.Content=$layout
     $bar=[System.Windows.Controls.StackPanel]::new();$bar.Orientation='Horizontal';$bar.Margin='16,12';[System.Windows.Controls.DockPanel]::SetDock($bar,'Top');[void]$layout.Children.Add($bar)
     foreach($entry in @(@('回桌面','close'),@('衣櫃','wardrobe'),@('吃點心','food'),@('專注／繼續','focus'),@('暫停計時','pause'))){$b=[System.Windows.Controls.Button]::new();$b.Content=$entry[0];$b.Tag=$entry[1];$b.Padding='12,6';$b.Margin='0,0,8,0';$b.Add_Click({param($s,$e);switch($s.Tag){'close'{Close-Room};'wardrobe'{Request-RoomAction 'wardrobe'};'food'{$room.foodMenu.PlacementTarget=$s;$room.foodMenu.IsOpen=$true};'focus'{Start-Timer};'pause'{Pause-Timer}}});[void]$bar.Children.Add($b)}
-    $room.message=[System.Windows.Controls.TextBlock]::new();$room.message.Text='點家具互動 · 拖動球和紙箱 · 點咖凌摸摸頭';$room.message.Margin='20,8';$room.message.Foreground='#79556A';$room.message.TextWrapping='Wrap';[System.Windows.Controls.DockPanel]::SetDock($room.message,'Bottom');[void]$layout.Children.Add($room.message)
+    $room.message=[System.Windows.Controls.TextBlock]::new();$room.message.Text='點家具互動 · 拖動球和紙箱 · 點角色摸摸頭';$room.message.Margin='20,8';$room.message.Foreground='#79556A';$room.message.TextWrapping='Wrap';[System.Windows.Controls.DockPanel]::SetDock($room.message,'Bottom');[void]$layout.Children.Add($room.message)
     $room.timerText=[System.Windows.Controls.TextBlock]::new();$room.timerText.Margin='20,0,20,4';$room.timerText.Foreground='#79556A';$room.timerText.Text='右鍵可切換安靜陪伴、日常小劇場與番茄鐘設定';[System.Windows.Controls.DockPanel]::SetDock($room.timerText,'Top');[void]$layout.Children.Add($room.timerText)
     $view=[System.Windows.Controls.Viewbox]::new();$view.Stretch='Uniform';[void]$layout.Children.Add($view)
     $room.canvas=[System.Windows.Controls.Canvas]::new();$room.canvas.Width=900;$room.canvas.Height=650;$room.canvas.ClipToBounds=$true;$view.Child=$room.canvas

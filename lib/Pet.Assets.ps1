@@ -1,35 +1,57 @@
 ﻿function Read-OutfitCatalog([string]$Root) {
-    $catalog=Get-Content -LiteralPath (Join-Path $Root 'assets\outfits\catalog.json') -Raw -Encoding UTF8 | ConvertFrom-Json
-    if($catalog.schemaVersion -ne 1 -or @($catalog.outfits).Count -ne 3){throw 'Invalid outfit catalog'}
-    foreach($outfit in $catalog.outfits){
-        if($outfit.id -notin @('uniform','pajamas','hoodie') -or @($outfit.counts).Count -ne 26){throw 'Invalid outfit entry'}
-        foreach($count in $outfit.counts){if($count -lt 1 -or $count -gt 8){throw 'Invalid animation frame count'}}
+    $all=Get-Content -LiteralPath (Join-Path $Root 'assets/characters/catalog.json') -Raw -Encoding UTF8 | ConvertFrom-Json
+    if($all.schemaVersion -ne 1){throw 'Invalid character catalog'}
+    foreach($character in $all.characters){
+        foreach($entry in $character.outfits){
+            if(@($entry.actions).Count -ne @($entry.counts).Count -or $entry.counts.Count -lt 21){throw 'Incomplete actions'}
+            for($i=0;$i -lt $entry.counts.Count;$i++){
+                if($entry.counts[$i] -lt 1 -or $entry.counts[$i] -gt 8 -or $entry.actions[$i].row -ne $i -or $entry.actions[$i].frameMs -le 0){throw 'Invalid animation metadata'}
+            }
+        }
     }
-    if(@($catalog.outfits.id | Select-Object -Unique).Count -ne 3){throw 'Duplicate outfits'}
-    return $catalog
+    $script:characterCatalog=$all
+    $script:character=@($all.characters | Where-Object id -eq $state.character)[0]
+    if(-not $script:character){throw 'Unknown character'}
+    return $script:character
+}
+function Get-CharacterText([string]$Key,[string]$Fallback) {
+    if($character.dialogue -and $character.dialogue.$Key){return [string]$character.dialogue.$Key};return $Fallback
+}
+function Select-Character([string]$Id) {
+    $next=@($characterCatalog.characters | Where-Object id -eq $Id)[0]
+    if(-not $next){throw 'Unknown character'}
+    if($wardrobeWindow){$wardrobeWindow.Close()}
+    if($room.open){Cancel-RoomActivity}
+    Mark-Activity;Hide-Bubble;$script:pendingClick=$null;$script:cooldownUntil=0
+    $script:state.characterOutfits[$state.character]=$state.outfit
+    $script:state.character=$Id;$script:character=$next;$script:catalog=$next
+    Select-Outfit $state.characterOutfits[$Id]
+    $w.Title=$next.displayName+' · 陪伴日常';if($room.open){$room.window.Title=$next.displayName+'的小屋';Render-Room};Update-Badge;Update-CharacterMenus
+    Show-Bubble (Get-CharacterText 'hello' '你好！今天也一起度過吧。')
 }
 function Get-OutfitAssets([string]$Id) {
-    if($script:outfitCache.ContainsKey($Id)){return $script:outfitCache[$Id]}
+    $cacheKey=$state.character+'/'+$Id
+    if($script:outfitCache.ContainsKey($cacheKey)){return $script:outfitCache[$cacheKey]}
     $entry=@($script:catalog.outfits | Where-Object id -eq $Id)[0]
     if(-not $entry){throw 'Unknown outfit'}
     $atlas=[System.Windows.Media.Imaging.BitmapImage]::new()
-    $atlas.BeginInit();$atlas.CacheOption='OnLoad';$atlas.UriSource=[Uri](Join-Path $script:root ('assets\outfits\'+$Id+'\atlas.png'));$atlas.EndInit();$atlas.Freeze()
-    if($atlas.PixelWidth -ne 1536 -or $atlas.PixelHeight -ne 5408){throw 'Invalid outfit atlas dimensions'}
+    $atlas.BeginInit();$atlas.CacheOption='OnLoad';$atlas.UriSource=[Uri](Join-Path $script:root $entry.atlas);$atlas.EndInit();$atlas.Freeze()
+    if($atlas.PixelWidth -ne 1536 -or $atlas.PixelHeight -ne (208*$entry.counts.Count)){throw 'Invalid outfit atlas dimensions'}
     $frames=@{}
-    for($r=0;$r -lt 26;$r++){for($c=0;$c -lt $entry.counts[$r];$c++){
+    for($r=0;$r -lt $entry.counts.Count;$r++){for($c=0;$c -lt $entry.counts[$r];$c++){
         $frame=[System.Windows.Media.Imaging.CroppedBitmap]::new($atlas,[System.Windows.Int32Rect]::new($c*192,$r*208,192,208));$frame.Freeze();$frames["$r,$c"]=$frame
     }}
     $thumb=[System.Windows.Media.Imaging.BitmapImage]::new()
-    $thumb.BeginInit();$thumb.CacheOption='OnLoad';$thumb.UriSource=[Uri](Join-Path $script:root ('assets\outfits\'+$Id+'\portrait.png'));$thumb.EndInit();$thumb.Freeze()
+    $thumb.BeginInit();$thumb.CacheOption='OnLoad';$thumb.UriSource=[Uri](Join-Path $script:root $entry.portrait);$thumb.EndInit();$thumb.Freeze()
     $result=@{entry=$entry;frames=$frames;thumbnail=$thumb;counts=@($entry.counts)}
-    $script:outfitCache[$Id]=$result;return $result
+    $script:outfitCache[$cacheKey]=$result;return $result
 }
 function Select-Outfit([string]$Id,[switch]$Celebrate) {
     $assets=Get-OutfitAssets $Id
-    $script:frames=$assets.frames;$script:counts=$assets.counts;$script:state.outfit=$Id
+    $script:frames=$assets.frames;$script:counts=$assets.counts;$script:state.outfit=$Id;$state.characterOutfits[$state.character]=$Id
     $script:durations=@()
     for($r=0;$r -lt $counts.Count;$r++){
-        $speed=switch($r){0{220};4{170};11{330};12{300};13{350};14{400};15{300};16{650};17{300};18{180};19{200};20{280};21{550};22{600};23{600};24{300};25{300};default{160}}
+        $speed=$assets.entry.actions[$r].frameMs
         $timings=@();for($c=0;$c -lt $counts[$r];$c++){$timings+=$speed};$script:durations+=,$timings
     }
     if($script:loaded){
@@ -46,11 +68,11 @@ function Show-Wardrobe {
     if($room.open){Cancel-RoomActivity}
     Mark-Activity;Set-Animation 0 0
     $script:wardrobeWindow=[System.Windows.Window]::new();$dialog=$script:wardrobeWindow
-    $dialog.Title='咖凌衣櫃';$dialog.Width=640;$dialog.Height=420;$dialog.ResizeMode='NoResize';$dialog.WindowStartupLocation='CenterScreen';$dialog.Background='#FFF5F8'
+    $dialog.Title=$character.displayName+'衣櫃';$dialog.Width=640;$dialog.Height=420;$dialog.ResizeMode='NoResize';$dialog.WindowStartupLocation='CenterScreen';$dialog.Background='#FFF5F8'
     $layout=[System.Windows.Controls.StackPanel]::new();$layout.Margin=18;$dialog.Content=$layout
-    $title=[System.Windows.Controls.TextBlock]::new();$title.Text='今天，想和哪一個咖凌一起度過？';$title.FontSize=20;$title.Foreground='#673D54';$title.Margin='0,0,0,6';[void]$layout.Children.Add($title)
+    $title=[System.Windows.Controls.TextBlock]::new();$title.Text=$character.displayName+' · 今天的衣裝';$title.FontSize=20;$title.Foreground='#673D54';$title.Margin='0,0,0,6';[void]$layout.Children.Add($title)
     $note=[System.Windows.Controls.TextBlock]::new();$note.Text='每套都有完整動作。換裝立即生效，下次開啟會記得。';$note.FontSize=12;$note.Foreground='#876878';$note.Margin='0,0,0,16';[void]$layout.Children.Add($note)
-    $cards=[System.Windows.Controls.Primitives.UniformGrid]::new();$cards.Columns=3;[void]$layout.Children.Add($cards);$script:wardrobeButtons=@{}
+    $cards=[System.Windows.Controls.Primitives.UniformGrid]::new();$cards.Columns=$catalog.outfits.Count;[void]$layout.Children.Add($cards);$script:wardrobeButtons=@{}
     foreach($entry in $script:catalog.outfits){
         $assets=Get-OutfitAssets $entry.id
         $card=[System.Windows.Controls.Border]::new();$card.Background='White';$card.BorderBrush='#EACAD8';$card.BorderThickness=1;$card.CornerRadius=14;$card.Margin=5;$card.Padding=10
