@@ -1,6 +1,6 @@
 ﻿function New-PetState {
     return @{
-        version=1; left=$null; top=$null; scale=1.5; mode='stay'; look=$true
+        version=2; character='kaling'; characterOutfits=@{kaling='uniform';ren='original'}; left=$null; top=$null; scale=1.5; mode='stay'; look=$true
         bubbles=$true; stories=$true; quiet=$false; autoHide=$true; clickThrough=$false
         focusMinutes=25; shortMinutes=5; longMinutes=15; mood='calm'; outfit='uniform'
         pomo=@{phase='focus'; status='ready'; remaining=1500.0; rounds=0; total=0}
@@ -12,7 +12,7 @@ function Read-PetState([string]$Directory) {
     if(-not (Test-Path -LiteralPath $path)){return $state}
     try {
         $data=Get-Content -LiteralPath $path -Raw -Encoding UTF8 | ConvertFrom-Json
-        if($data.version -ne 1){throw 'Unsupported settings version'}
+        if($data.version -notin @(1,2)){throw 'Unsupported settings version'}
         foreach($name in @('left','top','scale','focusMinutes','shortMinutes','longMinutes')) {
             $value=$data.$name
             if($null -eq $value -and $name -in @('left','top')){continue}
@@ -27,6 +27,12 @@ function Read-PetState([string]$Directory) {
         if($data.mode -notin @('stay','wander','follow')){throw 'Invalid mode'};$state.mode=$data.mode
         if($data.mood -in @('calm','happy','focused','sleepy')){$state.mood=$data.mood}
         if($data.outfit -in @('uniform','pajamas','hoodie')){$state.outfit=$data.outfit}
+        $state.characterOutfits.kaling=$state.outfit
+        if($data.version -eq 2){
+            if($data.character -in @('kaling','ren')){$state.character=$data.character}
+            if($data.characterOutfits.kaling -in @('uniform','pajamas','hoodie')){$state.characterOutfits.kaling=$data.characterOutfits.kaling}
+            if($state.character -eq 'ren'){$state.outfit='original'}elseif($data.character -eq 'ren' -or $data.character -notin @('kaling',$null)){$state.outfit=$state.characterOutfits.kaling}
+        }
         $p=$data.pomo
         if($p.phase -notin @('focus','short','long') -or $p.status -notin @('ready','running','paused')){throw 'Invalid timer state'}
         foreach($name in @('remaining','rounds','total')){
@@ -42,6 +48,7 @@ function Read-PetState([string]$Directory) {
     return $state
 }
 function Write-PetState($State,[string]$Directory) {
+    $State.characterOutfits[$State.character]=$State.outfit
     [void][IO.Directory]::CreateDirectory($Directory)
     $path=Join-Path $Directory 'settings.json';$temp=Join-Path $Directory ('settings.'+[guid]::NewGuid().ToString('N')+'.tmp')
     try {

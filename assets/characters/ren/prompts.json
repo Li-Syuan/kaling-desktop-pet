@@ -1,0 +1,107 @@
+{
+  "mode": "built-in imagegen",
+  "master": "Use case: stylized-concept. Asset: transparent character model sheet for a Windows desktop pet. Reference: MapleStory Ren official appearance. Create a polished clean-lined chibi Ren model sheet, 4 separate full-body views in ONE horizontal row: front neutral sheathed sword; three-quarter facing right hand on sheathed sword; full side facing right walking stance; three-quarter facing right holding drawn slender sword angled forward. Same character in all four views: long white high ponytail with narrow icy blue streak, red eyes, two upright white rabbit ears, black ribbon, white/cream wide-sleeved robe with gold trim and dark navy underclothes, green sash, white stockings, dark boots. Cute large head about half body height, modest outfit faithful to reference. Small readable face and costume, not pixel art. Exactly four characters, transparent background with generous clear gaps between silhouettes, complete ears feet and sword inside each cell, no lettering, labels, logos, scenery, dragon or shadows. Keep all four equal scale.",
+  "jobs": [
+    {
+      "id": "basic-a",
+      "rows": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "prompt": "Use the supplied Ren model sheet as exact identity reference. Change only pose and expression. Transparent sprite sheet, exactly FOUR columns with generously separated full-body sprites, equal cell grid, same character scale and ground baseline, no borders text shadows or scenery. Every ear, ponytail, boot and sword fully inside its cell with clear transparent margins. Preserve white ponytail icy-blue streak, red eyes, two rabbit ears, green sash, white/gold robe, dark sleeves and boots. Closed sheathed sword stays at hip except combat. Each ROW is a four-frame animation, left to right. FOUR ROWS. Row1 idle breathing/blink: eyes open, relaxed, closed blink, open. Row2 walking RIGHT: contact, passing, opposite contact, passing. Row3 walking LEFT: contact, passing, opposite contact, passing. Row4 small friendly wave: arm lifts, hand raised, wave, hand lowers.",
+      "reference": "reference.png"
+    },
+    {
+      "id": "basic-b",
+      "rows": [
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "prompt": "Use the supplied Ren model sheet as exact identity reference. Change only pose and expression. Transparent sprite sheet, exactly FOUR columns with generously separated full-body sprites, equal cell grid, same character scale and ground baseline, no borders text shadows or scenery. Every ear, ponytail, boot and sword fully inside its cell with clear transparent margins. Preserve white ponytail icy-blue streak, red eyes, two rabbit ears, green sash, white/gold robe, dark sleeves and boots. Closed sheathed sword stays at hip except combat. Each ROW is a four-frame animation, left to right. FIVE ROWS. Row1 jump: crouch, leap, float, land. Row2 sad: neutral, eyes down, ears droop slightly, recover. Row3 waiting: look aside, hand at waist, foot tap, settle. Row4 thinking: hand toward chin, pondering, blink, small nod. Row5 focused reading: hold small book, look down, turn page, look up.",
+      "reference": "reference.png"
+    },
+    {
+      "id": "look",
+      "rows": [
+        9,
+        10
+      ],
+      "prompt": "Use the supplied Ren model sheet as exact identity reference. Change only pose and expression. Transparent sprite sheet, exactly FOUR columns with generously separated full-body sprites, equal cell grid, same character scale and ground baseline, no borders text shadows or scenery. Every ear, ponytail, boot and sword fully inside its cell with clear transparent margins. Preserve white ponytail icy-blue streak, red eyes, two rabbit ears, green sash, white/gold robe, dark sleeves and boots. Closed sheathed sword stays at hip except combat. Each ROW is a four-frame animation, left to right. FOUR ROWS with sixteen front-standing gaze views clockwise, only eyes and slight head angle change, full bodies otherwise neutral. Row1 gaze up, upper-right slight, upper-right diagonal, right-up. Row2 right, right-down, lower-right, down-right slight. Row3 down, down-left slight, lower-left, left-down. Row4 left, left-up, upper-left, up-left slight.",
+      "reference": "reference.png"
+    },
+    {
+      "id": "daily-a",
+      "rows": [
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "prompt": "Use the supplied Ren model sheet as exact identity reference. Change only pose and expression. Transparent sprite sheet, exactly FOUR columns with generously separated full-body sprites, equal cell grid, same character scale and ground baseline, no borders text shadows or scenery. Every ear, ponytail, boot and sword fully inside its cell with clear transparent margins. Preserve white ponytail icy-blue streak, red eyes, two rabbit ears, green sash, white/gold robe, dark sleeves and boots. Closed sheathed sword stays at hip except combat. Each ROW is a four-frame animation, left to right. FIVE ROWS. Row1 being petted: shy eyes, gentle blush closed eyes, tilt head pleased, small smile. Row2 eat cookie: hold cookie, lift to lips, small bite, content chewing. Row3 eat pudding: hold pudding cup and spoon, scoop, spoon to lips, satisfied. Row4 drink tea: hold small teacup, raise, sip, lower. Row5 sit and swing feet: seated facing front, feet left, feet right, relaxed with feet center. No chairs drawn.",
+      "reference": "reference.png"
+    },
+    {
+      "id": "daily-b",
+      "rows": [
+        16,
+        17,
+        18,
+        19,
+        20
+      ],
+      "prompt": "Use the supplied Ren model sheet as exact identity reference. Change only pose and expression. Transparent sprite sheet, exactly FOUR columns with generously separated full-body sprites, equal cell grid, same character scale and ground baseline, no borders text shadows or scenery. Every ear, ponytail, boot and sword fully inside its cell with clear transparent margins. Preserve white ponytail icy-blue streak, red eyes, two rabbit ears, green sash, white/gold robe, dark sleeves and boots. Closed sheathed sword stays at hip except combat. Each ROW is a four-frame animation, left to right. FIVE ROWS. Row1 fall asleep seated hugging knees: awake, drowsy, eyes shut, head rests on knees asleep. Row2 wake/stretch: rub eyes, arms rise, stretch, relaxed. Row3 turn in place: facing front, side right, back with ponytail and rabbit ears, side left. Row4 lifted gently by invisible hand: sleeves raised slightly and feet dangle, feet left, feet right, surprised eyes. Row5 peeking: lean upper body left, lean further with curious face, blink, shy smile. Whole body visible, no wall.",
+      "reference": "reference.png"
+    },
+    {
+      "id": "combat",
+      "rows": [
+        21,
+        22,
+        23
+      ],
+      "prompt": "Use the supplied Ren model sheet as exact identity reference. Change only pose and expression. Transparent sprite sheet, exactly FOUR columns with generously separated full-body sprites, equal cell grid, same character scale and ground baseline, no borders text shadows or scenery. Every ear, ponytail, boot and sword fully inside its cell with clear transparent margins. Preserve white ponytail icy-blue streak, red eyes, two rabbit ears, green sash, white/gold robe, dark sleeves and boots. Closed sheathed sword stays at hip except combat. Each ROW is a four-frame animation, left to right. THREE ROWS. Face RIGHT for every frame. Keep actual sword visible and NOT cut off. NO glow or attack effects because effects are separate. Row1 petal slash: hand on hilt anticipating, sword draws in diagonal cut, follow through extended blade, return blade toward scabbard. Row2 double slash: low crouch ready, lunging forward slash, reverse slash across body, elegant sheathing pose. Row3 dragon ultimate: feet grounded sword at chest focus, sword raised gathering energy, powerful descending slash, calm sheathing stance. Crisp readable distinct poses.",
+      "reference": "reference.png"
+    }
+  ],
+  "effects": "Transparent VFX sprite sheet for a chibi MapleStory Ren desktop pet. Exactly 4 columns by 3 rows on transparent background, twelve isolated effect frames in equal cells, generous clear margins. NO characters, no text, no frames, no ground, no rectangular background. Row1 four progressive phases of a pink-white curved sword slash with delicate plum blossom petals: thin arc starts, sweeping arc broadens, bright arc full sweep, fading drifting petals. Row2 four progressive phases of TWO crossing pale pink and icy-blue blade arcs: first diagonal, crossed X, spreading streaks, fading wisps. Row3 four progressive phases of ONE elegant dark navy serpentine dragon spirit with gold line details and pale icy-blue aura (not a western winged dragon), inspired by Ren companion Saya: faint coiled silhouette, rising dragon head with long curled body, full powerful sweeping dragon with swordlight, dissolving dragon wisps. Continuous transitions within each row. Beautiful crisp painted game effects with true alpha glow, each effect entirely inside its cell. No character bodies or faces except dragon.",
+  "repairs": [
+    {
+      "id": "care",
+      "prompt": "Create a transparent full-body sprite sheet of the EXACT Ren reference character. FOUR columns TWO rows. Every cell MUST show the ENTIRE character, including long rabbit ears, WHOLE legs and BOTH boots. Do NOT make bust portraits; do NOT crop at waist or knees. Draw each character small enough to fit with 15% clear transparent margin around EVERY silhouette. The four poses are consecutive animation frames. Same scale, fixed baseline. No added backgrounds or labels. Preserve all costume details, face, red eyes, ponytail, green sash. Row 1: standing being petted: neutral, shy blush, eyes shut pleased, shy smile. Row 2: standing eating a cookie: hold, raise, bite, chew."
+    },
+    {
+      "id": "food",
+      "prompt": "Create a transparent full-body sprite sheet of the EXACT Ren reference character. FOUR columns TWO rows. Every cell MUST show the ENTIRE character, including long rabbit ears, WHOLE legs and BOTH boots. Do NOT make bust portraits; do NOT crop at waist or knees. Draw each character small enough to fit with 15% clear transparent margin around EVERY silhouette. The four poses are consecutive animation frames. Same scale, fixed baseline. No added backgrounds or labels. Preserve all costume details, face, red eyes, ponytail, green sash. Row 1: STANDING eating pudding with spoon: hold cup, scoop, taste, pleased. Row 2: STANDING drinking tea: hold teacup, raise, sip, lower."
+    },
+    {
+      "id": "review",
+      "prompt": "Create a transparent full-body sprite sheet of the EXACT Ren reference character. FOUR columns ONE row. Every cell MUST show the ENTIRE character, including long rabbit ears, WHOLE legs and BOTH boots. Do NOT make bust portraits; do NOT crop at waist or knees. Draw each character small enough to fit with 15% clear transparent margin around EVERY silhouette. The four poses are consecutive animation frames. Same scale, fixed baseline. No added backgrounds or labels. Preserve all costume details, face, red eyes, ponytail, green sash. ONE ROW: STANDING reading a book: hold closed book at chest, open book, look down, look up."
+    },
+    {
+      "id": "waiting",
+      "prompt": "Exact Ren character from reference. Transparent sprite strip of FOUR FULL BODY characters in ONE HORIZONTAL ROW. Four successive frames of waiting calmly: neutral stand, glance aside, one hand at waist, small nod. Every character must include two rabbit ears, torso, full legs and both boots completely visible. Same scale and baseline as reference. Four equal-width separate cells with transparent margin on all sides. NO objects or backdrop. Preserve identity white hair ponytail, red eyes, cream/gold robe, green sash, dark boots. Do not zoom in or crop at knees. No external hands. Transparent background."
+    },
+    {
+      "id": "thinking",
+      "prompt": "Exact Ren character from reference. Transparent sprite strip of FOUR FULL BODY characters in ONE HORIZONTAL ROW. Four successive frames of thinking: hand rises toward chin, thoughtful hand at chin, closed eyes pondering, little nod. Every character must include two rabbit ears, torso, full legs and both boots completely visible. Same scale and baseline as reference. Four equal-width separate cells with transparent margin on all sides. NO objects or backdrop. Preserve identity white hair ponytail, red eyes, cream/gold robe, green sash, dark boots. Do not zoom in or crop at knees. No external hands. Transparent background."
+    },
+    {
+      "id": "care-clean",
+      "prompt": "Background extraction only: remove ALL grey cloudy backdrop from this sprite sheet and output TRUE transparent alpha background. Keep all eight whole Ren figures, clothing, props, faces and poses in EXACT same 4x2 arrangement. Preserve complete ears, feet and hair. Also remove the four external human hands petting her head; keep Ren's own hands and hair unchanged. No replacement backdrop, no grey, no checkerboard painted into pixels."
+    },
+    {
+      "id": "food-clean",
+      "prompt": "Background extraction only: remove ALL grey cloudy backdrop from this sprite sheet and output TRUE transparent alpha background. Keep all eight whole Ren figures, clothing, props, faces and poses in EXACT same 4x2 arrangement. Preserve complete ears, feet and hair. No replacement backdrop, no grey, no checkerboard painted into pixels."
+    },
+    {
+      "id": "combat-clean",
+      "prompt": "Remove ONLY the entire cloudy grey background from this exact 4 columns x 3 rows sprite sheet. Preserve all twelve original characters, faces, costumes, swords and poses exactly. Make background genuinely transparent alpha=0, including gaps around ears, hair and blades. No painted backdrop, checker pattern, shadows or glow. Add transparent outer margin so no sword hair or ear is clipped. Do not crop or rearrange figures."
+    }
+  ]
+}
