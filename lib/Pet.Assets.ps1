@@ -2,7 +2,7 @@
     $catalog=Get-Content -LiteralPath (Join-Path $Root 'assets\outfits\catalog.json') -Raw -Encoding UTF8 | ConvertFrom-Json
     if($catalog.schemaVersion -ne 1 -or @($catalog.outfits).Count -ne 3){throw 'Invalid outfit catalog'}
     foreach($outfit in $catalog.outfits){
-        if($outfit.id -notin @('uniform','pajamas','hoodie') -or @($outfit.counts).Count -ne 21){throw 'Invalid outfit entry'}
+        if($outfit.id -notin @('uniform','pajamas','hoodie') -or @($outfit.counts).Count -ne 26){throw 'Invalid outfit entry'}
         foreach($count in $outfit.counts){if($count -lt 1 -or $count -gt 8){throw 'Invalid animation frame count'}}
     }
     if(@($catalog.outfits.id | Select-Object -Unique).Count -ne 3){throw 'Duplicate outfits'}
@@ -14,9 +14,9 @@ function Get-OutfitAssets([string]$Id) {
     if(-not $entry){throw 'Unknown outfit'}
     $atlas=[System.Windows.Media.Imaging.BitmapImage]::new()
     $atlas.BeginInit();$atlas.CacheOption='OnLoad';$atlas.UriSource=[Uri](Join-Path $script:root ('assets\outfits\'+$Id+'\atlas.png'));$atlas.EndInit();$atlas.Freeze()
-    if($atlas.PixelWidth -ne 1536 -or $atlas.PixelHeight -ne 4368){throw 'Invalid outfit atlas dimensions'}
+    if($atlas.PixelWidth -ne 1536 -or $atlas.PixelHeight -ne 5408){throw 'Invalid outfit atlas dimensions'}
     $frames=@{}
-    for($r=0;$r -lt 21;$r++){for($c=0;$c -lt $entry.counts[$r];$c++){
+    for($r=0;$r -lt 26;$r++){for($c=0;$c -lt $entry.counts[$r];$c++){
         $frame=[System.Windows.Media.Imaging.CroppedBitmap]::new($atlas,[System.Windows.Int32Rect]::new($c*192,$r*208,192,208));$frame.Freeze();$frames["$r,$c"]=$frame
     }}
     $thumb=[System.Windows.Media.Imaging.BitmapImage]::new()
@@ -29,18 +29,21 @@ function Select-Outfit([string]$Id,[switch]$Celebrate) {
     $script:frames=$assets.frames;$script:counts=$assets.counts;$script:state.outfit=$Id
     $script:durations=@()
     for($r=0;$r -lt $counts.Count;$r++){
-        $speed=switch($r){0{220};4{170};11{330};12{300};13{350};14{400};15{300};16{650};17{300};18{180};19{200};20{280};default{160}}
+        $speed=switch($r){0{220};4{170};11{330};12{300};13{350};14{400};15{300};16{650};17{300};18{180};19{200};20{280};21{550};22{600};23{600};24{300};25{300};default{160}}
         $timings=@();for($c=0;$c -lt $counts[$r];$c++){$timings+=$speed};$script:durations+=,$timings
     }
     if($script:loaded){
+        if($room.open){Cancel-RoomActivity}
         Mark-Activity
         if($Celebrate){Set-Animation 18 1440;Show-Bubble ('換上'+$assets.entry.displayName+'，陪你開始新的日常！')}else{Set-Animation 0 0}
+        if($room.open){$room.phase='reaction';$room.until=$room.time+1.44;Render-Room}
         Save-Settings
         if($script:wardrobeButtons){foreach($key in $script:wardrobeButtons.Keys){$script:wardrobeButtons[$key].Content=if($key -eq $Id){'正在穿這套'}else{'穿上這套'};$script:wardrobeButtons[$key].IsEnabled=$key -ne $Id}}
     }
 }
 function Show-Wardrobe {
     if($script:wardrobeWindow){[void]$script:wardrobeWindow.Activate();return}
+    if($room.open){Cancel-RoomActivity}
     Mark-Activity;Set-Animation 0 0
     $script:wardrobeWindow=[System.Windows.Window]::new();$dialog=$script:wardrobeWindow
     $dialog.Title='咖凌衣櫃';$dialog.Width=640;$dialog.Height=420;$dialog.ResizeMode='NoResize';$dialog.WindowStartupLocation='CenterScreen';$dialog.Background='#FFF5F8'

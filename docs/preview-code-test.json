@@ -2,10 +2,11 @@
   "ok": true,
   "scope": "JavaScript execution with simulated DOM; no browser rendering or real clicks verified.",
   "outfits": 3,
-  "actionsPerOutfit": 19,
+  "actionsPerOutfit": 24,
   "sleepHoldsFinalFrame": true,
   "cardinalMappings": 4,
   "pause": true,
   "backgroundSwitch": true,
-  "resize": true
+  "resize": true,
+  "roomScenes": 5
 }
