@@ -7,8 +7,9 @@
   "frames": 73,
   "atlas_validation": "passed",
   "visual_review": "passed with reviewed subtle intermediate gaze angles",
-  "desktop_selftest": "passed: 73 frames, nine states, sixteen directions, resize, clamp, wave and jump",
+  "desktop_selftest": "v1.1.0: 29 state checks and 57 integration checks passed; see VALIDATION.md for desktop-input limitations",
   "preview_logic": "passed simulated DOM checks",
   "browser_visual_test": "not completed",
-  "native_codex_contract": "v2 confirmed against installed desktop app 26.1007.9446.0"
+  "native_codex_contract": "v2 confirmed against installed desktop app 26.1007.9446.0",
+  "version": "1.1.0"
 }
