@@ -1,5 +1,7 @@
 ﻿# Runs inside pet.ps1 -SelfTest, using an isolated data directory.
 function Invoke-IntegrationTests {
+    # Only the dedicated fullscreen test should depend on foreground windows.
+    $state.autoHide=$false;$script:fullscreenHidden=$false;Update-Visibility
     $script:checks=[Collections.Generic.List[string]]::new()
     $limitations=[Collections.Generic.List[string]]::new()
     function Check($Condition,[string]$Name){if(-not $Condition){throw "FAIL: $Name"};$script:checks.Add($Name)}
@@ -56,7 +58,7 @@ function Invoke-IntegrationTests {
     Exit-Peek;Check (-not $peeking -and $w.Left -eq $original) 'peek returns to original position'
     $script:nextStory=[long]::MaxValue;$state.look=$false;$state.stories=$true;$state.quiet=$false;$state.mode='stay'
     Mark-Activity;Set-Animation 0 0;$script:lastInteraction=$clock.ElapsedMilliseconds-121000;$timer.Start();Pump-For 150;$timer.Stop()
-    Check ($resting -eq 'sitting' -and $row -eq 15) 'two minutes of inactivity sits down'
+    Check ($resting -eq 'sitting' -and $row -eq 15) "two minutes of inactivity sits down (rest=$resting row=$row visible=$($w.IsVisible) hidden=$fullscreenHidden)"
     $script:lastInteraction=$clock.ElapsedMilliseconds-301000;$script:actionUntil=0;$timer.Start();Pump-For 150;$timer.Stop()
     Check ($resting -eq 'sleeping' -and $row -eq 16) 'five minutes of inactivity starts nap'
     $script:frame=3;$script:nextFrame=0;$timer.Start();Pump-For 150;$timer.Stop()
@@ -152,7 +154,7 @@ public static class KalingTestNative {
         Check (-not [KalingNative]::IsFullscreen($probe.Handle,$hwnd)) 'ordinary window is not fullscreen'
         if(-not $activated){$script:fullscreenHidden=[KalingNative]::IsFullscreen($probe.Handle,$hwnd);Update-Visibility}
         Check ($w.IsVisible) 'exit fullscreen restores pet'
-    }finally{$timer.Stop();$probe.Close();$probe.Dispose()}
+    }finally{$timer.Stop();$probe.Close();$probe.Dispose();$state.autoHide=$false;$script:fullscreenHidden=$false;Update-Visibility}
     if($PhysicalInputTest){
     # Real desktop input is sent only after hit-testing our own disposable probe process.
     $savedCursor=[KalingTestNative+Point]::new();[void][KalingTestNative]::GetCursorPos([ref]$savedCursor)
