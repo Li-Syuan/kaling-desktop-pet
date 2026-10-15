@@ -26,7 +26,7 @@ function Select-Character([string]$Id) {
     $script:state.characterOutfits[$state.character]=$state.outfit
     $script:state.character=$Id;$script:character=$next;$script:catalog=$next
     Select-Outfit $state.characterOutfits[$Id]
-    $w.Title=$next.displayName+' · 陪伴日常';if($room.open){$room.window.Title=$next.displayName+'的小屋';Render-Room};Update-Badge;Update-CharacterMenus
+    $w.Title=$next.displayName+' · 陪伴日常';if($room.open){Update-RoomTheme};Update-Badge;Update-CharacterMenus
     Show-Bubble (Get-CharacterText 'hello' '你好！今天也一起度過吧。')
 }
 function Get-OutfitAssets([string]$Id) {

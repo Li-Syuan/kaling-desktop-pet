@@ -587,7 +587,8 @@
             }
           ]
         }
-      ]
+      ],
+      "roomTheme": "kaling"
     },
     {
       "id": "ren",
@@ -837,7 +838,8 @@
           ],
           "fxRow": 2
         }
-      ]
+      ],
+      "roomTheme": "ren"
     }
   ]
 }

@@ -1,0 +1,135 @@
+{
+  "kaling": {
+    "id": "kaling",
+    "title": "咖凌的小屋",
+    "background": "#FFF7F8",
+    "foreground": "#79556A",
+    "button": "#FFF1F5",
+    "border": "#D9B5C6",
+    "welcome": "點家具互動 · 拖動球和紙箱 · 點咖凌摸摸頭",
+    "assets": {
+      "room": {
+        "file": "assets/room/room.png"
+      },
+      "bed": {
+        "file": "assets/room/bed.png"
+      },
+      "sofa": {
+        "file": "assets/room/sofa.png"
+      },
+      "wardrobe": {
+        "file": "assets/room/wardrobe.png"
+      },
+      "table": {
+        "file": "assets/room/table.png"
+      },
+      "box": {
+        "file": "assets/room/box.png"
+      },
+      "ball": {
+        "file": "assets/room/ball.png"
+      }
+    },
+    "tooltips": {
+      "bed": "小床：休息／叫醒",
+      "sofa": "沙發：抱枕放空",
+      "wardrobe": "衣櫃：換衣服",
+      "table": "茶几：選點心",
+      "box": "紙箱：躲貓貓／拖動",
+      "ball": "球：點擊或拖動來玩"
+    },
+    "dialogue": {}
+  },
+  "ren": {
+    "id": "ren",
+    "title": "蓮 · 梅影劍居",
+    "background": "#F1EEE5",
+    "foreground": "#35534C",
+    "button": "#E2EBE3",
+    "border": "#B79B64",
+    "welcome": "梅影劍居 · 點家具休息，拖動鞠球與行囊木箱",
+    "assets": {
+      "room": {
+        "file": "assets/room/ren/room.png"
+      },
+      "bed": {
+        "file": "assets/room/ren/furniture.png",
+        "rect": [
+          41,
+          59,
+          500,
+          510
+        ]
+      },
+      "sofa": {
+        "file": "assets/room/ren/furniture.png",
+        "rect": [
+          566,
+          121,
+          507,
+          440
+        ]
+      },
+      "wardrobe": {
+        "file": "assets/room/ren/furniture.png",
+        "rect": [
+          1141,
+          26,
+          350,
+          551
+        ]
+      },
+      "table": {
+        "file": "assets/room/ren/furniture.png",
+        "rect": [
+          69,
+          657,
+          422,
+          313
+        ]
+      },
+      "box": {
+        "file": "assets/room/ren/furniture.png",
+        "rect": [
+          578,
+          570,
+          473,
+          398
+        ]
+      },
+      "ball": {
+        "file": "assets/room/ren/furniture.png",
+        "rect": [
+          1183,
+          684,
+          234,
+          239
+        ]
+      }
+    },
+    "tooltips": {
+      "bed": "梅紋小榻：休息／叫醒",
+      "sofa": "青竹長椅：靜坐休息",
+      "wardrobe": "白金衣櫃：選擇衣裝",
+      "table": "青瓷茶席：茶與點心",
+      "box": "行囊木箱：探頭／藏身／拖動",
+      "ball": "梅紋鞠球：輕碰或拖動"
+    },
+    "dialogue": {
+      "focus": "先把眼前的事做好。球，待會再玩。",
+      "wake": "嗯。我醒了。",
+      "pet": "……再一下就好。",
+      "unreachable": "這裡走不過去。換個位置吧。",
+      "bed": "歇一會。劍就留在架上。",
+      "sofa": "坐一會，聽聽風。",
+      "ball": "讓我試試。",
+      "box": "行囊裡……還有位置。",
+      "wardrobe": "整理一下衣裝。",
+      "food": "茶還溫著，一起吧。",
+      "invalidDrop": "放在空地吧，別擋住路。",
+      "sleep": "先休息。需要我時，叫醒我。",
+      "found": "……被你找到了。",
+      "tasty": "味道不錯。謝謝。"
+    }
+  }
+}

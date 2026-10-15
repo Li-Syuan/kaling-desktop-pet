@@ -4,16 +4,13 @@ function Resolve-RoomRow([int]$Row) {
     return $Row
 }
 $script:room=@{open=$false;window=$null;hwnd=[IntPtr]::Zero;phase='idle';task='';u=.45;v=.45;path=@();step=0;until=0.0;time=0.0;idle=0.0;nextAuto=40.0;nextFrame=0.0;drag=$null;roll=$null;pose=$null;foodCount=0;petCount=0}
-function Get-RoomBitmap([string]$Name) {
-    $b=[System.Windows.Media.Imaging.BitmapImage]::new();$b.BeginInit();$b.CacheOption='OnLoad';$b.UriSource=[Uri](Join-Path $root ('assets\room\'+$Name+'.png'));$b.EndInit();$b.Freeze();return $b
-}
 function Add-RoomImage([string]$Name,[double]$Width,[double]$Height) {
     $i=[System.Windows.Controls.Image]::new();$i.Source=Get-RoomBitmap $Name;$i.Width=$Width;$i.Height=$Height;$i.Stretch='Fill';[void]$room.canvas.Children.Add($i);return $i
 }
 function Place-RoomVisual($Visual,[double]$X,[double]$Y,[int]$Z) {
     [System.Windows.Controls.Canvas]::SetLeft($Visual,$X);[System.Windows.Controls.Canvas]::SetTop($Visual,$Y);[System.Windows.Controls.Panel]::SetZIndex($Visual,$Z)
 }
-function Set-RoomMessage([string]$Text) {if($room.open){$room.message.Text=$(if($state.character -eq 'ren'){'……'+$Text.Replace('嘿嘿，','').Replace('球球','球')}else{$Text})}}
+function Set-RoomMessage([string]$Text) {if($room.open){$room.message.Text=$Text}}
 function Keep-RoomVisible {
     if(-not $room.window -or $room.hwnd -eq [IntPtr]::Zero){return}
     $a=[System.Windows.Forms.Screen]::FromHandle($room.hwnd).WorkingArea;$m=([System.Windows.PresentationSource]::FromVisual($room.window)).CompositionTarget.TransformFromDevice
@@ -45,11 +42,11 @@ function Start-RoomPhase([string]$Phase,[int]$Row,[double]$Seconds) {
 }
 function Request-RoomAction([string]$Action,[switch]$Automatic) {
     if(-not $room.open){return}
-    if($Action -eq 'ball' -and $state.pomo.status -eq 'running'){Set-RoomMessage '先陪你專注，休息時再玩球。';return}
+    if($Action -eq 'ball' -and $state.pomo.status -eq 'running'){Set-RoomMessage (Get-RoomText 'focus' '先陪你專注，休息時再玩球。');return}
     $oldPose=$room.pose;$wasBed=$room.phase -like 'bed-*'
     Cancel-RoomActivity;if(-not $Automatic){Mark-Activity}
-    if($Action -eq 'wake'){if($wasBed){$room.pose=$oldPose;Start-RoomPhase 'waking' 23 1.0}else{Start-RoomPhase 'stretch' 17 2.4};Set-RoomMessage '嗯？你叫我嗎？';return}
-    if($Action -eq 'pet'){$room.petCount++;$r=if($room.petCount%3 -eq 0){21}else{11};Start-RoomPhase 'reaction' $r 2.2;Set-RoomMessage '嘿嘿，再陪我一下。';return}
+    if($Action -eq 'wake'){if($wasBed){$room.pose=$oldPose;Start-RoomPhase 'waking' 23 1.0}else{Start-RoomPhase 'stretch' 17 2.4};Set-RoomMessage (Get-RoomText 'wake' '嗯？你叫我嗎？');return}
+    if($Action -eq 'pet'){$room.petCount++;$r=if($room.petCount%3 -eq 0){21}else{11};Start-RoomPhase 'reaction' $r 2.2;Set-RoomMessage (Get-RoomText 'pet' '嘿嘿，再陪我一下。');return}
     $reactions=@{smug=21;wave=3;jump=4;stretch=17;spin=18;peek=20;waiting=6;thinking=7;review=8;sad=5}
     if($reactions.ContainsKey($Action)){Start-RoomPhase 'reaction' $reactions[$Action] 2.2;return}
     $goal=switch($Action){'bed'{@{u=.38;v=.63}};'sofa'{@{u=.70;v=.40}};'wardrobe'{@{u=.40;v=.18}};{$_ -in @('cookie','pudding','tea')}{@{u=.54;v=.67}};'ball'{@{u=$state.home.ball.u;v=$state.home.ball.v}};'box'{@{u=$state.home.box.u;v=$state.home.box.v}};default{$null}}
@@ -57,8 +54,8 @@ function Request-RoomAction([string]$Action,[switch]$Automatic) {
         foreach($offset in @(@(-.055,.055),@(-.10,0),@(0,.10),@(.10,0),@(0,-.10))){$u=$state.home.ball.u+$offset[0];$v=$state.home.ball.v+$offset[1];if(Test-RoomFloor $u $v){$goal=@{u=$u;v=$v};break}}
     }
     if(-not $goal){return};$room.task=$Action;$room.path=@(Get-RoomPath @{u=$room.u;v=$room.v} $goal);$room.step=0
-    if(-not $room.path.Count){Set-RoomMessage '這邊走不到，換個位置吧。';return}
-    $room.phase='walking';Set-Animation 1 0;Set-RoomMessage $(switch($Action){'bed'{'回小床休息一下。'};'sofa'{'抱著枕頭陪你。'};'ball'{'球球跑去哪裡了？'};'box'{'箱子裡是不是有祕密？'};'wardrobe'{'今天想穿哪一套？'};default{'去茶几吃點心！'}})
+    if(-not $room.path.Count){Set-RoomMessage (Get-RoomText 'unreachable' '這邊走不到，換個位置吧。');return}
+    $room.phase='walking';Set-Animation 1 0;Set-RoomMessage $(switch($Action){'bed'{(Get-RoomText 'bed' '回小床休息一下。')};'sofa'{(Get-RoomText 'sofa' '抱著枕頭陪你。')};'ball'{(Get-RoomText 'ball' '球球跑去哪裡了？')};'box'{(Get-RoomText 'box' '箱子裡是不是有祕密？')};'wardrobe'{(Get-RoomText 'wardrobe' '今天想穿哪一套？')};default{(Get-RoomText 'food' '去茶几吃點心！')}})
 }
 function Arrive-RoomTarget {
     switch($room.task){
@@ -88,7 +85,7 @@ function Move-RoomToy($Point) {
 function End-RoomToy {
     if(-not $room.drag){return};$d=$room.drag;$room.drag=$null;$room.visuals[$d.kind].ReleaseMouseCapture()
     if(-not $d.moved){Request-RoomAction $d.kind;return}
-    if(-not (Test-RoomDrop $d.kind $d.candidate.u $d.candidate.v $state.home)){Render-Room;Set-RoomMessage '玩具放在空地上就好，這裡會擋到家具。';return}
+    if(-not (Test-RoomDrop $d.kind $d.candidate.u $d.candidate.v $state.home)){Render-Room;Set-RoomMessage (Get-RoomText 'invalidDrop' '玩具放在空地上就好，這裡會擋到家具。');return}
     $state.home[$d.kind]=@{u=$d.candidate.u;v=$d.candidate.v};Save-Settings;Render-Room
     if($d.kind -eq 'ball' -and $state.pomo.status -ne 'running'){$room.roll=@{du=$d.du;dv=$d.dv;remaining=.8;chase=$true}}elseif($d.kind -eq 'box'){Request-RoomAction 'box'}
 }
@@ -110,15 +107,15 @@ function Update-Room([double]$Delta) {
             'bed-enter' {Start-RoomPhase 'bed-sit' 15 1.0}
             'sofa-enter' {Start-RoomPhase 'sofa' 22 10}
             'bed-sit' {Start-RoomPhase 'bed-tuck' 23 2.4}
-            'bed-tuck' {$script:frame=3;$room.phase='bed-sleep';Set-RoomMessage '睡著了…點小床或角色叫醒。'}
+            'bed-tuck' {$script:frame=3;$room.phase='bed-sleep';Set-RoomMessage (Get-RoomText 'sleep' '睡著了…點小床或角色叫醒。')}
             'waking' {$p=Get-RoomPoint $room.u $room.v;Move-RoomPose @{x=$p.x;y=$p.y;z=[int]$p.y};Start-RoomPhase 'getting-up' 17 .65}
             'getting-up' {$room.pose=$null;Start-RoomPhase 'stretch' 17 2.4}
             'sofa' {if($state.pomo.status -ne 'running' -and -not $state.quiet){Start-RoomPhase 'sofa-nap' 16 4}else{Cancel-RoomActivity}}
             'ball-tap' {$room.roll=@{du=.18;dv=-.10;remaining=.65;chase=$false};Start-RoomPhase 'reaction' 21 2.2}
             'box-enter' {Start-RoomPhase 'box-hide' 25 1.0}
             'box-hide' {Start-RoomPhase 'box-peek' 25 1.2;$script:frame=3}
-            'box-peek' {$room.pose=$null;Start-RoomPhase 'reaction' 21 2.2;Set-RoomMessage '被你找到啦！'}
-            'food' {$room.foodCount++;if($room.foodCount%2 -eq 0){Start-RoomPhase 'reaction' 21 2.2;Set-RoomMessage '嘿嘿，這份點心我很喜歡。'}else{Cancel-RoomActivity}}
+            'box-peek' {$room.pose=$null;Start-RoomPhase 'reaction' 21 2.2;Set-RoomMessage (Get-RoomText 'found' '被你找到啦！')}
+            'food' {$room.foodCount++;if($room.foodCount%2 -eq 0){Start-RoomPhase 'reaction' 21 2.2;Set-RoomMessage (Get-RoomText 'tasty' '嘿嘿，這份點心我很喜歡。')}else{Cancel-RoomActivity}}
             default {Cancel-RoomActivity}
         }
     }
@@ -142,12 +139,12 @@ function Show-Room {
     $area=[System.Windows.SystemParameters]::WorkArea;$dialog.Width=[math]::Min(880,$area.Width-24);$dialog.Height=[math]::Min(745,$area.Height-24)
     $layout=[System.Windows.Controls.DockPanel]::new();$dialog.Content=$layout
     $bar=[System.Windows.Controls.StackPanel]::new();$bar.Orientation='Horizontal';$bar.Margin='16,12';[System.Windows.Controls.DockPanel]::SetDock($bar,'Top');[void]$layout.Children.Add($bar)
-    foreach($entry in @(@('回桌面','close'),@('衣櫃','wardrobe'),@('吃點心','food'),@('專注／繼續','focus'),@('暫停計時','pause'))){$b=[System.Windows.Controls.Button]::new();$b.Content=$entry[0];$b.Tag=$entry[1];$b.Padding='12,6';$b.Margin='0,0,8,0';$b.Add_Click({param($s,$e);switch($s.Tag){'close'{Close-Room};'wardrobe'{Request-RoomAction 'wardrobe'};'food'{$room.foodMenu.PlacementTarget=$s;$room.foodMenu.IsOpen=$true};'focus'{Start-Timer};'pause'{Pause-Timer}}});[void]$bar.Children.Add($b)}
+    $room.buttons=@();foreach($entry in @(@('回桌面','close'),@('衣櫃','wardrobe'),@('吃點心','food'),@('專注／繼續','focus'),@('暫停計時','pause'))){$b=[System.Windows.Controls.Button]::new();$b.Content=$entry[0];$b.Tag=$entry[1];$b.Padding='12,6';$b.Margin='0,0,8,0';$b.Add_Click({param($s,$e);switch($s.Tag){'close'{Close-Room};'wardrobe'{Request-RoomAction 'wardrobe'};'food'{$room.foodMenu.PlacementTarget=$s;$room.foodMenu.IsOpen=$true};'focus'{Start-Timer};'pause'{Pause-Timer}}});[void]$bar.Children.Add($b);$room.buttons+=,$b}
     $room.message=[System.Windows.Controls.TextBlock]::new();$room.message.Text='點家具互動 · 拖動球和紙箱 · 點角色摸摸頭';$room.message.Margin='20,8';$room.message.Foreground='#79556A';$room.message.TextWrapping='Wrap';[System.Windows.Controls.DockPanel]::SetDock($room.message,'Bottom');[void]$layout.Children.Add($room.message)
     $room.timerText=[System.Windows.Controls.TextBlock]::new();$room.timerText.Margin='20,0,20,4';$room.timerText.Foreground='#79556A';$room.timerText.Text='右鍵可切換安靜陪伴、日常小劇場與番茄鐘設定';[System.Windows.Controls.DockPanel]::SetDock($room.timerText,'Top');[void]$layout.Children.Add($room.timerText)
     $view=[System.Windows.Controls.Viewbox]::new();$view.Stretch='Uniform';[void]$layout.Children.Add($view)
     $room.canvas=[System.Windows.Controls.Canvas]::new();$room.canvas.Width=900;$room.canvas.Height=650;$room.canvas.ClipToBounds=$true;$view.Child=$room.canvas
-    $bg=Add-RoomImage 'room' 900 650;$bg.IsHitTestVisible=$false;$room.visuals=@{}
+    $room.backgroundVisual=Add-RoomImage 'room' 900 650;$room.backgroundVisual.IsHitTestVisible=$false;$room.visuals=@{}
     foreach($spec in @(@('bed',.18,.66,210,175,450),@('sofa',.75,.20,190,135,425),@('wardrobe',.21,.10,118,170,325),@('table',.75,.65,135,85,510),@('box',.20,.33,102,75,400),@('ball',.77,.90,36,36,550))){
         $name=[string]$spec[0];$visual=Add-RoomImage $name $spec[3] $spec[4];$visual.Tag=$name;$visual.Cursor='Hand';$p=Get-RoomPoint $spec[1] $spec[2];Place-RoomVisual $visual ($p.x-$spec[3]/2) ($p.y-$spec[4]) $spec[5];$room.visuals[$name]=$visual
         $visual.ToolTip=@{bed='小床：休息／叫醒';sofa='沙發：抱枕放空';wardrobe='衣櫃：換衣服';table='茶几：選點心';box='紙箱：點一下躲貓貓，拖曳搬動';ball='球：點擊或拖動來玩'}[$name]
@@ -164,5 +161,5 @@ function Show-Room {
     $dialog.Add_Closing({param($s,$e);if($room.open){Close-Room -FromWindow}})
     $dialog.Add_LocationChanged({if($room.open -and $room.window.IsLoaded){$state.home.left=$room.window.Left;$state.home.top=$room.window.Top}})
     $dialog.WindowStartupLocation='Manual';$dialog.Left=if($null -ne $state.home.left){$state.home.left}else{$area.Left+($area.Width-$dialog.Width)/2};$dialog.Top=if($null -ne $state.home.top){$state.home.top}else{$area.Top+($area.Height-$dialog.Height)/2}
-    Set-Animation 0 0;$w.Hide();$dialog.Show();Keep-RoomVisible;Render-Room;Update-Visibility;Update-Badge
+    Update-RoomTheme;Set-Animation 0 0;$w.Hide();$dialog.Show();Keep-RoomVisible;Render-Room;Update-Visibility;Update-Badge
 }

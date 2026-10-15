@@ -206,6 +206,7 @@ public static class KalingTestNative {
     Close-Room;Select-Character 'kaling'
     . (Join-Path $root 'tests\Ren.Integration.ps1')
     . (Join-Path $root 'tests\Merged.Integration.ps1')
+    . (Join-Path $root 'tests\Room.Theme.Tests.ps1')
     $limitations.Add('Physical mixed-DPI multi-monitor transitions are not covered by this single-desktop test.')
     $limitations.Add('Sleep is tested through elapsed-gap logic; physical suspend/resume is not forced.')
     @{ok=$true;count=$checks.Count;checks=@($checks);limitations=@($limitations)} | ConvertTo-Json -Depth 4 | Set-Content (Join-Path $dataDirectory 'integration.json') -Encoding UTF8

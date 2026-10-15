@@ -21,6 +21,7 @@ Add-Type -Path (Join-Path $root 'lib\Pet.Native.cs')
 . (Join-Path $root 'lib\Pet.State.ps1')
 . (Join-Path $root 'lib\Pet.Assets.ps1')
 . (Join-Path $root 'lib\Pet.Activity.ps1')
+. (Join-Path $root 'lib\Pet.Room.Theme.ps1')
 . (Join-Path $root 'lib\Pet.Room.ps1')
 $script:state=Read-PetState $dataDirectory
 $script:app=[System.Windows.Application]::new();$app.ShutdownMode='OnExplicitShutdown'
