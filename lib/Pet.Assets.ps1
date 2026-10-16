@@ -27,6 +27,7 @@ function Select-Character([string]$Id) {
     $script:state.characterOutfits[$state.character]=$state.outfit
     $script:state.character=$Id;$script:character=$next;$script:catalog=$next
     Select-Outfit $state.characterOutfits[$Id]
+    Reset-Life
     $w.Title=$next.displayName+' · 陪伴日常';if($room.open){Update-RoomTheme};Update-Badge;Update-CharacterMenus
     Sync-CareMesses;Update-CareMenus
     Show-Bubble (Get-CharacterText 'hello' '你好！今天也一起度過吧。')

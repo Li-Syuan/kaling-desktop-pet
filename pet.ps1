@@ -18,12 +18,14 @@ $script:mutex=[Threading.Mutex]::new($true,('Local\KalingDesktopPet'+[string]$Se
 if(-not $created){$mutex.Dispose();exit 0}
 Add-Type -AssemblyName PresentationFramework,PresentationCore,WindowsBase,System.Windows.Forms,System.Drawing
 Add-Type -Path (Join-Path $root 'lib\Pet.Native.cs')
+Add-Type -Path (Join-Path $root 'lib\Pet.Life.cs') -ReferencedAssemblies @([System.Windows.Media.DrawingImage].Assembly.Location,[System.Windows.Point].Assembly.Location,'System.Xaml')
 . (Join-Path $root 'lib\Pet.State.ps1')
 . (Join-Path $root 'lib\Pet.Assets.ps1')
 . (Join-Path $root 'lib\Pet.Activity.ps1')
 . (Join-Path $root 'lib\Pet.Room.Theme.ps1')
 . (Join-Path $root 'lib\Pet.Room.ps1')
 . (Join-Path $root 'lib\Pet.Care.ps1')
+. (Join-Path $root 'lib\Pet.Life.ps1')
 $script:state=Read-PetState $dataDirectory
 $script:app=[System.Windows.Application]::new();$app.ShutdownMode='OnExplicitShutdown'
 $script:clock=[Diagnostics.Stopwatch]::StartNew()
@@ -94,7 +96,7 @@ function Resize-Pet([double]$Scale) {
 function Exit-Peek {
     if($script:peeking){$script:peeking=$false;$w.Left=$peekReturn.left;$w.Top=$peekReturn.top;$script:peekReturn=$null;Keep-Visible}
 }
-function Mark-Activity {Stop-Activity;Exit-Peek;$script:resting='none';$script:lastInteraction=$clock.ElapsedMilliseconds}
+function Mark-Activity {Stop-Activity;Stop-LifeGesture;Exit-Peek;$script:resting='none';$script:lastInteraction=$clock.ElapsedMilliseconds}
 function Begin-Peek {
     $script:peekReturn=@{left=$w.Left;top=$w.Top}
     $area=[System.Windows.Forms.Screen]::FromHandle($hwnd).WorkingArea;$m=([System.Windows.PresentationSource]::FromVisual($w)).CompositionTarget.TransformFromDevice
@@ -128,13 +130,14 @@ function Invoke-Interaction([string]$Action) {
         default {return $false}
     }
     if($Action -in @('cookie','pudding','tea')){Begin-CareMeal $Action 'desktop' (@{cookie=2.4;pudding=2.8;tea=3.2}[$Action])}
-    if($Action -eq 'pet'){Add-CareHappiness}
+    if($Action -eq 'pet'){Add-CareHappiness;Notify-Life 'pet'}
     $script:cooldownUntil=$clock.ElapsedMilliseconds+$(if($Action -in @('cookie','pudding','tea')){3500}else{1200})
     if($character.dialogue.$Action){Show-Bubble ([string]$character.dialogue.$Action)}
     Save-Settings;return $true
 }
 function Begin-Pointer($Point,[double]$Y,[bool]$Double) {
     $script:wasSleepingOnPress=$resting -eq 'sleeping';Mark-Activity
+    Notify-Life 'press'
     $script:press=$Point;$script:lastX=$Point.X;$script:origin=[System.Windows.Point]::new($w.Left,$w.Top)
     $script:pressY=$Y;$script:drag=$true;$script:moved=$false;$script:doublePress=$Double
     if($Double){$script:pendingClick=$null}
@@ -262,6 +265,7 @@ foreach($pair in @(@($lookItem,'look'),@($bubblesItem,'bubbles'),@($storiesItem,
 $script:throughItem=Add-Menu '滑鼠穿透 · Ctrl+Alt+K' {Toggle-Through};$throughItem.IsCheckable=$true;$throughItem.IsChecked=$state.clickThrough
 $null=Add-Menu '隱藏 · Ctrl+Alt+H' {Toggle-Visibility}
 $null=Add-Menu '打開動畫圖鑑' {Start-Process -FilePath (Join-Path $root 'preview.html')}
+$null=Add-Menu '蓮的日常 · 60 秒新舊對照' {Start-Process -FilePath (Join-Path $root 'life-preview.html')}
 $null=Add-Menu '關閉桌面寵物' {Close-Pet}
 Initialize-CharacterMenu
 $img.ContextMenu=$menu;$badge.ContextMenu=$menu
@@ -275,6 +279,7 @@ $null=Add-Tray '開始／繼續番茄鐘' {Start-Timer}
 $null=Add-Tray '打開／回到生活小屋' {Show-Room}
 $null=Add-Tray '收合小屋，回桌面' {Close-Room}
 $null=Add-Tray '衣櫃…' {Show-Wardrobe}
+$null=Add-Tray '蓮的日常 · 60 秒新舊對照' {Start-Process -FilePath (Join-Path $root 'life-preview.html')}
 $null=Add-Tray '暫停番茄鐘' {Pause-Timer}
 $null=Add-Tray '取消本輪' {Cancel-Timer}
 $null=Add-Tray '調整番茄鐘時間…' {Show-TimerSettings}
@@ -305,7 +310,7 @@ $w.Add_Loaded({
     if($hotkeys.Count -lt 2){Show-Bubble '部分快捷鍵已被占用，請使用系統匣的咖凌選單。' -Important}else{Show-Bubble (Get-CharacterText 'hello' '你好！摸摸頭，或右鍵選一份點心吧。')}
     if($SelfTest){$timer.Stop();$null=$w.Dispatcher.BeginInvoke([Action]{try{. (Join-Path $root 'tests\Integration.ps1');Invoke-IntegrationTests}catch{$script:testFailed=$true;$_ | Out-String | Set-Content (Join-Path $dataDirectory 'test-failure.txt') -Encoding UTF8}finally{Close-Pet}})}
 })
-$script:timer=[System.Windows.Threading.DispatcherTimer]::new();$timer.Interval=[TimeSpan]::FromMilliseconds(33)
+$script:timer=[System.Windows.Threading.DispatcherTimer]::new();$timer.Interval=[TimeSpan]::FromMilliseconds(16)
 $timer.Add_Tick({
     try {
         if(-not $loaded -or $closing){return}
@@ -325,7 +330,7 @@ $timer.Add_Tick({
         if(-not $w.IsVisible -or $menu.IsOpen -or $trayMenu.Visible){return}
         $focus=$state.pomo.status -eq 'running'
         if(-not $drag -and $now -gt $actionUntil){
-            if($state.stories -and -not $state.quiet -and -not $focus -and $resting -ne 'sleeping' -and -not $settingsWindow -and -not $wardrobeWindow -and $now -ge $nextStory){
+            if($state.character -ne 'ren' -and $state.stories -and -not $state.quiet -and -not $focus -and $resting -ne 'sleeping' -and -not $settingsWindow -and -not $wardrobeWindow -and $now -ge $nextStory){
                 $story=Get-Story (Get-Date).Hour $state.mood;if($character.stories){$story.text=Get-Random -InputObject @($character.stories)};$state.mood=$story.mood;Set-Animation $story.row 2200;Show-Bubble $story.text;$script:nextStory=$now+(Get-Random -Minimum 480000 -Maximum 900001)
             }else{
                 $p=Cursor-Position;$dx=$p.X-($w.Left+$w.Width/2);$dy=$p.Y-($w.Top+88+($w.Height-120)*0.37);$moving=$false
@@ -333,20 +338,21 @@ $timer.Add_Tick({
                 if($canRest -and $resting -eq 'none' -and $now-$lastInteraction -gt 120000){$script:resting='sitting'}
                 if($canRest -and $now-$lastInteraction -gt 300000 -and $resting -ne 'sleeping'){$script:resting='sleeping';Set-Animation 16 2600}
                 if(-not $focus -and -not $state.quiet -and $resting -eq 'none' -and (-not $state.care.enabled -or ((Get-ActiveCare).urge -lt 0 -and (Test-CarePlay (Get-ActiveCare))))){
-                    if($state.mode -eq 'follow' -and [math]::Abs($dx) -gt $w.Width*0.7){$script:direction=[math]::Sign($dx);$w.Left+=$direction*2.5;$moving=$true}
+                    if($state.mode -eq 'follow' -and [math]::Abs($dx) -gt $w.Width*0.7){$script:direction=[math]::Sign($dx);$w.Left+=$direction*75.76*[math]::Min(.1,[math]::Max(0,$delta));$moving=$true}
                     elseif($state.mode -eq 'wander'){
                         if($now -gt $nextWalk){$script:direction=if((Get-Random -Maximum 2) -eq 0){-1}else{1};$script:nextWalk=$now+6000;$script:walkEnd=$now+1600}
-                        if($now -lt $walkEnd){$w.Left+=$direction*1.8;$moving=$true}
+                        if($now -lt $walkEnd){$w.Left+=$direction*54.55*[math]::Min(.1,[math]::Max(0,$delta));$moving=$true}
                     }
                 }
                 if($moving){Keep-Visible;$r=if($direction -lt 0){2}else{1};if($row -ne $r){Set-Animation $r 0}}
-                elseif($state.look -and -not $focus -and -not $state.quiet -and $resting -eq 'none' -and [math]::Sqrt($dx*$dx+$dy*$dy) -gt 70 -and [math]::Sqrt($dx*$dx+$dy*$dy) -lt 750){
+                elseif($state.character -ne 'ren' -and $state.look -and -not $focus -and -not $state.quiet -and $resting -eq 'none' -and [math]::Sqrt($dx*$dx+$dy*$dy) -gt 70 -and [math]::Sqrt($dx*$dx+$dy*$dy) -lt 750){
                     $angle=([math]::Atan2($dx,-$dy)*180/[math]::PI+360)%360;$d=[int][math]::Floor(($angle+11.25)/22.5)%16;$img.Source=$frames["$(9+[math]::Floor($d/8)),$($d%8)"];return
                 }else{$r=if($focus -and $state.pomo.phase -eq 'focus'){8}elseif($resting -eq 'sleeping'){16}elseif($resting -eq 'sitting'){15}else{0};if($row -ne $r){Set-Animation $r 0}}
             }
         }
-        if($now -ge $nextFrame){$script:frame=if($row -eq 16){[math]::Min($frame+1,$counts[$row]-1)}else{($frame+1)%$counts[$row]};$img.Source=$frames["$row,$frame"];$script:nextFrame=$now+$durations[$row][$frame]}
-    }catch{$_ | Out-String | Add-Content -LiteralPath $log -Encoding UTF8;Close-Pet}finally{if(-not $closing){Update-CareVisual}}
+        if($now-$nextFrame -gt 1000){$script:nextFrame=$now}
+        while($now -ge $nextFrame){$script:frame=if($row -eq 16){[math]::Min($frame+1,$counts[$row]-1)}else{($frame+1)%$counts[$row]};$img.Source=$frames["$row,$frame"];$script:nextFrame+=$durations[$row][$frame]}
+    }catch{$_ | Out-String | Add-Content -LiteralPath $log -Encoding UTF8;Close-Pet}finally{if(-not $closing){try{Update-CareVisual;Update-LifeVisual}catch{$_ | Out-String | Add-Content -LiteralPath $log -Encoding UTF8;Close-Pet}}}
 })
 $w.Add_Closing({Close-CareWindows;Stop-Activity;if($fxWindow){$fxWindow.Close();$script:fxWindow=$null};$script:closing=$true;Pause-Pomodoro $state;Save-Settings})
 $w.Add_Closed({

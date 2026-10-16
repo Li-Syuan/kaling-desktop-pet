@@ -40,7 +40,7 @@ function Begin-CareMeal([string]$Food,[string]$Place,[double]$Seconds) {
     if($state.care.enabled){$script:careTask=@{kind='food';food=$Food;place=$Place;remaining=$Seconds;character=$state.character}}
 }
 function Complete-PendingCareMeal {
-    if($careTask -and $careTask.kind -eq 'food' -and $careTask.character -eq $state.character){$food=$careTask.food;$script:careTask=$null;$null=Complete-CareMeal (Get-ActiveCare) $food (Get-Random -Minimum 480 -Maximum 721);Save-Settings}
+    if($careTask -and $careTask.kind -eq 'food' -and $careTask.character -eq $state.character){$food=$careTask.food;$script:careTask=$null;$null=Complete-CareMeal (Get-ActiveCare) $food (Get-Random -Minimum 480 -Maximum 721);Notify-Life 'snack';Save-Settings}
 }
 function Add-CareHappiness([double]$Amount=4) {if($state.care.enabled){$c=Get-ActiveCare;$c.happiness=[math]::Min(100.0,$c.happiness+$Amount)}}
 function Request-CareAction([string]$Action,[switch]$Automatic) {

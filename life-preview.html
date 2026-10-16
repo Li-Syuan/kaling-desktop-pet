@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="data:,"><title>蓮的日常 · 新舊對照</title>
+<style>
+:root{color-scheme:dark;font-family:"Microsoft JhengHei UI",system-ui,sans-serif;background:#101c29;color:#e8edf0}*{box-sizing:border-box}body{margin:0}main{max-width:1100px;margin:auto;padding:44px 28px}small{color:#9bb7aa;letter-spacing:.12em}h1{font-size:clamp(28px,5vw,48px);font-weight:600;margin:12px 0}p{line-height:1.8;color:#bbc9d2;max-width:840px}a{color:#d7c296}video{display:block;width:100%;border-radius:20px;border:1px solid #34463e;background:#101c29;margin:28px 0 16px}nav{display:flex;gap:10px;flex-wrap:wrap}button,select{font:inherit;color:#e8edf0;border:1px solid #526253;background:#1e302d;border-radius:99px;padding:10px 16px;cursor:pointer}button:hover,button:focus-visible{background:#36564b}label{margin-left:auto;display:flex;gap:10px;align-items:center}section{margin-top:32px;padding:22px 26px;border-left:3px solid #afbd8c;background:#172735;border-radius:0 14px 14px 0}section p{margin:6px 0}.note{font-size:13px;color:#91a9b8}#status{min-height:28px}footer{margin-top:30px;display:flex;gap:24px;flex-wrap:wrap}
+</style></head><body><main>
+<small>REN / A LITTLE MORE ALIVE</small><h1>安靜待著，也有自己的日常。</h1>
+<p>左側是 v1.5 的蓮，右側是新版分層動畫。看她眨眼、留意游標、被摸頭後放鬆，再安靜陪你專注。這段 60 秒對照使用 Windows 版共用的 WPF 渲染器製作。</p>
+<video id="demo" controls playsinline preload="metadata" poster="docs/ren-life-comparison.png"><source src="docs/ren-life-comparison.mp4" type="video/mp4">請以 Windows 媒體播放器開啟 docs/ren-life-comparison.mp4。</video>
+<nav aria-label="示範章節"><button data-time="0">從頭看</button><button data-time="26">看向滑鼠</button><button data-time="34">摸摸頭</button><button data-time="40">滑鼠離開</button><button data-time="46">專注陪伴</button><label>播放速度<select id="speed" aria-label="播放速度"><option value="1">正常</option><option value="0.5">慢動作</option><option value="1.5">1.5 倍</option></select></label></nav>
+<p id="status" role="status" class="note">按播放或選章節開始；完整解壓縮後可離線觀看。</p>
+<section><strong>在桌面上試試</strong><p>先從系統匣關閉舊版，開啟本資料夾的 Start.bat，切換「角色 → 蓮」。停著觀察約半分鐘，再把滑鼠移近她、摸摸頭，最後離開。</p><p>「日常小劇場」控制約每 20–50 秒的小動作；「看向滑鼠」控制注意力。專注與安靜陪伴仍保留輕微呼吸、眨眼。</p></section>
+<p class="note">對照影片是固定示範時間軸，並非實際桌面錄影或顯示器效能測試。新版待機、摸頭與專注使用分層角色；走路、點心、小屋和劍術沿用既有姿勢。坐下與睡眠增加細微呼吸。</p>
+<footer><a href="preview.html">所有角色的動畫圖鑑</a><a href="docs/REN-LIFE.md">本次變更與驗收</a><a href="https://github.com/Li-Syuan/kaling-desktop-pet/releases/latest">Windows 下載</a></footer>
+</main><script>
+const demo=document.getElementById('demo'),status=document.getElementById('status');
+document.querySelectorAll('[data-time]').forEach(b=>b.addEventListener('click',async()=>{demo.currentTime=Number(b.dataset.time);try{await demo.play();status.textContent=b.textContent+' · 播放中'}catch{status.textContent='請按影片上的播放鍵。'}}));
+document.getElementById('speed').addEventListener('change',e=>{demo.playbackRate=Number(e.target.value)});
+demo.addEventListener('error',()=>{status.textContent='找不到影片，請完整解壓縮專案，保留 docs 資料夾。'});
+</script></body></html>

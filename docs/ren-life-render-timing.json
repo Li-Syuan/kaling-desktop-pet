@@ -1,0 +1,6 @@
+﻿{
+    "millisecondsPerUpdate":  0.070674,
+    "milliseconds":  21.2022,
+    "frames":  300,
+    "note":  "model + retained WPF drawing throughput; not physical display FPS"
+}
