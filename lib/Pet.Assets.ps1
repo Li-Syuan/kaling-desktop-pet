@@ -22,11 +22,12 @@ function Select-Character([string]$Id) {
     if(-not $next){throw 'Unknown character'}
     if($wardrobeWindow){$wardrobeWindow.Close()}
     if($room.open){Cancel-RoomActivity}
-    Mark-Activity;Hide-Bubble;$script:pendingClick=$null;$script:cooldownUntil=0
+    Close-CareWindows;Mark-Activity;Hide-Bubble;$script:pendingClick=$null;$script:cooldownUntil=0
     $script:state.characterOutfits[$state.character]=$state.outfit
     $script:state.character=$Id;$script:character=$next;$script:catalog=$next
     Select-Outfit $state.characterOutfits[$Id]
     $w.Title=$next.displayName+' · 陪伴日常';if($room.open){Update-RoomTheme};Update-Badge;Update-CharacterMenus
+    Sync-CareMesses;Update-CareMenus
     Show-Bubble (Get-CharacterText 'hello' '你好！今天也一起度過吧。')
 }
 function Get-OutfitAssets([string]$Id) {

@@ -24,6 +24,7 @@ function Update-RoomTheme {
     $room.backgroundVisual.Source=Get-RoomBitmap 'room'
     foreach($name in $room.visuals.Keys){$room.visuals[$name].Source=Get-RoomBitmap $name;$room.visuals[$name].ToolTip=$theme.tooltips.$name}
     $room.bedFront.Source=Get-RoomBitmap 'bed';$room.boxFront.Source=Get-RoomBitmap 'box'
+    $room.careScreen.Source=Get-RoomBitmap 'toilet';$room.careFoam.Source=Get-RoomBitmap 'bath'
     $room.message.Foreground=$theme.foreground;$room.timerText.Foreground=$theme.foreground
     foreach($button in $room.buttons){$button.Background=$theme.button;$button.Foreground=$theme.foreground;$button.BorderBrush=$theme.border}
     Set-RoomMessage $theme.welcome;Render-Room

@@ -28,6 +28,24 @@
       },
       "ball": {
         "file": "assets/room/ball.png"
+      },
+      "toilet": {
+        "file": "assets/care/props.png",
+        "rect": [
+          38,
+          513,
+          468,
+          472
+        ]
+      },
+      "bath": {
+        "file": "assets/care/props.png",
+        "rect": [
+          552,
+          522,
+          558,
+          457
+        ]
       }
     },
     "tooltips": {
@@ -36,7 +54,9 @@
       "wardrobe": "衣櫃：換衣服",
       "table": "茶几：選點心",
       "box": "紙箱：躲貓貓／拖動",
-      "ball": "球：點擊或拖動來玩"
+      "ball": "球：點擊或拖動來玩",
+      "toilet": "屏風廁所：有便意時點擊引導如廁",
+      "bath": "泡泡浴盆：洗香香、恢復清潔"
     },
     "dialogue": {}
   },
@@ -105,6 +125,24 @@
           234,
           239
         ]
+      },
+      "toilet": {
+        "file": "assets/care/props.png",
+        "rect": [
+          34,
+          40,
+          470,
+          463
+        ]
+      },
+      "bath": {
+        "file": "assets/care/props.png",
+        "rect": [
+          559,
+          101,
+          549,
+          411
+        ]
       }
     },
     "tooltips": {
@@ -113,7 +151,9 @@
       "wardrobe": "白金衣櫃：選擇衣裝",
       "table": "青瓷茶席：茶與點心",
       "box": "行囊木箱：探頭／藏身／拖動",
-      "ball": "梅紋鞠球：輕碰或拖動"
+      "ball": "梅紋鞠球：輕碰或拖動",
+      "toilet": "屏風廁所：有便意時點擊引導如廁",
+      "bath": "泡泡浴盆：洗香香、恢復清潔"
     },
     "dialogue": {
       "focus": "先把眼前的事做好。球，待會再玩。",

@@ -1,9 +1,10 @@
 ﻿. (Join-Path $PSScriptRoot 'Pet.Room.Model.ps1')
+. (Join-Path $PSScriptRoot 'Pet.Care.Model.ps1')
 function New-PetState {
     return @{
-        version=2; character='kaling'; characterOutfits=@{kaling='uniform';ren='original'}; left=$null; top=$null; scale=1.5; mode='stay'; look=$true
+        version=3; character='ren'; characterOutfits=@{kaling='uniform';ren='original'}; left=$null; top=$null; scale=1.5; mode='stay'; look=$true
         bubbles=$true; stories=$true; quiet=$false; autoHide=$true; clickThrough=$false
-        focusMinutes=25; shortMinutes=5; longMinutes=15; mood='calm'; outfit='uniform'
+        focusMinutes=25; shortMinutes=5; longMinutes=15; mood='calm'; outfit='original';care=(New-CareState)
         pomo=@{phase='focus'; status='ready'; remaining=1500.0; rounds=0; total=0};home=(New-HomeState)
     }
 }
@@ -13,7 +14,7 @@ function Read-PetState([string]$Directory) {
     if(-not (Test-Path -LiteralPath $path)){return $state}
     try {
         $data=Get-Content -LiteralPath $path -Raw -Encoding UTF8 | ConvertFrom-Json
-        if($data.version -notin @(1,2)){throw 'Unsupported settings version'}
+        if($data.version -notin @(1,2,3)){throw 'Unsupported settings version'}
         foreach($name in @('left','top','scale','focusMinutes','shortMinutes','longMinutes')) {
             $value=$data.$name
             if($null -eq $value -and $name -in @('left','top')){continue}
@@ -28,12 +29,15 @@ function Read-PetState([string]$Directory) {
         if($data.mode -notin @('stay','wander','follow')){throw 'Invalid mode'};$state.mode=$data.mode
         if($data.mood -in @('calm','happy','focused','sleepy')){$state.mood=$data.mood}
         if($data.outfit -in @('uniform','pajamas','hoodie')){$state.outfit=$data.outfit}
-        $state.characterOutfits.kaling=$state.outfit
-        if($data.version -eq 2){
+        if($data.outfit -in @('uniform','pajamas','hoodie')){$state.characterOutfits.kaling=[string]$data.outfit}
+        if($data.version -ge 2){
             if($data.character -in @('kaling','ren')){$state.character=$data.character}
             if($data.characterOutfits.kaling -in @('uniform','pajamas','hoodie')){$state.characterOutfits.kaling=$data.characterOutfits.kaling}
             if($state.character -eq 'ren'){$state.outfit='original'}elseif($data.character -eq 'ren' -or $data.character -notin @('kaling',$null)){$state.outfit=$state.characterOutfits.kaling}
         }
+        if($data.version -lt 3){$state.character='ren'}
+        if($state.character -eq 'ren'){$state.outfit='original'}else{$state.outfit=$state.characterOutfits.kaling}
+        $state.care=Read-CareState $data.care
         $state.home=Read-HomeState $data.home
         $p=$data.pomo
         if($p.phase -notin @('focus','short','long') -or $p.status -notin @('ready','running','paused')){throw 'Invalid timer state'}
@@ -54,7 +58,7 @@ function Write-PetState($State,[string]$Directory) {
     [void][IO.Directory]::CreateDirectory($Directory)
     $path=Join-Path $Directory 'settings.json';$temp=Join-Path $Directory ('settings.'+[guid]::NewGuid().ToString('N')+'.tmp')
     try {
-        [IO.File]::WriteAllText($temp,($State | ConvertTo-Json -Depth 5),[Text.UTF8Encoding]::new($false))
+        [IO.File]::WriteAllText($temp,($State | ConvertTo-Json -Depth 9),[Text.UTF8Encoding]::new($false))
         if([IO.File]::Exists($path)){[IO.File]::Replace($temp,$path,$path+'.bak',$true)}else{[IO.File]::Move($temp,$path)}
     } finally {if([IO.File]::Exists($temp)){[IO.File]::Delete($temp)}}
 }

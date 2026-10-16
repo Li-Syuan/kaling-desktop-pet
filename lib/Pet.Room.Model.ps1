@@ -5,7 +5,7 @@ function Get-RoomPoint([double]$U,[double]$V) {return @{x=450+360*($U-$V);y=260+
 function Get-RoomUV([double]$X,[double]$Y) {return @{u=(($Y-260)/170+($X-450)/360)/2;v=(($Y-260)/170-($X-450)/360)/2}}
 function Test-RoomFloor([double]$U,[double]$V) {
     if([double]::IsNaN($U) -or [double]::IsNaN($V) -or $U -lt 0.06 -or $U -gt 0.94 -or $V -lt 0.06 -or $V -gt 0.94){return $false}
-    foreach($r in @(@(0.05,0.31,0.47,0.88),@(0.57,0.93,0.07,0.30),@(0.64,0.87,0.55,0.76),@(0.13,0.30,0.04,0.22))){
+    foreach($r in @(@(0.05,0.31,0.47,0.88),@(0.57,0.93,0.07,0.30),@(0.64,0.87,0.55,0.76),@(0.13,0.30,0.04,0.22),@(0.35,0.53,0.04,0.15),@(0.06,0.25,0.90,0.94))){
         if($U -ge $r[0] -and $U -le $r[1] -and $V -ge $r[2] -and $V -le $r[3]){return $false}
     };return $true
 }

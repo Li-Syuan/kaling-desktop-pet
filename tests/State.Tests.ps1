@@ -47,7 +47,7 @@ $p=Limit-PetPosition -1600 -200 192 328 @{Left=-1920;Top=-300;Right=0;Bottom=780
 Assert ($p.left -eq -1600 -and $p.top -eq -200) 'negative-coordinate monitor preserved'
 Assert ((Get-Story 23 'happy').mood -eq 'sleepy') 'late-night story'
 Assert ((Get-Story 9 'happy').text -match '早安') 'morning story'
-$wardrobe=New-PetState;$wardrobe.outfit='pajamas';Write-PetState $wardrobe $OutputDirectory
+$wardrobe=New-PetState;$wardrobe.character='kaling';$wardrobe.outfit='pajamas';Write-PetState $wardrobe $OutputDirectory
 $read=Read-PetState $OutputDirectory;Assert ($read.outfit -eq 'pajamas') 'outfit survives restart'
 $wardrobe.outfit='missing';Write-PetState $wardrobe $OutputDirectory
 $read=Read-PetState $OutputDirectory;Assert ($read.outfit -eq 'uniform') 'unknown outfit falls back to uniform'
@@ -56,14 +56,14 @@ $read=Read-PetState $OutputDirectory;Assert ($read.outfit -eq 'uniform' -and $re
 $legacy=New-PetState;$legacy.version=1;$legacy.outfit='pajamas';$legacy.Remove('character');$legacy.Remove('characterOutfits');$legacy.left=-700;$legacy.focusMinutes=37
 [IO.File]::WriteAllText((Join-Path $OutputDirectory 'settings.json'),($legacy | ConvertTo-Json -Depth 5),[Text.UTF8Encoding]::new($false))
 $read=Read-PetState $OutputDirectory
-Assert ($read.version -eq 2 -and $read.character -eq 'kaling' -and $read.outfit -eq 'pajamas' -and $read.characterOutfits.kaling -eq 'pajamas') 'v1 migrates character and outfit'
+Assert ($read.version -eq 3 -and $read.character -eq 'ren' -and $read.outfit -eq 'original' -and $read.characterOutfits.kaling -eq 'pajamas') 'v1 migrates character and outfit'
 Assert ($read.left -eq -700 -and $read.focusMinutes -eq 37) 'v1 migration retains geometry and preferences'
 $read.character='ren';$read.outfit='original';Write-PetState $read $OutputDirectory;$read=Read-PetState $OutputDirectory
 Assert ($read.character -eq 'ren' -and $read.outfit -eq 'original' -and $read.characterOutfits.kaling -eq 'pajamas') 'v2 restores Ren and inactive Kaling outfit'
 $read.character='missing';Write-PetState $read $OutputDirectory;$read=Read-PetState $OutputDirectory
-Assert ($read.character -eq 'kaling') 'unknown character falls back safely'
+Assert ($read.character -eq 'ren') 'unknown character falls back safely'
 Assert (Test-Path (Join-Path $OutputDirectory 'settings.json.bak')) 'v2 writes retain backup'
-$old=New-PetState;$old.Remove('home');$old.outfit='hoodie';$old.mode='wander';Write-PetState $old $OutputDirectory
+$old=New-PetState;$old.character='kaling';$old.Remove('home');$old.outfit='hoodie';$old.mode='wander';Write-PetState $old $OutputDirectory
 $read=Read-PetState $OutputDirectory
 Assert ($read.outfit -eq 'hoodie' -and $read.mode -eq 'wander' -and $read.home.ball.u -eq .77) 'v1.2 settings gain house defaults without losing outfit or mode'
 $read.home=@{left=-600;top=42;ball=@{u=.20;v=.33};box=@{u=.45;v=.35}};Write-PetState $read $OutputDirectory

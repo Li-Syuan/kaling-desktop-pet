@@ -1,0 +1,19 @@
+{
+  "tool": "Built-in image_gen",
+  "references": [
+    "assets/characters/ren/portrait.png",
+    "assets/room/ren/furniture.png"
+  ],
+  "assets": [
+    {
+      "file": "assets/care/props.png",
+      "prompt": "Create a polished transparent sprite atlas for a cozy chibi isometric desktop pet game, matching the provided furniture reference. Six isolated objects arranged evenly in a strict 3 columns by 2 rows grid, wide 1536x1024 canvas, no labels, no background, absolutely no overlapping cells and generous transparent margins. Row1: left a closed three-panel walnut and jade plum-blossom privacy screen for a miniature bathroom; middle a low oval walnut bathtub with ivory rim, rich white foam and jade towels; right a tiny cute stylized rounded brown cartoon poop pile with two dot eyes, clean playful icon, not realistic. Row2: left a pink cream three-panel floral bathroom privacy screen; middle a pink cream clawfoot miniature bathtub full of soft white foam; right a cluster of translucent soap bubbles with small star sparkles. Furniture perspective is isometric, front sides visible, game prop scale and outlines consistent with reference. No people or exposed anatomy. Background genuinely transparent with alpha. Each object wholly within its cell."
+    },
+    {
+      "file": "assets/care/ren.png",
+      "prompt": "Use this reference as strict character identity anchor. Generate a transparent game animation atlas, 4 columns by 2 rows, 1536x1024 landscape canvas. Each of the eight cells contains ONE complete full body character centered, same size, feet aligned within each row, no clipping, ample transparent spacing, no text or props. Preserve precisely white hair ponytail, two upright rabbit ears, red eyes, white gold coat, green sash, black boots, sheathed sword location, reference chibi proportions. Top row is a four-frame cute impatient needing-restroom loop, fully clothed: hands held over lower belly, lean slightly left looking sideways, upright shy worried face, lean slightly right, upright blinking worried face. Bottom row a four-frame embarrassed recovery: pink cheeks looking away, shy eyes shut, hand near cheek shy smile, composed relieved eyes open. Wholesome comedy, no nudity, no excretion shown, no suggestive expression. Keep identical character design across all frames. Transparent alpha."
+    }
+  ],
+  "processing": "Original generated RGBA pixels retained. WPF reads crop rectangles from catalog.json; no image pixels edited.",
+  "kaling": "Uses original outfit atlases: waiting row 6 and petting row 11, with new care motion. Generated Kaling candidates were not selected due to alpha-edge artifacts."
+}

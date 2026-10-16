@@ -23,6 +23,7 @@ Add-Type -Path (Join-Path $root 'lib\Pet.Native.cs')
 . (Join-Path $root 'lib\Pet.Activity.ps1')
 . (Join-Path $root 'lib\Pet.Room.Theme.ps1')
 . (Join-Path $root 'lib\Pet.Room.ps1')
+. (Join-Path $root 'lib\Pet.Care.ps1')
 $script:state=Read-PetState $dataDirectory
 $script:app=[System.Windows.Application]::new();$app.ShutdownMode='OnExplicitShutdown'
 $script:clock=[Diagnostics.Stopwatch]::StartNew()
@@ -101,6 +102,7 @@ function Begin-Peek {
     Set-Animation 20 2240
 }
 function Invoke-Interaction([string]$Action) {
+    if($Action -in @('cookie','pudding','tea') -and -not (Test-CareFoodAllowed $Action)){return $false}
     if($activity.kind -eq 'attack'){Stop-Activity;$script:cooldownUntil=0}
     if($room.open){Request-RoomAction $(switch($Action){'sleep'{'bed'};'sit'{'sofa'};default{$Action}});return $true}
     if($clock.ElapsedMilliseconds -lt $cooldownUntil -and $Action -ne 'wake'){return $false}
@@ -125,6 +127,8 @@ function Invoke-Interaction([string]$Action) {
         'sad' {Set-Animation 5 1600}
         default {return $false}
     }
+    if($Action -in @('cookie','pudding','tea')){Begin-CareMeal $Action 'desktop' (@{cookie=2.4;pudding=2.8;tea=3.2}[$Action])}
+    if($Action -eq 'pet'){Add-CareHappiness}
     $script:cooldownUntil=$clock.ElapsedMilliseconds+$(if($Action -in @('cookie','pudding','tea')){3500}else{1200})
     if($state.character -eq 'ren'){Show-Bubble (Get-CharacterText $Action '')}
     Save-Settings;return $true
@@ -151,6 +155,8 @@ function End-Pointer {
     else{$script:pendingClick=@{action=$(if($wasSleepingOnPress){'wake'}else{$kind});due=$clock.ElapsedMilliseconds+[KalingNative]::GetDoubleClickTime()}}
 }
 function Update-Visibility {
+    if(($manualHidden -or $fullscreenHidden) -and $careTask){Cancel-CareActivity}
+    Sync-CareMesses
     if($room.open){if($w.IsVisible){$w.Hide()};if($manualHidden -or $fullscreenHidden){$room.window.Hide()}elseif(-not $room.window.IsVisible){$room.window.Show();Keep-RoomVisible};return}
     if($manualHidden -or $fullscreenHidden){Stop-Activity;Hide-Bubble;if($w.IsVisible){$w.Hide()}}
     elseif(-not $w.IsVisible -and -not $closing){$w.Show();Keep-Visible}
@@ -158,7 +164,7 @@ function Update-Visibility {
 function Toggle-Visibility {$script:manualHidden=-not $manualHidden;Update-Visibility}
 function Toggle-Through {
     $state.clickThrough=-not $state.clickThrough;[KalingNative]::ClickThrough($hwnd,$state.clickThrough)
-    $throughItem.IsChecked=$state.clickThrough;Save-Settings
+    $throughItem.IsChecked=$state.clickThrough;Sync-CareMesses;Save-Settings
     if($room.open){Set-RoomMessage $(if($state.clickThrough){'桌面穿透已開啟，回桌面後套用。小屋保留家具與玩具互動。'}else{'桌面穿透已關閉。'});return}
     Show-Bubble $(if($state.clickThrough){'滑鼠穿透已開啟。Ctrl+Alt+K 或系統匣可恢復。'}else{'滑鼠互動已恢復。'}) -Important
 }
@@ -274,6 +280,7 @@ $null=Add-Tray '取消本輪' {Cancel-Timer}
 $null=Add-Tray '調整番茄鐘時間…' {Show-TimerSettings}
 $null=Add-Tray '關閉桌面寵物' {Close-Pet}
 Initialize-CharacterTray
+Initialize-CareMenus
 $tray.ContextMenuStrip=$trayMenu;$tray.Add_DoubleClick({$script:manualHidden=$false;Update-Visibility});$tray.Visible=$true
 $img.Add_MouseLeftButtonDown({param($s,$e);Begin-Pointer (Cursor-Position) ($e.GetPosition($img).Y/$img.ActualHeight) ($e.ClickCount -eq 2);[void]$img.CaptureMouse();$e.Handled=$true})
 $img.Add_MouseMove({if($drag){Move-Pointer (Cursor-Position)}})
@@ -304,6 +311,7 @@ $timer.Add_Tick({
         if(-not $loaded -or $closing){return}
         $now=$clock.ElapsedMilliseconds;$delta=($now-$lastTick)/1000.0;$script:lastTick=$now
         $event=Step-Pomodoro $state $delta;Handle-TimerEvent $event
+        Update-Care $delta
         if($peeking -and $now -ge $actionUntil){Exit-Peek}
         if($now -ge $nextPoll){
             $script:nextPoll=$now+500;$monitorHandle=if($room.open){$room.hwnd}else{$hwnd};$script:fullscreenHidden=$state.autoHide -and [KalingNative]::IsFullscreen([KalingNative]::GetForegroundWindow(),$monitorHandle)
@@ -324,7 +332,7 @@ $timer.Add_Tick({
                 $canRest=-not $focus -and -not $state.quiet -and $state.stories -and -not $settingsWindow -and -not $wardrobeWindow
                 if($canRest -and $resting -eq 'none' -and $now-$lastInteraction -gt 120000){$script:resting='sitting'}
                 if($canRest -and $now-$lastInteraction -gt 300000 -and $resting -ne 'sleeping'){$script:resting='sleeping';Set-Animation 16 2600}
-                if(-not $focus -and -not $state.quiet -and $resting -eq 'none'){
+                if(-not $focus -and -not $state.quiet -and $resting -eq 'none' -and (-not $state.care.enabled -or ((Get-ActiveCare).urge -lt 0 -and (Test-CarePlay (Get-ActiveCare))))){
                     if($state.mode -eq 'follow' -and [math]::Abs($dx) -gt $w.Width*0.7){$script:direction=[math]::Sign($dx);$w.Left+=$direction*2.5;$moving=$true}
                     elseif($state.mode -eq 'wander'){
                         if($now -gt $nextWalk){$script:direction=if((Get-Random -Maximum 2) -eq 0){-1}else{1};$script:nextWalk=$now+6000;$script:walkEnd=$now+1600}
@@ -338,9 +346,9 @@ $timer.Add_Tick({
             }
         }
         if($now -ge $nextFrame){$script:frame=if($row -eq 16){[math]::Min($frame+1,$counts[$row]-1)}else{($frame+1)%$counts[$row]};$img.Source=$frames["$row,$frame"];$script:nextFrame=$now+$durations[$row][$frame]}
-    }catch{$_ | Out-String | Add-Content -LiteralPath $log -Encoding UTF8;Close-Pet}
+    }catch{$_ | Out-String | Add-Content -LiteralPath $log -Encoding UTF8;Close-Pet}finally{if(-not $closing){Update-CareVisual}}
 })
-$w.Add_Closing({Stop-Activity;if($fxWindow){$fxWindow.Close();$script:fxWindow=$null};$script:closing=$true;Pause-Pomodoro $state;Save-Settings})
+$w.Add_Closing({Close-CareWindows;Stop-Activity;if($fxWindow){$fxWindow.Close();$script:fxWindow=$null};$script:closing=$true;Pause-Pomodoro $state;Save-Settings})
 $w.Add_Closed({
     $timer.Stop();if($room.open){Close-Room};if($settingsWindow){$settingsWindow.Close()};if($wardrobeWindow){$wardrobeWindow.Close()}
     foreach($id in $hotkeys){[void][KalingNative]::UnregisterHotKey($hwnd,$id)}

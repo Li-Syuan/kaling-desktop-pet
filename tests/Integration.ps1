@@ -2,6 +2,7 @@
 function Invoke-IntegrationTests {
     # Only the dedicated fullscreen test should depend on foreground windows.
     $state.autoHide=$false;$script:fullscreenHidden=$false;Update-Visibility
+    Select-Character 'kaling';$state.care.enabled=$false
     $script:checks=[Collections.Generic.List[string]]::new()
     $limitations=[Collections.Generic.List[string]]::new()
     function Check($Condition,[string]$Name){if(-not $Condition){throw "FAIL: $Name"};$script:checks.Add($Name)}
@@ -208,6 +209,7 @@ public static class KalingTestNative {
     . (Join-Path $root 'tests\Merged.Integration.ps1')
     . (Join-Path $root 'tests\Room.Theme.Tests.ps1')
     . (Join-Path $root 'tests\Attack.Menu.Tests.ps1')
+    . (Join-Path $root 'tests\Care.Integration.ps1')
     $limitations.Add('Physical mixed-DPI multi-monitor transitions are not covered by this single-desktop test.')
     $limitations.Add('Sleep is tested through elapsed-gap logic; physical suspend/resume is not forced.')
     @{ok=$true;count=$checks.Count;checks=@($checks);limitations=@($limitations)} | ConvertTo-Json -Depth 4 | Set-Content (Join-Path $dataDirectory 'integration.json') -Encoding UTF8
