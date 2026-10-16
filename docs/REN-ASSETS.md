@@ -1,5 +1,7 @@
 # 蓮素材與來源
 
+目前角色 atlas、頭像與照顧反應已在 v1.6 依確認後的官方比例母圖更新；新的 16 姿勢、提示詞與渲染方式見 [蓮的日常](REN-LIFE.md)。下方保留初版與技能特效的來源紀錄。
+
 角色外觀經使用者確認，以白髮、紅眼、兔耳、白金衣裝、綠色腰帶及原版劍裝為依據。
 
 - 官方宣傳圖：https://g.nexonstatic.com/media/m2sndzne/1366x768-ren-the-red-eyed-wanderer-wallpaper-maplestory.jpg

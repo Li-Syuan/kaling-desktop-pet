@@ -1,0 +1,29 @@
+{
+  "tool": "built-in image_gen",
+  "approvedMaster": "master.png",
+  "approval": "User confirmed official-proportion master on 2026-10-16: 這個方向對，照這張延伸動畫",
+  "inputs": [
+    "master.png"
+  ],
+  "prompts": [
+    {
+      "file": "daily.png",
+      "prompt": "Using the supplied approved Ren character as a strict identity reference, draw an animation key-pose sheet with exactly 8 complete separate full-body sprites in 4 equal columns and 2 equal rows, on true transparent background. Preserve the reference's exact compact head-to-body ratio, ear length, face, eyes, white ponytail with dark gold ribbons, cyan streak, green sash, gold-trimmed open-shoulder sleeves, shorts and boots. Keep the same drawing style; do not redesign. All faces, heads and body widths stay the same size across cells, even for seated poses; leave ample gaps so no sword or hair crosses into another cell. Read left to right. Top row: 1 neutral standing, sword sheathed at waist, same face as reference; 2 same standing but eyes gently closed, pleased after head pat; 3 walking left with left foot forward, sword sheathed; 4 walking left with right foot forward, same walking orientation. Bottom row: 5 sitting calmly with legs out in front, sword sheathed beside hip; 6 sleeping curled on side, eyes closed, ponytail on floor, sword sheathed beside hip; 7 standing and raising one small hand to wave, sword sheathed; 8 standing stretching both arms up with eyes closed, sword sheathed. These are consistent animation poses of ONE approved character, not variations or a redesign. Exactly eight complete figures, no text, no labels, no grid lines, no background, no bubbles, no effects or detached parts. Transparent padding around every figure. Do not shorten ears, lengthen legs, or shrink head. The body below the chin is approximately one head tall as in the reference.",
+      "note": "Two overlapping rest poses are unused; replaced by rest.png."
+    },
+    {
+      "file": "actions.png",
+      "prompt": "Use the supplied approved Ren sprite as strict identity reference. Create exactly 8 complete sprites in a spacious 4 column by 2 row sheet on true transparent background, matching the reference's face, short compact body proportions, head size, long ears, costume and drawing style. ALL heads same size; sitting bodies get shorter naturally. At least 25 transparent pixels between neighboring characters; keep hair and sword inside each cell. Top row left to right: 1 standing holding and nibbling a small round cookie, sword sheathed; 2 standing holding a small pudding cup and spoon near mouth, sword sheathed; 3 standing taking a sip from a small teacup, sword sheathed; 4 being picked up, body dangling, bent short legs, hands slightly raised, a surprised expression, sword sheathed. Bottom row left to right: 5 crouching with hand on sword hilt ready to draw; 6 a compact sword slash pose, golden blade extended low toward viewer's right, both feet in frame; 7 a follow-through sword pose, blade diagonally upward, hair following behind, same short legs and same large head; 8 sword being returned to its scabbard, calm face and relaxed stance. Do not add swooshes, slashes or other effects: effects are a separate animation layer. No labels, borders, scenery, text, bubbles, props other than listed food and sword, or ground shadow. Exactly eight full figures; never crop ears or hair. Keep the same red half-lidded eyes, short chin, cyan streak, green sash, sleeves, boots and white ponytail with dark gold ribbons as the reference. No redesign or proportion changes.",
+      "correction": "Edit only the top-right sprite: REMOVE the large external human hand that is holding the hair/ears. Keep the small Ren character dangling in exactly the same surprised pose and restore the character's own ear, bow and white hair where the hand covered them. Replace the removed external hand area with true transparency. The pet is held by an invisible cursor, so there must be NO extra person or hand. Keep all other seven sprites exactly unchanged: same positions, size, colors, costume, face, sword and proportions, same canvas and layout. Preserve existing transparency."
+    },
+    {
+      "file": "master-closed.png",
+      "prompt": "Edit this approved character image in place. ONLY change both red eyes to gently closed relaxed eyelids, with a tiny content smile. Everything outside the eyes and tiny mouth must remain identical: exact face shape, head size, ear length, hair shape, ponytail, both hands, sword, costume, feet, shading, canvas dimensions, character position, and all transparent padding. Do not reframe or resize the image. Do not redraw the character's body. This is the matching closed-eyes frame for a blink animation. Same transparent background. One full figure, no additions.",
+      "note": "Expression reference; runtime face comes from matching daily poses."
+    },
+    {
+      "file": "rest.png",
+      "prompt": "Use this approved Ren master as exact identity reference. Create ONLY TWO complete isolated full-body sprites on a wide transparent canvas, with a large completely transparent gap at least one head-width between them. Left half: Ren sitting calmly on floor with both short legs extended forward, sword safely sheathed at hip. Right half: Ren sleeping curled on the side with eyes closed, white ponytail resting on the floor, sword safely sheathed at hip. Both characters have exactly the same head size, ear length, face shape, white-gold outfit with green sash, white legwear and dark boots as the approved reference. Their body proportions remain very compact as in the reference. Preserve drawing style. No labels, no background, no grid, no shadows, no particles. Hair, ears and sheathed sword must be fully inside each separate half, with no overlap. Two complete whole-character poses, not parts."
+    }
+  ]
+}

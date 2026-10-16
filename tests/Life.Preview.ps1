@@ -1,11 +1,11 @@
-﻿param([Parameter(Mandatory=$true)][string]$OutputDirectory)
+﻿param([Parameter(Mandatory=$true)][string]$OutputDirectory,[Parameter(Mandatory=$true)][string]$ReferenceAtlas)
 $ErrorActionPreference='Stop'
 Add-Type -AssemblyName PresentationCore,PresentationFramework,WindowsBase
 $repo=Split-Path $PSScriptRoot -Parent
-Add-Type -Path (Join-Path $repo 'lib/Pet.Life.cs') -ReferencedAssemblies @([System.Windows.Media.DrawingImage].Assembly.Location,[System.Windows.Point].Assembly.Location,'System.Xaml')
+Add-Type -Path @((Join-Path $repo 'lib/Pet.Life.cs'),(Join-Path $repo 'lib/Pet.Life.Art.cs'),(Join-Path $repo 'lib/Pet.Life.Visual.cs')) -ReferencedAssemblies @([System.Windows.Media.DrawingImage].Assembly.Location,[System.Windows.Point].Assembly.Location,'System.Xaml','System.Core')
 [void][IO.Directory]::CreateDirectory($OutputDirectory)
-$life=[RenLifeState]::new(42);$rig=[RenLifeVisual]::new((Join-Path $repo 'assets/characters/ren/life-parts.png'))
-$atlas=[System.Windows.Media.Imaging.BitmapImage]::new();$atlas.BeginInit();$atlas.CacheOption='OnLoad';$atlas.UriSource=[Uri](Join-Path $repo 'assets/characters/ren/atlas.png');$atlas.EndInit();$atlas.Freeze()
+$life=[RenLifeState]::new(42);$rig=[RenLifeVisual]::new((Join-Path $repo 'assets/characters/ren/life'))
+$atlas=[System.Windows.Media.Imaging.BitmapImage]::new();$atlas.BeginInit();$atlas.CacheOption='OnLoad';$atlas.UriSource=[Uri]([IO.Path]::GetFullPath($ReferenceAtlas));$atlas.EndInit();$atlas.Freeze()
 $frames=@{};foreach($row in @(0,8,10,11)){foreach($f in 0..7){$p=[System.Windows.Media.Imaging.CroppedBitmap]::new($atlas,[System.Windows.Int32Rect]::new($f*192,$row*208,192,208));$p.Freeze();$frames["$row,$f"]=$p}}
 $font=[System.Windows.Media.Typeface]::new('Microsoft JhengHei UI')
 function Label($DC,[string]$Text,[double]$X,[double]$Y,[double]$Size,$Color){
@@ -21,7 +21,7 @@ for($i=0;$i -lt 1800;$i++){
  $v=[System.Windows.Media.DrawingVisual]::new();$d=$v.RenderOpen()
  $d.DrawRectangle(([System.Windows.Media.BrushConverter]::new()).ConvertFromString('#111e2c'),$null,[System.Windows.Rect]::new(0,0,960,540))
  $d.DrawRectangle(([System.Windows.Media.BrushConverter]::new()).ConvertFromString('#fff3e8'),$null,[System.Windows.Rect]::new(480,0,480,468))
- Label $d '原版 v1.5' 32 22 20 '#c0d0de';Label $d '新版 · 蓮的日常' 512 22 20 '#485548'
+ Label $d '桌面版 v1.5' 32 22 20 '#c0d0de';Label $d '新版 · 原作比例的蓮' 512 22 20 '#485548'
  $d.DrawImage($frames["$r,$f"],[System.Windows.Rect]::new(96,95,288,312));$d.DrawImage($rig.Image,[System.Windows.Rect]::new(576,95,288,312))
  if($near){foreach($x in @(62,542)){$d.DrawEllipse([System.Windows.Media.Brushes]::Gold,$null,[System.Windows.Point]::new($x,210),5,5)}}
  Label $d $phase 32 482 21 '#f7e7c9';Label $d ('{0:00} / 60 秒' -f [int]$t) 800 489 14 '#b2c7d1'

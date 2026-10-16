@@ -39,7 +39,23 @@ foreach($i in 1..60){$a.Step((1.0/30),1,0,$true,$true,$false,$false,$true,$false
 foreach($i in 1..120){$b.Step((1.0/60),1,0,$true,$true,$false,$false,$true,$false)}
 Check ([math]::Abs($a.EyeX-$b.EyeX) -lt .0001 -and [math]::Abs($a.HeadX-$b.HeadX) -lt .005) 'life: attention response independent of refresh rate'
 
+if($lifeArtworkEnabled){
 Reset-Life;$script:lifeLast=$clock.ElapsedMilliseconds-33;Update-CareVisual;Update-LifeVisual
+Check ($lifeVisual.Art.Daily.Length -eq 8 -and $lifeVisual.Art.Actions.Length -eq 8) 'life: all 16 approved whole-character poses load separately'
+$inside=$true
+foreach($p in @($lifeVisual.Art.Daily)+@($lifeVisual.Art.Actions)){$left=84-$p.Anchor*$p.Scale;$inside=$inside -and $left -ge 0 -and $left+$p.Width*$p.Scale -le 192 -and $p.Height*$p.Scale -le 200}
+Check $inside 'life: ears hair and sword fit without clipping the pose canvas'
+# PNG stores straight alpha. WPF's premultiplied RGB round trip can differ by
+# one channel level; alpha and pixel positions must still match exactly.
+Add-Type 'public static class RenFrameAcceptance { public static bool Match(byte[] a,byte[] b){if(a.Length!=b.Length)return false;for(int i=0;i<a.Length;i++){int tolerance=i%4==3?0:1;if(System.Math.Abs(a[i]-b[i])>tolerance)return false;}return true;}}'
+$matches=$true
+foreach($r in 0..23){foreach($f in 0..($counts[$r]-1)){
+ $expected=$lifeVisual.Frame($r,$f);$actual=[Windows.Media.Imaging.FormatConvertedBitmap]::new($frames["$r,$f"],[Windows.Media.PixelFormats]::Pbgra32,$null,0);$bytes=New-Object byte[] (192*208*4);$other=New-Object byte[] (192*208*4)
+ $expected.CopyPixels($bytes,192*4,0);$actual.CopyPixels($other,192*4,0)
+ $matches=$matches -and [RenFrameAcceptance]::Match($bytes,$other)
+}}
+Check $matches 'life: all 104 packaged frames match renderer within one-level PNG RGB rounding and exact alpha'
+Check ([object]::ReferenceEquals((Get-CareArt 'reaction' 0),$frames['6,0']) -and [object]::ReferenceEquals((Get-CareArt 'reaction' 4),$frames['11,0'])) 'life: care reactions use the same new character art'
 Check ($lifeActive -and $img.Source -is [System.Windows.Media.DrawingImage]) 'life: actual desktop uses layered WPF renderer'
 $reference=$lifeVisual.Image;$before=$life.Time;$timer.Start();Pump-For 300;$timer.Stop()
 Check ($life.Time -gt $before -and [object]::ReferenceEquals($reference,$lifeVisual.Image)) 'life: real dispatcher advances retained drawing without allocating another actor'
@@ -85,4 +101,15 @@ $bench=[Diagnostics.Stopwatch]::StartNew()
 foreach($i in 1..300){$life.Step((1.0/60),.4,0,$true,$true,$true,$false,$true,$false);$lifeVisual.Render($life,$false,$false)}
 $bench.Stop()
 @{frames=300;milliseconds=$bench.Elapsed.TotalMilliseconds;millisecondsPerUpdate=$bench.Elapsed.TotalMilliseconds/300;note='model + retained WPF drawing throughput; not physical display FPS'} | ConvertTo-Json | Set-Content (Join-Path $dataDirectory 'life-render-timing.json') -Encoding UTF8
+}else{
+ # Until replacement artwork is accepted, exercise the shipped atlas path.
+ foreach($r in @(0,8,11,15,16,19)){
+  Set-Animation $r 1000;Update-CareVisual;$art=$img.Source;Update-LifeVisual
+  Check (-not $lifeActive -and -not (Test-LifeRig) -and $null -eq $lifeVisual -and [object]::ReferenceEquals($art,$img.Source)) "life: rejected artwork stays disabled for row $r"
+ }
+ $script:lifeTransition=@{from=$img.Source;start=$clock.ElapsedMilliseconds}
+ Update-LifeVisual
+ Check ($null -eq $lifeTransition) 'life: disabled artwork cannot leave a blended replacement'
+ Set-Animation 0 0;Capture 'ren-atlas-fallback.png'
+}
 $state.care.enabled=$true

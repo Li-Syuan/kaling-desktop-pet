@@ -18,7 +18,7 @@ $script:mutex=[Threading.Mutex]::new($true,('Local\KalingDesktopPet'+[string]$Se
 if(-not $created){$mutex.Dispose();exit 0}
 Add-Type -AssemblyName PresentationFramework,PresentationCore,WindowsBase,System.Windows.Forms,System.Drawing
 Add-Type -Path (Join-Path $root 'lib\Pet.Native.cs')
-Add-Type -Path (Join-Path $root 'lib\Pet.Life.cs') -ReferencedAssemblies @([System.Windows.Media.DrawingImage].Assembly.Location,[System.Windows.Point].Assembly.Location,'System.Xaml')
+Add-Type -Path @((Join-Path $root 'lib\Pet.Life.cs'),(Join-Path $root 'lib\Pet.Life.Art.cs'),(Join-Path $root 'lib\Pet.Life.Visual.cs')) -ReferencedAssemblies @([System.Windows.Media.DrawingImage].Assembly.Location,[System.Windows.Point].Assembly.Location,'System.Xaml','System.Core')
 . (Join-Path $root 'lib\Pet.State.ps1')
 . (Join-Path $root 'lib\Pet.Assets.ps1')
 . (Join-Path $root 'lib\Pet.Activity.ps1')
@@ -330,7 +330,7 @@ $timer.Add_Tick({
         if(-not $w.IsVisible -or $menu.IsOpen -or $trayMenu.Visible){return}
         $focus=$state.pomo.status -eq 'running'
         if(-not $drag -and $now -gt $actionUntil){
-            if($state.character -ne 'ren' -and $state.stories -and -not $state.quiet -and -not $focus -and $resting -ne 'sleeping' -and -not $settingsWindow -and -not $wardrobeWindow -and $now -ge $nextStory){
+            if(($state.character -ne 'ren' -or -not $lifeArtworkEnabled) -and $state.stories -and -not $state.quiet -and -not $focus -and $resting -ne 'sleeping' -and -not $settingsWindow -and -not $wardrobeWindow -and $now -ge $nextStory){
                 $story=Get-Story (Get-Date).Hour $state.mood;if($character.stories){$story.text=Get-Random -InputObject @($character.stories)};$state.mood=$story.mood;Set-Animation $story.row 2200;Show-Bubble $story.text;$script:nextStory=$now+(Get-Random -Minimum 480000 -Maximum 900001)
             }else{
                 $p=Cursor-Position;$dx=$p.X-($w.Left+$w.Width/2);$dy=$p.Y-($w.Top+88+($w.Height-120)*0.37);$moving=$false
@@ -345,7 +345,7 @@ $timer.Add_Tick({
                     }
                 }
                 if($moving){Keep-Visible;$r=if($direction -lt 0){2}else{1};if($row -ne $r){Set-Animation $r 0}}
-                elseif($state.character -ne 'ren' -and $state.look -and -not $focus -and -not $state.quiet -and $resting -eq 'none' -and [math]::Sqrt($dx*$dx+$dy*$dy) -gt 70 -and [math]::Sqrt($dx*$dx+$dy*$dy) -lt 750){
+                elseif(($state.character -ne 'ren' -or -not $lifeArtworkEnabled) -and $state.look -and -not $focus -and -not $state.quiet -and $resting -eq 'none' -and [math]::Sqrt($dx*$dx+$dy*$dy) -gt 70 -and [math]::Sqrt($dx*$dx+$dy*$dy) -lt 750){
                     $angle=([math]::Atan2($dx,-$dy)*180/[math]::PI+360)%360;$d=[int][math]::Floor(($angle+11.25)/22.5)%16;$img.Source=$frames["$(9+[math]::Floor($d/8)),$($d%8)"];return
                 }else{$r=if($focus -and $state.pomo.phase -eq 'focus'){8}elseif($resting -eq 'sleeping'){16}elseif($resting -eq 'sitting'){15}else{0};if($row -ne $r){Set-Animation $r 0}}
             }

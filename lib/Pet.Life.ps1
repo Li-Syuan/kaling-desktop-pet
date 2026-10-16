@@ -1,4 +1,6 @@
 ﻿# Ambient life runs after care presentation, so neither overwrites the other.
+# Approved whole-character artwork, with the same silhouette in every activity.
+$script:lifeArtworkEnabled=$true
 $script:life=$null;$script:lifeVisual=$null;$script:lifeLast=0L;$script:lifeActive=$false
 $script:lifeTransition=$null;$script:lifeLastSource=$null;$script:lifeWasRig=$false
 function Reset-Life {
@@ -12,9 +14,10 @@ function Notify-Life([string]$Event) {
     switch($Event){'press'{$life.Press()};'pet'{$life.Pet()};'snack'{$life.Snack()};default{$life.Interrupt()}}
 }
 function Test-LifeRig {
-    return $state.character -eq 'ren' -and -not $room.open -and -not ($drag -and $moved) -and $activity.kind -ne 'attack' -and -not $careTask -and (-not $state.care.enabled -or (Get-ActiveCare).urge -lt 0) -and $row -in @(0,8,11)
+    return $lifeArtworkEnabled -and $state.character -eq 'ren' -and -not $room.open -and -not ($drag -and $moved) -and $activity.kind -ne 'attack' -and -not $careTask -and (-not $state.care.enabled -or (Get-ActiveCare).urge -lt 0) -and $row -in @(0,8,11)
 }
 function Update-LifeVisual {
+    if(-not $lifeArtworkEnabled){$script:lifeActive=$false;$script:lifeTransition=$null;$script:lifeLastSource=$null;$script:lifeWasRig=$false;return}
     if(-not $loaded -or $state.character -ne 'ren'){$script:lifeActive=$false;return}
     if(-not $life){Reset-Life}
     $now=$clock.ElapsedMilliseconds;$dt=($now-$lifeLast)/1000.0;$script:lifeLast=$now
@@ -32,7 +35,7 @@ function Update-LifeVisual {
     $script:lifeActive=$visible -and $rig
     if(-not $visible){$life.ResetAttention();$life.Interrupt();$script:lifeTransition=$null;return}
     if($rig){
-        if(-not $lifeVisual){$script:lifeVisual=[RenLifeVisual]::new((Join-Path $root 'assets/characters/ren/life-parts.png'))}
+        if(-not $lifeVisual){$script:lifeVisual=[RenLifeVisual]::new((Join-Path $root 'assets/characters/ren/life'))}
         $lifeVisual.Render($life,$quiet,($row -eq 11));$img.Source=$lifeVisual.Image
     }elseif($row -in @(15,16) -and -not $careTask -and (-not $state.care.enabled -or (Get-ActiveCare).urge -lt 0) -and -not $drag -and $activity.kind -ne 'attack'){
         $img.RenderTransformOrigin=[System.Windows.Point]::new(.5,1)
