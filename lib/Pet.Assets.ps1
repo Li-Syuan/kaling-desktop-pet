@@ -1,4 +1,5 @@
-﻿function Read-OutfitCatalog([string]$Root) {
+﻿. (Join-Path $PSScriptRoot 'Pet.Poses.ps1')
+function Read-OutfitCatalog([string]$Root) {
     $all=Get-Content -LiteralPath (Join-Path $Root 'assets/characters/catalog.json') -Raw -Encoding UTF8 | ConvertFrom-Json
     if($all.schemaVersion -ne 1){throw 'Invalid character catalog'}
     foreach($character in $all.characters){
@@ -37,13 +38,22 @@ function Get-OutfitAssets([string]$Id) {
     if(-not $entry){throw 'Unknown outfit'}
     $atlas=[System.Windows.Media.Imaging.BitmapImage]::new()
     $atlas.BeginInit();$atlas.CacheOption='OnLoad';$atlas.UriSource=[Uri](Join-Path $script:root $entry.atlas);$atlas.EndInit();$atlas.Freeze()
-    if($atlas.PixelWidth -ne 1536 -or $atlas.PixelHeight -ne (208*$entry.counts.Count)){throw 'Invalid outfit atlas dimensions'}
     $frames=@{}
-    for($r=0;$r -lt $entry.counts.Count;$r++){for($c=0;$c -lt $entry.counts[$r];$c++){
-        $frame=[System.Windows.Media.Imaging.CroppedBitmap]::new($atlas,[System.Windows.Int32Rect]::new($c*192,$r*208,192,208));$frame.Freeze();$frames["$r,$c"]=$frame
-    }}
-    $thumb=[System.Windows.Media.Imaging.BitmapImage]::new()
-    $thumb.BeginInit();$thumb.CacheOption='OnLoad';$thumb.UriSource=[Uri](Join-Path $script:root $entry.portrait);$thumb.EndInit();$thumb.Freeze()
+    if($entry.poseRects){
+        if($entry.poseScale -le 0 -or $entry.poseScale -gt 2){throw 'Invalid pose scale'}
+        for($r=0;$r -lt $entry.counts.Count;$r++){
+            if(@($entry.actions[$r].frames).Count -ne $entry.counts[$r]){throw 'Incomplete pose keys'}
+            for($c=0;$c -lt $entry.counts[$r];$c++){$frames["$r,$c"]=Get-PoseFrame $atlas $entry $entry.actions[$r].frames[$c]}
+        }
+        $thumb=$frames['0,0']
+    }else{
+        if($atlas.PixelWidth -ne 1536 -or $atlas.PixelHeight -ne (208*$entry.counts.Count)){throw 'Invalid outfit atlas dimensions'}
+        for($r=0;$r -lt $entry.counts.Count;$r++){for($c=0;$c -lt $entry.counts[$r];$c++){
+            $frame=[System.Windows.Media.Imaging.CroppedBitmap]::new($atlas,[System.Windows.Int32Rect]::new($c*192,$r*208,192,208));$frame.Freeze();$frames["$r,$c"]=$frame
+        }}
+        $thumb=[System.Windows.Media.Imaging.BitmapImage]::new()
+        $thumb.BeginInit();$thumb.CacheOption='OnLoad';$thumb.UriSource=[Uri](Join-Path $script:root $entry.portrait);$thumb.EndInit();$thumb.Freeze()
+    }
     $result=@{entry=$entry;frames=$frames;thumbnail=$thumb;counts=@($entry.counts)}
     $script:outfitCache[$cacheKey]=$result;return $result
 }

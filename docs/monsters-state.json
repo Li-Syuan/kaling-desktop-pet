@@ -1,0 +1,19 @@
+﻿{
+    "checks":  [
+                   "Ren remains default with four independent care slots",
+                   "v1.4 settings retain character outfit and care",
+                   "old save adds healthy monster defaults without offline debt",
+                   "mushroom selection survives restart",
+                   "mushroom retains geometry preferences timer and house",
+                   "mushroom care persists without advancing offline",
+                   "mushroom unknown appearance recovers to own default",
+                   "ribbon-pig selection survives restart",
+                   "ribbon-pig retains geometry preferences timer and house",
+                   "ribbon-pig care persists without advancing offline",
+                   "ribbon-pig unknown appearance recovers to own default",
+                   "mutating one care slot never changes the others",
+                   "atomic backup preserved"
+               ],
+    "ok":  true,
+    "count":  13
+}

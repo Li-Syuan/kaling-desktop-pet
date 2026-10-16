@@ -130,7 +130,7 @@ function Invoke-Interaction([string]$Action) {
     if($Action -in @('cookie','pudding','tea')){Begin-CareMeal $Action 'desktop' (@{cookie=2.4;pudding=2.8;tea=3.2}[$Action])}
     if($Action -eq 'pet'){Add-CareHappiness}
     $script:cooldownUntil=$clock.ElapsedMilliseconds+$(if($Action -in @('cookie','pudding','tea')){3500}else{1200})
-    if($state.character -eq 'ren'){Show-Bubble (Get-CharacterText $Action '')}
+    if($character.dialogue.$Action){Show-Bubble ([string]$character.dialogue.$Action)}
     Save-Settings;return $true
 }
 function Begin-Pointer($Point,[double]$Y,[bool]$Double) {
@@ -326,7 +326,7 @@ $timer.Add_Tick({
         $focus=$state.pomo.status -eq 'running'
         if(-not $drag -and $now -gt $actionUntil){
             if($state.stories -and -not $state.quiet -and -not $focus -and $resting -ne 'sleeping' -and -not $settingsWindow -and -not $wardrobeWindow -and $now -ge $nextStory){
-                $story=Get-Story (Get-Date).Hour $state.mood;if($state.character -eq 'ren'){$story.text=Get-Random -InputObject @($character.stories)};$state.mood=$story.mood;Set-Animation $story.row 2200;Show-Bubble $story.text;$script:nextStory=$now+(Get-Random -Minimum 480000 -Maximum 900001)
+                $story=Get-Story (Get-Date).Hour $state.mood;if($character.stories){$story.text=Get-Random -InputObject @($character.stories)};$state.mood=$story.mood;Set-Animation $story.row 2200;Show-Bubble $story.text;$script:nextStory=$now+(Get-Random -Minimum 480000 -Maximum 900001)
             }else{
                 $p=Cursor-Position;$dx=$p.X-($w.Left+$w.Width/2);$dy=$p.Y-($w.Top+88+($w.Height-120)*0.37);$moving=$false
                 $canRest=-not $focus -and -not $state.quiet -and $state.stories -and -not $settingsWindow -and -not $wardrobeWindow

@@ -1,6 +1,6 @@
 ﻿# House-specific poses use existing daily animations when a character has no dedicated art.
 function Resolve-RoomRow([int]$Row) {
-    if($state.character -eq 'ren' -and $Row -ge 21){return @{21=11;22=15;23=16;24=3;25=20}[$Row]}
+    if($character.roomRows -and $null -ne $character.roomRows.([string]$Row)){return [int]$character.roomRows.([string]$Row)}
     return $Row
 }
 $script:room=@{open=$false;window=$null;hwnd=[IntPtr]::Zero;phase='idle';task='';u=.45;v=.45;path=@();step=0;until=0.0;time=0.0;idle=0.0;nextAuto=40.0;nextFrame=0.0;drag=$null;roll=$null;pose=$null;foodCount=0;petCount=0}
@@ -39,7 +39,7 @@ function Cancel-RoomActivity {
     $room.idle=0;$room.nextAuto=$room.time+(Get-Random -Minimum 30 -Maximum 61);$script:resting='none';Set-Animation 0 0;Render-Room
 }
 function Start-RoomPhase([string]$Phase,[int]$Row,[double]$Seconds) {
-    $Row=Resolve-RoomRow $Row;if($state.character -eq 'ren' -and $Phase -eq 'waking'){$Row=20}
+    $Row=Resolve-RoomRow $Row;if($Phase -eq 'waking' -and $null -ne $character.wakeRow){$Row=[int]$character.wakeRow}
     $room.phase=$Phase;$room.until=$room.time+$Seconds;Set-Animation $Row ([int]($Seconds*1000));Render-Room
 }
 function Request-RoomAction([string]$Action,[switch]$Automatic) {

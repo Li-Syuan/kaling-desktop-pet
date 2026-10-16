@@ -3,7 +3,7 @@ Stop-Activity;Close-Room;Reset-Pomodoro $state;$state.quiet=$false;$state.autoHi
 $script:manualHidden=$false;$script:fullscreenHidden=$false;Update-Visibility
 function Care-Step([int]$Count){for($k=0;$k -lt $Count;$k++){Update-Care .1;if($room.open){Update-Room .1};Update-CareVisual};Pump}
 function Care-Ready {Cancel-CareActivity;if($room.open){Cancel-RoomActivity};$script:cooldownUntil=0;$script:actionUntil=0;$script:drag=$false;$script:pendingClick=$null;$script:careNotice=120}
-foreach($pair in @(@('ren','original'),@('kaling','uniform'),@('kaling','pajamas'),@('kaling','hoodie'))){
+foreach($pair in @(@('ren','original'),@('kaling','uniform'),@('kaling','pajamas'),@('kaling','hoodie'),@('mushroom','original'),@('ribbon-pig','original'))){
  Select-Character $pair[0];Select-Outfit $pair[1];$state.care.characters[$state.character]=New-CharacterCare;$c=Get-ActiveCare;Care-Ready
  foreach($f in 0..7){$art=Get-CareArt 'reaction' $f;Check ($art.IsFrozen -and $art.PixelHeight -gt 0) "$($pair -join '/') care frame $f is valid"}
  $before=$c.satiety;$null=Invoke-Interaction 'cookie';Check ($c.satiety -eq $before -and $careTask.kind -eq 'food') 'feeding waits for completed animation'

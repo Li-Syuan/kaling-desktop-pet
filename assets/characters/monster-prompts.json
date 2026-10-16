@@ -1,0 +1,16 @@
+{
+  "tool": "image_gen built-in",
+  "shared": "Create a production transparent sprite pose atlas for a Windows desktop pet. Exactly 16 isolated full-body poses in a strict 4 column by 4 row grid, square 1536x1536 canvas. Each pose contained in its own 384x384 cell with at least 35px EMPTY transparent padding on all sides, uniform character scale and a common ground baseline within each cell. No contact shadows, no background, no grid lines, no captions, no text, no numbers, no white sticker border or glow. Clean solid edge alpha. Reference image is the character identity reference; preserve its recognizable proportions and features, soften heavy black outlines to dark brown, with polished clean game illustration shading. Keep the character NON-HUMAN, no human body or clothes. Pose order left to right, top to bottom: row1 neutral front three-quarter; eyes closed blink same pose; side-facing LEFT walking with one foot/body edge raised; side-facing LEFT alternate walk step. Row2 happy being petted eyes squeezed; sad droopy expression; nervous squirm cheeks puffed needing toilet (cute and fully non-graphic); proud relaxed wink. Row3 nibbling a chocolate chip cookie at mouth; licking a small cup of pudding; sipping from small tea cup; curled up sitting resting. Row4 lying asleep eyes closed; stretching up from nap; crouching low peekaboo (whole character visible, no box); excited little jump playing with a tiny ball. All poses must show same cap spots / same ribbon position and proportions. These are sprite objects, not a collage scene.",
+  "mushroom": {
+    "reference": "https://nxcache.nexon.net/cms/2021/q2/1802/mushroom.png",
+    "identity": "Broad orange cap, golden spots, cream body, blush, no human body"
+  },
+  "ribbonPig": {
+    "reference": "https://cdn.staticneo.com/ca/maple_story_conceptart_Yvp2W.jpg",
+    "identity": "Round peach pig, red ribbon around midsection, bow on upper back, four hooves, curled tail, half-lidded eyes"
+  },
+  "forest": {
+    "reference": "assets/room/ren/room.png",
+    "prompt": "Edit this isometric empty dollhouse room into a cozy MapleStory forest hideout for an orange mushroom and a pink ribbon pig. Retain EXACT isometric camera, room boundary silhouette, positions of wall-to-floor joins, empty unobstructed wooden floor, transparent outer background. Room remains empty, no characters or floor furniture. Replace all swords, Chinese dragon scroll and plum decorations with friendly woodland motifs: leaf-shaped window looking onto green forest, tiny painted orange mushroom and red ribbon wall plaques, warm honey oak framing, sage and cream walls. Rounded wood edges. Polished cozy game illustration, clean non-glowing edges, no text. Furniture will be separately overlaid by the game so keep entire floor empty. Match the input aspect ratio and composition."
+  }
+}

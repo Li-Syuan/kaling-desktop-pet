@@ -839,7 +839,2013 @@
           "fxRow": 2
         }
       ],
-      "roomTheme": "ren"
+      "roomTheme": "ren",
+      "roomRows": {
+        "21": 11,
+        "22": 15,
+        "23": 16,
+        "24": 3,
+        "25": 20
+      },
+      "wakeRow": 20
+    },
+    {
+      "id": "mushroom",
+      "displayName": "菇菇寶貝",
+      "defaultOutfit": "original",
+      "outfits": [
+        {
+          "id": "original",
+          "displayName": "經典怪物造型",
+          "description": "橘色大菇帽 · 軟萌彈跳",
+          "atlas": "assets/characters/mushroom/poses.png",
+          "poseRects": [
+            [
+              34,
+              60,
+              279,
+              252
+            ],
+            [
+              345,
+              59,
+              278,
+              252
+            ],
+            [
+              659,
+              62,
+              261,
+              249
+            ],
+            [
+              968,
+              65,
+              259,
+              246
+            ],
+            [
+              38,
+              337,
+              289,
+              276
+            ],
+            [
+              346,
+              373,
+              274,
+              240
+            ],
+            [
+              644,
+              369,
+              271,
+              244
+            ],
+            [
+              962,
+              366,
+              269,
+              243
+            ],
+            [
+              41,
+              659,
+              272,
+              252
+            ],
+            [
+              348,
+              657,
+              275,
+              249
+            ],
+            [
+              653,
+              663,
+              275,
+              251
+            ],
+            [
+              963,
+              681,
+              267,
+              223
+            ],
+            [
+              34,
+              1000,
+              291,
+              195
+            ],
+            [
+              360,
+              951,
+              258,
+              246
+            ],
+            [
+              646,
+              1012,
+              280,
+              183
+            ],
+            [
+              969,
+              941,
+              252,
+              251
+            ]
+          ],
+          "poseScale": 0.5292096,
+          "counts": [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            8,
+            8,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "actions": [
+            {
+              "id": "idle",
+              "row": 0,
+              "frameMs": 220,
+              "holdLast": false,
+              "label": "待機眨眼",
+              "frames": [
+                {
+                  "pose": 0,
+                  "sy": 1
+                },
+                {
+                  "pose": 0,
+                  "sy": 1.012
+                },
+                {
+                  "pose": 1,
+                  "sy": 1
+                },
+                {
+                  "pose": 0,
+                  "sy": 0.99
+                }
+              ]
+            },
+            {
+              "id": "right",
+              "row": 1,
+              "frameMs": 175,
+              "holdLast": false,
+              "label": "向右小跑",
+              "frames": [
+                {
+                  "pose": 2,
+                  "flip": true,
+                  "y": 0,
+                  "angle": -2
+                },
+                {
+                  "pose": 3,
+                  "flip": true,
+                  "y": -3,
+                  "angle": 1
+                },
+                {
+                  "pose": 2,
+                  "flip": true,
+                  "y": 0,
+                  "angle": -1
+                },
+                {
+                  "pose": 3,
+                  "flip": true,
+                  "y": -2,
+                  "angle": 2
+                }
+              ]
+            },
+            {
+              "id": "left",
+              "row": 2,
+              "frameMs": 175,
+              "holdLast": false,
+              "label": "向左小跑",
+              "frames": [
+                {
+                  "pose": 2,
+                  "flip": false,
+                  "y": 0,
+                  "angle": -2
+                },
+                {
+                  "pose": 3,
+                  "flip": false,
+                  "y": -3,
+                  "angle": 1
+                },
+                {
+                  "pose": 2,
+                  "flip": false,
+                  "y": 0,
+                  "angle": -1
+                },
+                {
+                  "pose": 3,
+                  "flip": false,
+                  "y": -2,
+                  "angle": 2
+                }
+              ]
+            },
+            {
+              "id": "wave",
+              "row": 3,
+              "frameMs": 220,
+              "holdLast": false,
+              "label": "打招呼",
+              "frames": [
+                {
+                  "pose": 0,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 7,
+                  "angle": 1.5,
+                  "sy": 1.012
+                },
+                {
+                  "pose": 7,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 0,
+                  "angle": -1.5,
+                  "sy": 0.988
+                }
+              ]
+            },
+            {
+              "id": "jump",
+              "row": 4,
+              "frameMs": 210,
+              "holdLast": false,
+              "label": "蹦一下",
+              "frames": [
+                {
+                  "pose": 0,
+                  "y": 0,
+                  "sx": 1.07,
+                  "sy": 0.93
+                },
+                {
+                  "pose": 0,
+                  "y": -14,
+                  "sx": 0.97,
+                  "sy": 1.04
+                },
+                {
+                  "pose": 0,
+                  "y": -28,
+                  "sx": 0.96,
+                  "sy": 1.04
+                },
+                {
+                  "pose": 0,
+                  "y": -10,
+                  "sx": 1,
+                  "sy": 1
+                }
+              ]
+            },
+            {
+              "id": "sad",
+              "row": 5,
+              "frameMs": 160,
+              "holdLast": false,
+              "label": "委屈",
+              "frames": [
+                {
+                  "pose": 0,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 5,
+                  "angle": 1.5,
+                  "sy": 1.012
+                },
+                {
+                  "pose": 5,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 0,
+                  "angle": -1.5,
+                  "sy": 0.988
+                }
+              ]
+            },
+            {
+              "id": "waiting",
+              "row": 6,
+              "frameMs": 160,
+              "holdLast": false,
+              "label": "坐立難安",
+              "frames": [
+                {
+                  "pose": 6,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 6,
+                  "angle": 2.5,
+                  "sy": 1.012
+                },
+                {
+                  "pose": 6,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 6,
+                  "angle": -2.5,
+                  "sy": 0.988
+                }
+              ]
+            },
+            {
+              "id": "thinking",
+              "row": 7,
+              "frameMs": 160,
+              "holdLast": false,
+              "label": "歪頭想想",
+              "frames": [
+                {
+                  "pose": 0,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 7,
+                  "angle": 1.5,
+                  "sy": 1.012
+                },
+                {
+                  "pose": 0,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 7,
+                  "angle": -1.5,
+                  "sy": 0.988
+                }
+              ]
+            },
+            {
+              "id": "review",
+              "row": 8,
+              "frameMs": 160,
+              "holdLast": false,
+              "label": "觀察你",
+              "frames": [
+                {
+                  "pose": 0,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 0,
+                  "angle": 1.5,
+                  "sy": 1.012
+                },
+                {
+                  "pose": 1,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 0,
+                  "angle": -1.5,
+                  "sy": 0.988
+                }
+              ]
+            },
+            {
+              "id": "gaze-a",
+              "row": 9,
+              "frameMs": 160,
+              "holdLast": false,
+              "label": "看左邊",
+              "frames": [
+                {
+                  "pose": 0,
+                  "flip": false,
+                  "angle": -3.0,
+                  "x": -2
+                },
+                {
+                  "pose": 0,
+                  "flip": false,
+                  "angle": -2.2,
+                  "x": -2
+                },
+                {
+                  "pose": 0,
+                  "flip": false,
+                  "angle": -1.4,
+                  "x": -2
+                },
+                {
+                  "pose": 0,
+                  "flip": false,
+                  "angle": -0.5999999999999996,
+                  "x": -2
+                },
+                {
+                  "pose": 0,
+                  "flip": false,
+                  "angle": 0.20000000000000018,
+                  "x": -2
+                },
+                {
+                  "pose": 0,
+                  "flip": false,
+                  "angle": 1.0,
+                  "x": -2
+                },
+                {
+                  "pose": 0,
+                  "flip": false,
+                  "angle": 1.8000000000000007,
+                  "x": -2
+                },
+                {
+                  "pose": 0,
+                  "flip": false,
+                  "angle": 2.6000000000000005,
+                  "x": -2
+                }
+              ]
+            },
+            {
+              "id": "gaze-b",
+              "row": 10,
+              "frameMs": 160,
+              "holdLast": false,
+              "label": "看右邊",
+              "frames": [
+                {
+                  "pose": 0,
+                  "flip": true,
+                  "angle": -3.0,
+                  "x": 2
+                },
+                {
+                  "pose": 0,
+                  "flip": true,
+                  "angle": -2.2,
+                  "x": 2
+                },
+                {
+                  "pose": 0,
+                  "flip": true,
+                  "angle": -1.4,
+                  "x": 2
+                },
+                {
+                  "pose": 0,
+                  "flip": true,
+                  "angle": -0.5999999999999996,
+                  "x": 2
+                },
+                {
+                  "pose": 0,
+                  "flip": true,
+                  "angle": 0.20000000000000018,
+                  "x": 2
+                },
+                {
+                  "pose": 0,
+                  "flip": true,
+                  "angle": 1.0,
+                  "x": 2
+                },
+                {
+                  "pose": 0,
+                  "flip": true,
+                  "angle": 1.8000000000000007,
+                  "x": 2
+                },
+                {
+                  "pose": 0,
+                  "flip": true,
+                  "angle": 2.6000000000000005,
+                  "x": 2
+                }
+              ]
+            },
+            {
+              "id": "pet",
+              "row": 11,
+              "frameMs": 330,
+              "holdLast": false,
+              "label": "摸摸",
+              "frames": [
+                {
+                  "pose": 4,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 4,
+                  "angle": 1.5,
+                  "sy": 1.012
+                },
+                {
+                  "pose": 4,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 4,
+                  "angle": -1.5,
+                  "sy": 0.988
+                }
+              ]
+            },
+            {
+              "id": "cookie",
+              "row": 12,
+              "frameMs": 300,
+              "holdLast": false,
+              "label": "啃餅乾",
+              "frames": [
+                {
+                  "pose": 8,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 8,
+                  "angle": 1.5,
+                  "sy": 1.012
+                },
+                {
+                  "pose": 8,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 8,
+                  "angle": -1.5,
+                  "sy": 0.988
+                }
+              ]
+            },
+            {
+              "id": "pudding",
+              "row": 13,
+              "frameMs": 350,
+              "holdLast": false,
+              "label": "吃布丁",
+              "frames": [
+                {
+                  "pose": 9,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 9,
+                  "angle": 1.5,
+                  "sy": 1.012
+                },
+                {
+                  "pose": 9,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 9,
+                  "angle": -1.5,
+                  "sy": 0.988
+                }
+              ]
+            },
+            {
+              "id": "tea",
+              "row": 14,
+              "frameMs": 400,
+              "holdLast": false,
+              "label": "喝茶",
+              "frames": [
+                {
+                  "pose": 10,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 10,
+                  "angle": 1.5,
+                  "sy": 1.012
+                },
+                {
+                  "pose": 10,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 10,
+                  "angle": -1.5,
+                  "sy": 0.988
+                }
+              ]
+            },
+            {
+              "id": "sit",
+              "row": 15,
+              "frameMs": 300,
+              "holdLast": false,
+              "label": "趴坐",
+              "frames": [
+                {
+                  "pose": 0,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 11,
+                  "angle": 1.5,
+                  "sy": 1.012
+                },
+                {
+                  "pose": 11,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 11,
+                  "angle": -1.5,
+                  "sy": 0.988
+                }
+              ]
+            },
+            {
+              "id": "sleep",
+              "row": 16,
+              "frameMs": 650,
+              "holdLast": true,
+              "label": "睡覺",
+              "frames": [
+                {
+                  "pose": 11,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 12,
+                  "angle": 1.5,
+                  "sy": 1.012
+                },
+                {
+                  "pose": 12,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 12,
+                  "angle": -1.5,
+                  "sy": 0.988
+                }
+              ]
+            },
+            {
+              "id": "stretch",
+              "row": 17,
+              "frameMs": 300,
+              "holdLast": false,
+              "label": "伸懶腰",
+              "frames": [
+                {
+                  "pose": 11,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 13,
+                  "angle": 1.5,
+                  "sy": 1.012
+                },
+                {
+                  "pose": 13,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 0,
+                  "angle": -1.5,
+                  "sy": 0.988
+                }
+              ]
+            },
+            {
+              "id": "spin",
+              "row": 18,
+              "frameMs": 180,
+              "holdLast": false,
+              "label": "轉身扭扭",
+              "frames": [
+                {
+                  "pose": 0,
+                  "flip": false,
+                  "angle": 0,
+                  "sx": 1
+                },
+                {
+                  "pose": 0,
+                  "flip": true,
+                  "angle": 7,
+                  "sx": 0.9
+                },
+                {
+                  "pose": 0,
+                  "flip": true,
+                  "angle": -7,
+                  "sx": 0.9
+                },
+                {
+                  "pose": 0,
+                  "flip": false,
+                  "angle": 0,
+                  "sx": 1
+                }
+              ]
+            },
+            {
+              "id": "lift",
+              "row": 19,
+              "frameMs": 200,
+              "holdLast": false,
+              "label": "提起",
+              "frames": [
+                {
+                  "pose": 6,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 6,
+                  "angle": 1.5,
+                  "sy": 1.012
+                },
+                {
+                  "pose": 6,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 6,
+                  "angle": -1.5,
+                  "sy": 0.988
+                }
+              ]
+            },
+            {
+              "id": "peek",
+              "row": 20,
+              "frameMs": 280,
+              "holdLast": false,
+              "label": "躲貓貓",
+              "frames": [
+                {
+                  "pose": 14,
+                  "y": 8
+                },
+                {
+                  "pose": 0,
+                  "y": 0
+                },
+                {
+                  "pose": 14,
+                  "y": 8
+                },
+                {
+                  "pose": 0,
+                  "y": 0
+                }
+              ]
+            },
+            {
+              "id": "smug",
+              "row": 21,
+              "frameMs": 550,
+              "holdLast": false,
+              "label": "得意",
+              "frames": [
+                {
+                  "pose": 7,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 7,
+                  "angle": 1.5,
+                  "sy": 1.012
+                },
+                {
+                  "pose": 7,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 7,
+                  "angle": -1.5,
+                  "sy": 0.988
+                }
+              ]
+            },
+            {
+              "id": "pillow",
+              "row": 22,
+              "frameMs": 600,
+              "holdLast": false,
+              "label": "沙發打盹",
+              "frames": [
+                {
+                  "pose": 11,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 11,
+                  "angle": 1.5,
+                  "sy": 1.012
+                },
+                {
+                  "pose": 1,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 11,
+                  "angle": -1.5,
+                  "sy": 0.988
+                }
+              ]
+            },
+            {
+              "id": "quilt",
+              "row": 23,
+              "frameMs": 600,
+              "holdLast": true,
+              "label": "被窩探頭",
+              "frames": [
+                {
+                  "pose": 14,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 0,
+                  "angle": 1.5,
+                  "sy": 1.012
+                },
+                {
+                  "pose": 0,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 14,
+                  "angle": -1.5,
+                  "sy": 0.988
+                }
+              ]
+            },
+            {
+              "id": "balltap",
+              "row": 24,
+              "frameMs": 300,
+              "holdLast": false,
+              "label": "推球",
+              "frames": [
+                {
+                  "pose": 0,
+                  "x": 0,
+                  "angle": 0
+                },
+                {
+                  "pose": 15,
+                  "x": -3,
+                  "angle": -3
+                },
+                {
+                  "pose": 15,
+                  "x": 3,
+                  "angle": 3
+                },
+                {
+                  "pose": 0,
+                  "x": 0,
+                  "angle": 0
+                }
+              ]
+            },
+            {
+              "id": "boxduck",
+              "row": 25,
+              "frameMs": 300,
+              "holdLast": false,
+              "label": "縮進紙箱",
+              "frames": [
+                {
+                  "pose": 0,
+                  "y": 0,
+                  "sy": 1
+                },
+                {
+                  "pose": 14,
+                  "y": 4,
+                  "sy": 0.97
+                },
+                {
+                  "pose": 14,
+                  "y": 10,
+                  "sy": 0.94
+                },
+                {
+                  "pose": 14,
+                  "y": 14,
+                  "sy": 0.91
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "roomTheme": "mushroom",
+      "wakeRow": 20,
+      "dialogue": {
+        "hello": "菇菇！今天也一起蹦蹦跳。",
+        "pet": "菇～帽子被摸得暖暖的。",
+        "wave": "菇！我在這裡！",
+        "jump": "蹦！帽子差點飛走。",
+        "cookie": "咔滋咔滋，菇菇喜歡！",
+        "pudding": "軟軟的布丁，和我一樣！",
+        "tea": "呼～小口喝。",
+        "sit": "縮成一顆小香菇。",
+        "sleep": "菇……呼……",
+        "wake": "菇？天亮了嗎？",
+        "stretch": "長高一點點！",
+        "spin": "轉一圈，斑點還在！",
+        "peek": "被找到啦，菇！",
+        "smug": "這頂帽子很威風吧！",
+        "focus": "菇！完成一輪了，休息一下。",
+        "rest": "菇菇準備好了。"
+      },
+      "careDialogue": {
+        "urge": "菇？！快帶我回小屋！",
+        "accident": "菇……這不是小蘑菇。",
+        "toilet": "借過借過，菇！",
+        "done": "菇！下次也走這邊。",
+        "bath": "菇菇帽子洗香香。",
+        "clean": "亮晶晶！菇菇謝謝你。",
+        "full": "菇菇肚子圓滾滾了。",
+        "hungry": "菇……肚子咕咕叫。",
+        "tired": "帽子也想睡一下。",
+        "dirty": "菇菇想洗澡了。",
+        "limit": "菇……地板沒有空位了。",
+        "disabled": "菇菇安靜陪著你。"
+      },
+      "stories": [
+        "菇菇正在數帽子上的斑點。",
+        "窗外的葉子晃呀晃，我也晃呀晃。",
+        "蹦累了，陪你安靜一下。"
+      ]
+    },
+    {
+      "id": "ribbon-pig",
+      "displayName": "緞帶肥肥",
+      "defaultOutfit": "original",
+      "outfits": [
+        {
+          "id": "original",
+          "displayName": "經典怪物造型",
+          "description": "紅緞帶 · 小短腿踏步",
+          "atlas": "assets/characters/ribbon-pig/poses.png",
+          "poseRects": [
+            [
+              22,
+              42,
+              287,
+              262
+            ],
+            [
+              337,
+              41,
+              291,
+              263
+            ],
+            [
+              652,
+              45,
+              282,
+              254
+            ],
+            [
+              966,
+              50,
+              272,
+              253
+            ],
+            [
+              20,
+              342,
+              291,
+              257
+            ],
+            [
+              364,
+              340,
+              263,
+              259
+            ],
+            [
+              659,
+              336,
+              270,
+              263
+            ],
+            [
+              962,
+              343,
+              281,
+              255
+            ],
+            [
+              36,
+              641,
+              279,
+              259
+            ],
+            [
+              360,
+              647,
+              265,
+              253
+            ],
+            [
+              652,
+              637,
+              290,
+              266
+            ],
+            [
+              979,
+              666,
+              260,
+              232
+            ],
+            [
+              24,
+              972,
+              303,
+              224
+            ],
+            [
+              370,
+              941,
+              250,
+              252
+            ],
+            [
+              660,
+              981,
+              275,
+              200
+            ],
+            [
+              973,
+              926,
+              267,
+              270
+            ]
+          ],
+          "poseScale": 0.5082508,
+          "counts": [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            8,
+            8,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "actions": [
+            {
+              "id": "idle",
+              "row": 0,
+              "frameMs": 220,
+              "holdLast": false,
+              "label": "待機眨眼",
+              "frames": [
+                {
+                  "pose": 0,
+                  "sy": 1
+                },
+                {
+                  "pose": 0,
+                  "sy": 1.012
+                },
+                {
+                  "pose": 1,
+                  "sy": 1
+                },
+                {
+                  "pose": 0,
+                  "sy": 0.99
+                }
+              ]
+            },
+            {
+              "id": "right",
+              "row": 1,
+              "frameMs": 175,
+              "holdLast": false,
+              "label": "向右小跑",
+              "frames": [
+                {
+                  "pose": 2,
+                  "flip": true,
+                  "y": 0,
+                  "angle": -2
+                },
+                {
+                  "pose": 3,
+                  "flip": true,
+                  "y": -3,
+                  "angle": 1
+                },
+                {
+                  "pose": 2,
+                  "flip": true,
+                  "y": 0,
+                  "angle": -1
+                },
+                {
+                  "pose": 3,
+                  "flip": true,
+                  "y": -2,
+                  "angle": 2
+                }
+              ]
+            },
+            {
+              "id": "left",
+              "row": 2,
+              "frameMs": 175,
+              "holdLast": false,
+              "label": "向左小跑",
+              "frames": [
+                {
+                  "pose": 2,
+                  "flip": false,
+                  "y": 0,
+                  "angle": -2
+                },
+                {
+                  "pose": 3,
+                  "flip": false,
+                  "y": -3,
+                  "angle": 1
+                },
+                {
+                  "pose": 2,
+                  "flip": false,
+                  "y": 0,
+                  "angle": -1
+                },
+                {
+                  "pose": 3,
+                  "flip": false,
+                  "y": -2,
+                  "angle": 2
+                }
+              ]
+            },
+            {
+              "id": "wave",
+              "row": 3,
+              "frameMs": 220,
+              "holdLast": false,
+              "label": "打招呼",
+              "frames": [
+                {
+                  "pose": 0,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 7,
+                  "angle": 1.5,
+                  "sy": 1.012
+                },
+                {
+                  "pose": 7,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 0,
+                  "angle": -1.5,
+                  "sy": 0.988
+                }
+              ]
+            },
+            {
+              "id": "jump",
+              "row": 4,
+              "frameMs": 210,
+              "holdLast": false,
+              "label": "蹦一下",
+              "frames": [
+                {
+                  "pose": 0,
+                  "y": 0,
+                  "sx": 1.07,
+                  "sy": 0.93
+                },
+                {
+                  "pose": 0,
+                  "y": -14,
+                  "sx": 0.97,
+                  "sy": 1.04
+                },
+                {
+                  "pose": 0,
+                  "y": -28,
+                  "sx": 0.96,
+                  "sy": 1.04
+                },
+                {
+                  "pose": 0,
+                  "y": -10,
+                  "sx": 1,
+                  "sy": 1
+                }
+              ]
+            },
+            {
+              "id": "sad",
+              "row": 5,
+              "frameMs": 160,
+              "holdLast": false,
+              "label": "委屈",
+              "frames": [
+                {
+                  "pose": 0,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 5,
+                  "angle": 1.5,
+                  "sy": 1.012
+                },
+                {
+                  "pose": 5,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 0,
+                  "angle": -1.5,
+                  "sy": 0.988
+                }
+              ]
+            },
+            {
+              "id": "waiting",
+              "row": 6,
+              "frameMs": 160,
+              "holdLast": false,
+              "label": "坐立難安",
+              "frames": [
+                {
+                  "pose": 6,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 6,
+                  "angle": 2.5,
+                  "sy": 1.012
+                },
+                {
+                  "pose": 6,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 6,
+                  "angle": -2.5,
+                  "sy": 0.988
+                }
+              ]
+            },
+            {
+              "id": "thinking",
+              "row": 7,
+              "frameMs": 160,
+              "holdLast": false,
+              "label": "歪頭想想",
+              "frames": [
+                {
+                  "pose": 0,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 7,
+                  "angle": 1.5,
+                  "sy": 1.012
+                },
+                {
+                  "pose": 0,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 7,
+                  "angle": -1.5,
+                  "sy": 0.988
+                }
+              ]
+            },
+            {
+              "id": "review",
+              "row": 8,
+              "frameMs": 160,
+              "holdLast": false,
+              "label": "觀察你",
+              "frames": [
+                {
+                  "pose": 0,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 0,
+                  "angle": 1.5,
+                  "sy": 1.012
+                },
+                {
+                  "pose": 1,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 0,
+                  "angle": -1.5,
+                  "sy": 0.988
+                }
+              ]
+            },
+            {
+              "id": "gaze-a",
+              "row": 9,
+              "frameMs": 160,
+              "holdLast": false,
+              "label": "看左邊",
+              "frames": [
+                {
+                  "pose": 0,
+                  "flip": false,
+                  "angle": -3.0,
+                  "x": -2
+                },
+                {
+                  "pose": 0,
+                  "flip": false,
+                  "angle": -2.2,
+                  "x": -2
+                },
+                {
+                  "pose": 0,
+                  "flip": false,
+                  "angle": -1.4,
+                  "x": -2
+                },
+                {
+                  "pose": 0,
+                  "flip": false,
+                  "angle": -0.5999999999999996,
+                  "x": -2
+                },
+                {
+                  "pose": 0,
+                  "flip": false,
+                  "angle": 0.20000000000000018,
+                  "x": -2
+                },
+                {
+                  "pose": 0,
+                  "flip": false,
+                  "angle": 1.0,
+                  "x": -2
+                },
+                {
+                  "pose": 0,
+                  "flip": false,
+                  "angle": 1.8000000000000007,
+                  "x": -2
+                },
+                {
+                  "pose": 0,
+                  "flip": false,
+                  "angle": 2.6000000000000005,
+                  "x": -2
+                }
+              ]
+            },
+            {
+              "id": "gaze-b",
+              "row": 10,
+              "frameMs": 160,
+              "holdLast": false,
+              "label": "看右邊",
+              "frames": [
+                {
+                  "pose": 0,
+                  "flip": true,
+                  "angle": -3.0,
+                  "x": 2
+                },
+                {
+                  "pose": 0,
+                  "flip": true,
+                  "angle": -2.2,
+                  "x": 2
+                },
+                {
+                  "pose": 0,
+                  "flip": true,
+                  "angle": -1.4,
+                  "x": 2
+                },
+                {
+                  "pose": 0,
+                  "flip": true,
+                  "angle": -0.5999999999999996,
+                  "x": 2
+                },
+                {
+                  "pose": 0,
+                  "flip": true,
+                  "angle": 0.20000000000000018,
+                  "x": 2
+                },
+                {
+                  "pose": 0,
+                  "flip": true,
+                  "angle": 1.0,
+                  "x": 2
+                },
+                {
+                  "pose": 0,
+                  "flip": true,
+                  "angle": 1.8000000000000007,
+                  "x": 2
+                },
+                {
+                  "pose": 0,
+                  "flip": true,
+                  "angle": 2.6000000000000005,
+                  "x": 2
+                }
+              ]
+            },
+            {
+              "id": "pet",
+              "row": 11,
+              "frameMs": 330,
+              "holdLast": false,
+              "label": "摸摸",
+              "frames": [
+                {
+                  "pose": 4,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 4,
+                  "angle": 1.5,
+                  "sy": 1.012
+                },
+                {
+                  "pose": 4,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 4,
+                  "angle": -1.5,
+                  "sy": 0.988
+                }
+              ]
+            },
+            {
+              "id": "cookie",
+              "row": 12,
+              "frameMs": 300,
+              "holdLast": false,
+              "label": "啃餅乾",
+              "frames": [
+                {
+                  "pose": 8,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 8,
+                  "angle": 1.5,
+                  "sy": 1.012
+                },
+                {
+                  "pose": 8,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 8,
+                  "angle": -1.5,
+                  "sy": 0.988
+                }
+              ]
+            },
+            {
+              "id": "pudding",
+              "row": 13,
+              "frameMs": 350,
+              "holdLast": false,
+              "label": "吃布丁",
+              "frames": [
+                {
+                  "pose": 9,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 9,
+                  "angle": 1.5,
+                  "sy": 1.012
+                },
+                {
+                  "pose": 9,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 9,
+                  "angle": -1.5,
+                  "sy": 0.988
+                }
+              ]
+            },
+            {
+              "id": "tea",
+              "row": 14,
+              "frameMs": 400,
+              "holdLast": false,
+              "label": "喝茶",
+              "frames": [
+                {
+                  "pose": 10,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 10,
+                  "angle": 1.5,
+                  "sy": 1.012
+                },
+                {
+                  "pose": 10,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 10,
+                  "angle": -1.5,
+                  "sy": 0.988
+                }
+              ]
+            },
+            {
+              "id": "sit",
+              "row": 15,
+              "frameMs": 300,
+              "holdLast": false,
+              "label": "趴坐",
+              "frames": [
+                {
+                  "pose": 0,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 11,
+                  "angle": 1.5,
+                  "sy": 1.012
+                },
+                {
+                  "pose": 11,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 11,
+                  "angle": -1.5,
+                  "sy": 0.988
+                }
+              ]
+            },
+            {
+              "id": "sleep",
+              "row": 16,
+              "frameMs": 650,
+              "holdLast": true,
+              "label": "睡覺",
+              "frames": [
+                {
+                  "pose": 11,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 12,
+                  "angle": 1.5,
+                  "sy": 1.012
+                },
+                {
+                  "pose": 12,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 12,
+                  "angle": -1.5,
+                  "sy": 0.988
+                }
+              ]
+            },
+            {
+              "id": "stretch",
+              "row": 17,
+              "frameMs": 300,
+              "holdLast": false,
+              "label": "伸懶腰",
+              "frames": [
+                {
+                  "pose": 11,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 13,
+                  "angle": 1.5,
+                  "sy": 1.012
+                },
+                {
+                  "pose": 13,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 0,
+                  "angle": -1.5,
+                  "sy": 0.988
+                }
+              ]
+            },
+            {
+              "id": "spin",
+              "row": 18,
+              "frameMs": 180,
+              "holdLast": false,
+              "label": "轉身扭扭",
+              "frames": [
+                {
+                  "pose": 0,
+                  "flip": false,
+                  "angle": 0,
+                  "sx": 1
+                },
+                {
+                  "pose": 0,
+                  "flip": true,
+                  "angle": 7,
+                  "sx": 0.9
+                },
+                {
+                  "pose": 0,
+                  "flip": true,
+                  "angle": -7,
+                  "sx": 0.9
+                },
+                {
+                  "pose": 0,
+                  "flip": false,
+                  "angle": 0,
+                  "sx": 1
+                }
+              ]
+            },
+            {
+              "id": "lift",
+              "row": 19,
+              "frameMs": 200,
+              "holdLast": false,
+              "label": "提起",
+              "frames": [
+                {
+                  "pose": 6,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 6,
+                  "angle": 1.5,
+                  "sy": 1.012
+                },
+                {
+                  "pose": 6,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 6,
+                  "angle": -1.5,
+                  "sy": 0.988
+                }
+              ]
+            },
+            {
+              "id": "peek",
+              "row": 20,
+              "frameMs": 280,
+              "holdLast": false,
+              "label": "躲貓貓",
+              "frames": [
+                {
+                  "pose": 14,
+                  "y": 8
+                },
+                {
+                  "pose": 0,
+                  "y": 0
+                },
+                {
+                  "pose": 14,
+                  "y": 8
+                },
+                {
+                  "pose": 0,
+                  "y": 0
+                }
+              ]
+            },
+            {
+              "id": "smug",
+              "row": 21,
+              "frameMs": 550,
+              "holdLast": false,
+              "label": "得意",
+              "frames": [
+                {
+                  "pose": 7,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 7,
+                  "angle": 1.5,
+                  "sy": 1.012
+                },
+                {
+                  "pose": 7,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 7,
+                  "angle": -1.5,
+                  "sy": 0.988
+                }
+              ]
+            },
+            {
+              "id": "pillow",
+              "row": 22,
+              "frameMs": 600,
+              "holdLast": false,
+              "label": "沙發打盹",
+              "frames": [
+                {
+                  "pose": 11,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 11,
+                  "angle": 1.5,
+                  "sy": 1.012
+                },
+                {
+                  "pose": 1,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 11,
+                  "angle": -1.5,
+                  "sy": 0.988
+                }
+              ]
+            },
+            {
+              "id": "quilt",
+              "row": 23,
+              "frameMs": 600,
+              "holdLast": true,
+              "label": "被窩探頭",
+              "frames": [
+                {
+                  "pose": 14,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 0,
+                  "angle": 1.5,
+                  "sy": 1.012
+                },
+                {
+                  "pose": 0,
+                  "angle": 0.0,
+                  "sy": 1.0
+                },
+                {
+                  "pose": 14,
+                  "angle": -1.5,
+                  "sy": 0.988
+                }
+              ]
+            },
+            {
+              "id": "balltap",
+              "row": 24,
+              "frameMs": 300,
+              "holdLast": false,
+              "label": "推球",
+              "frames": [
+                {
+                  "pose": 0,
+                  "x": 0,
+                  "angle": 0
+                },
+                {
+                  "pose": 15,
+                  "x": -3,
+                  "angle": -3
+                },
+                {
+                  "pose": 15,
+                  "x": 3,
+                  "angle": 3
+                },
+                {
+                  "pose": 0,
+                  "x": 0,
+                  "angle": 0
+                }
+              ]
+            },
+            {
+              "id": "boxduck",
+              "row": 25,
+              "frameMs": 300,
+              "holdLast": false,
+              "label": "縮進紙箱",
+              "frames": [
+                {
+                  "pose": 0,
+                  "y": 0,
+                  "sy": 1
+                },
+                {
+                  "pose": 14,
+                  "y": 4,
+                  "sy": 0.97
+                },
+                {
+                  "pose": 14,
+                  "y": 10,
+                  "sy": 0.94
+                },
+                {
+                  "pose": 14,
+                  "y": 14,
+                  "sy": 0.91
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "roomTheme": "ribbon-pig",
+      "wakeRow": 20,
+      "dialogue": {
+        "hello": "哼哼！有點心的地方就有我。",
+        "pet": "哼～再摸一下鼻子。",
+        "wave": "哼哼，我有在聽。",
+        "jump": "嘿咻！肥肥也會飛一下。",
+        "cookie": "咔滋！這塊歸我了。",
+        "pudding": "哼～布丁可以再一口嗎？",
+        "tea": "呼嚕，小心燙。",
+        "sit": "肚肚貼地，舒服。",
+        "sleep": "呼嚕……呼嚕……",
+        "wake": "嗯？是開飯了嗎？",
+        "stretch": "伸一伸，緞帶別掉了。",
+        "spin": "看看我的紅緞帶！",
+        "peek": "藏好鼻子……哎呀被發現了。",
+        "smug": "哼哼，今天也很帥。",
+        "focus": "哼！完成了，該休息了。",
+        "rest": "陪你再努力一輪。"
+      },
+      "careDialogue": {
+        "urge": "哼？！肚肚有點急！",
+        "accident": "哼……先別看這邊。",
+        "toilet": "借過，小短腿全速前進！",
+        "done": "哼哼，肥肥記住路了。",
+        "bath": "泡泡多一點，緞帶洗漂亮。",
+        "clean": "哼！地板香香的。",
+        "full": "肚肚真的裝不下啦。",
+        "hungry": "哼哼……想吃一口。",
+        "tired": "小短腿要休息了。",
+        "dirty": "肥肥想洗香香。",
+        "limit": "先幫我清一下地板嘛。",
+        "disabled": "哼，乖乖陪你。"
+      },
+      "stories": [
+        "紅緞帶整理好了，準備巡邏！",
+        "沒有偷吃，我只是在聞味道。",
+        "哼哼，小短腿也想陪你走遠一點。"
+      ]
     }
   ]
 }

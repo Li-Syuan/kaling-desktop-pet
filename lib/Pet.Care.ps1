@@ -3,6 +3,7 @@ $script:careTask=$null;$script:careWindows=@{};$script:careRoomVisuals=@{};$scri
 function Get-ActiveCare {return $state.care.characters[$state.character]}
 function Test-CarePaused {return -not $state.care.enabled -or $closing -or $manualHidden -or $fullscreenHidden -or $state.quiet -or $state.pomo.status -eq 'running'}
 function Get-CareText([string]$Key) {
+    if($character.careDialogue.$Key){return [string]$character.careDialogue.$Key}
     $words=@{
         urge=@('……稍等。帶我回小屋。','等一下！快帶我回小屋！');accident=@('……別看。我來守著。','不是我……好啦，是我。');toilet=@('借過。很快回來。','廁所廁所，我來了！');done=@('記住了。謝謝。','成功了！下次我也會記得！');bath=@('洗去風塵。稍等。','泡泡好多，洗香香！');clean=@('乾淨了。謝謝。','亮晶晶！謝謝你幫忙。');full=@('吃飽了。留著晚點吧。','肚子裝不下啦，晚點再吃！');hungry=@('想吃點東西。','肚子咕嚕咕嚕了……');tired=@('歇一會。','眼皮要合起來了……');dirty=@('該清理一下了。','想洗香香，再陪你玩！');limit=@('先清理地面吧。','地板滿了，幫我清一下嘛！');disabled=@('先陪你待著。','先乖乖陪你！')
     };$i=if($state.character -eq 'ren'){0}else{1};return [string]$words[$Key][$i]

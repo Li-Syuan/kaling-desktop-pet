@@ -171,5 +171,245 @@
       "found": "……被你找到了。",
       "tasty": "味道不錯。謝謝。"
     }
+  },
+  "mushroom": {
+    "id": "mushroom",
+    "title": "菇菇寶貝 · 森林小窩",
+    "background": "#F1F4E8",
+    "foreground": "#4B6044",
+    "button": "#E8EEDB",
+    "border": "#AFBE92",
+    "welcome": "菇菇寶貝的森林小窩 · 點家具休息，拖球或紙箱玩耍",
+    "assets": {
+      "room": {
+        "file": "assets/room/forest/room.png"
+      },
+      "bed": {
+        "file": "assets/room/ren/furniture.png",
+        "rect": [
+          41,
+          59,
+          500,
+          510
+        ]
+      },
+      "sofa": {
+        "file": "assets/room/ren/furniture.png",
+        "rect": [
+          566,
+          121,
+          507,
+          440
+        ]
+      },
+      "wardrobe": {
+        "file": "assets/room/ren/furniture.png",
+        "rect": [
+          1141,
+          26,
+          350,
+          551
+        ]
+      },
+      "table": {
+        "file": "assets/room/ren/furniture.png",
+        "rect": [
+          69,
+          657,
+          422,
+          313
+        ]
+      },
+      "box": {
+        "file": "assets/room/ren/furniture.png",
+        "rect": [
+          578,
+          570,
+          473,
+          398
+        ]
+      },
+      "ball": {
+        "file": "assets/room/ren/furniture.png",
+        "rect": [
+          1183,
+          684,
+          234,
+          239
+        ]
+      },
+      "toilet": {
+        "file": "assets/care/props.png",
+        "rect": [
+          34,
+          40,
+          470,
+          463
+        ]
+      },
+      "bath": {
+        "file": "assets/care/props.png",
+        "rect": [
+          559,
+          101,
+          549,
+          411
+        ]
+      }
+    },
+    "tooltips": {
+      "bed": "木床：休息／叫醒",
+      "sofa": "森林長椅：趴坐打盹",
+      "wardrobe": "看看現在的經典造型",
+      "table": "茶几：選點心",
+      "box": "木箱：躲貓貓／拖動",
+      "ball": "球：點擊或拖動來玩",
+      "toilet": "屏風廁所：有便意時點擊引導如廁",
+      "bath": "泡泡浴盆：洗香香、恢復清潔"
+    },
+    "dialogue": {
+      "hello": "菇菇！今天也一起蹦蹦跳。",
+      "pet": "菇～帽子被摸得暖暖的。",
+      "wave": "菇！我在這裡！",
+      "jump": "蹦！帽子差點飛走。",
+      "cookie": "咔滋咔滋，菇菇喜歡！",
+      "pudding": "軟軟的布丁，和我一樣！",
+      "tea": "呼～小口喝。",
+      "sit": "縮成一顆小香菇。",
+      "sleep": "菇……呼……",
+      "wake": "菇？天亮了嗎？",
+      "stretch": "長高一點點！",
+      "spin": "轉一圈，斑點還在！",
+      "peek": "被找到啦，菇！",
+      "smug": "這頂帽子很威風吧！",
+      "focus": "先安靜陪你，休息再玩球。",
+      "rest": "菇菇準備好了。",
+      "bed": "菇……呼……",
+      "sofa": "縮成一顆小香菇。",
+      "food": "咔滋咔滋，菇菇喜歡！",
+      "ball": "來推球球！",
+      "box": "被找到啦，菇！",
+      "wardrobe": "看看今天的模樣。"
+    }
+  },
+  "ribbon-pig": {
+    "id": "ribbon-pig",
+    "title": "緞帶肥肥 · 森林小窩",
+    "background": "#FFF2EC",
+    "foreground": "#795250",
+    "button": "#F9E2D9",
+    "border": "#D7ADA3",
+    "welcome": "緞帶肥肥的森林小窩 · 點家具休息，拖球或紙箱玩耍",
+    "assets": {
+      "room": {
+        "file": "assets/room/forest/room.png"
+      },
+      "bed": {
+        "file": "assets/room/ren/furniture.png",
+        "rect": [
+          41,
+          59,
+          500,
+          510
+        ]
+      },
+      "sofa": {
+        "file": "assets/room/ren/furniture.png",
+        "rect": [
+          566,
+          121,
+          507,
+          440
+        ]
+      },
+      "wardrobe": {
+        "file": "assets/room/ren/furniture.png",
+        "rect": [
+          1141,
+          26,
+          350,
+          551
+        ]
+      },
+      "table": {
+        "file": "assets/room/ren/furniture.png",
+        "rect": [
+          69,
+          657,
+          422,
+          313
+        ]
+      },
+      "box": {
+        "file": "assets/room/ren/furniture.png",
+        "rect": [
+          578,
+          570,
+          473,
+          398
+        ]
+      },
+      "ball": {
+        "file": "assets/room/ren/furniture.png",
+        "rect": [
+          1183,
+          684,
+          234,
+          239
+        ]
+      },
+      "toilet": {
+        "file": "assets/care/props.png",
+        "rect": [
+          34,
+          40,
+          470,
+          463
+        ]
+      },
+      "bath": {
+        "file": "assets/care/props.png",
+        "rect": [
+          559,
+          101,
+          549,
+          411
+        ]
+      }
+    },
+    "tooltips": {
+      "bed": "木床：休息／叫醒",
+      "sofa": "森林長椅：趴坐打盹",
+      "wardrobe": "看看現在的經典造型",
+      "table": "茶几：選點心",
+      "box": "木箱：躲貓貓／拖動",
+      "ball": "球：點擊或拖動來玩",
+      "toilet": "屏風廁所：有便意時點擊引導如廁",
+      "bath": "泡泡浴盆：洗香香、恢復清潔"
+    },
+    "dialogue": {
+      "hello": "哼哼！有點心的地方就有我。",
+      "pet": "哼～再摸一下鼻子。",
+      "wave": "哼哼，我有在聽。",
+      "jump": "嘿咻！肥肥也會飛一下。",
+      "cookie": "咔滋！這塊歸我了。",
+      "pudding": "哼～布丁可以再一口嗎？",
+      "tea": "呼嚕，小心燙。",
+      "sit": "肚肚貼地，舒服。",
+      "sleep": "呼嚕……呼嚕……",
+      "wake": "嗯？是開飯了嗎？",
+      "stretch": "伸一伸，緞帶別掉了。",
+      "spin": "看看我的紅緞帶！",
+      "peek": "藏好鼻子……哎呀被發現了。",
+      "smug": "哼哼，今天也很帥。",
+      "focus": "先安靜陪你，休息再玩球。",
+      "rest": "陪你再努力一輪。",
+      "bed": "呼嚕……呼嚕……",
+      "sofa": "肚肚貼地，舒服。",
+      "food": "咔滋！這塊歸我了。",
+      "ball": "來推球球！",
+      "box": "藏好鼻子……哎呀被發現了。",
+      "wardrobe": "看看今天的模樣。"
+    }
   }
 }

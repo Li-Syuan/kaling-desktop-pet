@@ -2,7 +2,7 @@
 . (Join-Path $PSScriptRoot 'Pet.Care.Model.ps1')
 function New-PetState {
     return @{
-        version=3; character='ren'; characterOutfits=@{kaling='uniform';ren='original'}; left=$null; top=$null; scale=1.5; mode='stay'; look=$true
+        version=3; character='ren'; characterOutfits=(New-CharacterOutfits); left=$null; top=$null; scale=1.5; mode='stay'; look=$true
         bubbles=$true; stories=$true; quiet=$false; autoHide=$true; clickThrough=$false
         focusMinutes=25; shortMinutes=5; longMinutes=15; mood='calm'; outfit='original';care=(New-CareState)
         pomo=@{phase='focus'; status='ready'; remaining=1500.0; rounds=0; total=0};home=(New-HomeState)
@@ -28,15 +28,18 @@ function Read-PetState([string]$Directory) {
         }
         if($data.mode -notin @('stay','wander','follow')){throw 'Invalid mode'};$state.mode=$data.mode
         if($data.mood -in @('calm','happy','focused','sleepy')){$state.mood=$data.mood}
-        if($data.outfit -in @('uniform','pajamas','hoodie')){$state.outfit=$data.outfit}
+        # Keep legacy Kaling outfits; add new identities without resetting existing care.
         if($data.outfit -in @('uniform','pajamas','hoodie')){$state.characterOutfits.kaling=[string]$data.outfit}
+        $definitions=@(Get-PetDefinitions)
         if($data.version -ge 2){
-            if($data.character -in @('kaling','ren')){$state.character=$data.character}
-            if($data.characterOutfits.kaling -in @('uniform','pajamas','hoodie')){$state.characterOutfits.kaling=$data.characterOutfits.kaling}
-            if($state.character -eq 'ren'){$state.outfit='original'}elseif($data.character -eq 'ren' -or $data.character -notin @('kaling',$null)){$state.outfit=$state.characterOutfits.kaling}
+            foreach($definition in $definitions){
+                $saved=$data.characterOutfits.($definition.id)
+                if($saved -in @($definition.outfits.id)){$state.characterOutfits[$definition.id]=[string]$saved}
+            }
+            if($data.character -in @($definitions.id)){$state.character=[string]$data.character}
         }
         if($data.version -lt 3){$state.character='ren'}
-        if($state.character -eq 'ren'){$state.outfit='original'}else{$state.outfit=$state.characterOutfits.kaling}
+        $state.outfit=$state.characterOutfits[$state.character]
         $state.care=Read-CareState $data.care
         $state.home=Read-HomeState $data.home
         $p=$data.pomo

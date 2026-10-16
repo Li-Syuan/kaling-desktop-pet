@@ -1,16 +1,20 @@
-﻿# Pure care rules: time and random choices are supplied by the caller.
+﻿. (Join-Path $PSScriptRoot 'Pet.Characters.ps1')
+# Pure care rules: time and random choices are supplied by the caller.
 $script:careRules=@{digestMin=480;digestMax=720;warning=30;interval=600;maxMesses=3;maxMeals=3;foodLimit=88}
 function New-CharacterCare {
     return @{satiety=60.0;energy=85.0;hygiene=90.0;happiness=80.0;meals=0;digest=-1.0;urge=-1.0;cooldown=0.0;training=20;autoTried=$false;messes=@()}
 }
-function New-CareState {return @{enabled=$true;characters=@{ren=(New-CharacterCare);kaling=(New-CharacterCare)}}}
+function New-CareState {
+    $characters=@{};foreach($definition in (Get-PetDefinitions)){$characters[$definition.id]=New-CharacterCare}
+    return @{enabled=$true;characters=$characters}
+}
 function Test-CareNumber($Value,[double]$Min,[double]$Max) {
     return $Value -is [ValueType] -and $Value -isnot [bool] -and -not [double]::IsNaN([double]$Value) -and -not [double]::IsInfinity([double]$Value) -and $Value -ge $Min -and $Value -le $Max
 }
 function Read-CareState($Data) {
     $result=New-CareState;if($null -eq $Data){return $result}
     if($Data.enabled -is [bool]){$result.enabled=$Data.enabled}
-    foreach($id in @('ren','kaling')){
+    foreach($id in @($result.characters.Keys)){
         $src=$Data.characters.$id;$c=$result.characters[$id];if(-not $src){continue}
         foreach($key in @('satiety','energy','hygiene','happiness')){if(Test-CareNumber $src.$key 0 100){$c[$key]=[double]$src.$key}}
         foreach($entry in @(@('meals',0,3),@('digest',-1,720),@('urge',-1,30),@('cooldown',0,600),@('training',20,90))){$key=$entry[0];if(Test-CareNumber $src.$key $entry[1] $entry[2]){$c[$key]=[double]$src.$key}}
