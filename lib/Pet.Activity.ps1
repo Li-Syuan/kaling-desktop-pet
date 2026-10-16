@@ -10,11 +10,33 @@ function Stop-Activity {
     $activity.generation++;$activity.kind='idle'
     if($fxWindow){$fxWindow.Hide()}
 }
-function Test-AttackAllowed {
-    return -not $room.open -and $state.character -eq 'ren' -and -not $state.quiet -and $state.pomo.status -ne 'running' -and -not $manualHidden -and -not $fullscreenHidden -and -not $drag -and -not $closing -and -not $wardrobeWindow -and -not $settingsWindow
+function Get-AttackBlockReason([switch]$AllowRoom) {
+    if($state.character -ne 'ren'){return '請先從「角色」選單切換成蓮。'}
+    if($closing){return '程式正在關閉。'}
+    if($manualHidden -or $fullscreenHidden){return '角色隱藏中，顯示後即可施放。'}
+    if($state.pomo.status -eq 'running'){return '番茄鐘運行中，請先暫停計時。'}
+    if($state.quiet){return '安靜陪伴已開啟，關閉後即可施放。'}
+    if($drag -or $room.drag){return '請先放開正在拖曳的角色或玩具。'}
+    if($wardrobeWindow -or $settingsWindow){return '請先關閉衣櫃或番茄鐘設定視窗。'}
+    if($room.open -and -not $AllowRoom){return '請回到桌面施放劍術。'}
+    return ''
+}
+function Test-AttackAllowed {return [string]::IsNullOrEmpty((Get-AttackBlockReason))}
+function Request-Attack([string]$Id) {
+    $reason=Get-AttackBlockReason -AllowRoom
+    if($reason){Show-Bubble $reason -Important;return $false}
+    if(-not @($character.attacks | Where-Object id -eq $Id).Count){return $false}
+    # The label explicitly promises returning to the desktop before performing.
+    if($room.open){Close-Room}
+    return Start-Attack $Id
 }
 function Update-CharacterMenus {
-    foreach($item in $attackItems){$item.IsEnabled=Test-AttackAllowed}
+    $reason=Get-AttackBlockReason -AllowRoom;$enabled=[string]::IsNullOrEmpty($reason)
+    $status=if($reason){$reason}elseif($room.open){'選招後收合小屋，回桌面施放。'}else{'選擇招式即可施放；預設無聲。'}
+    if($attackStatusItem){$attackStatusItem.Header=$status}
+    if($trayAttackStatusItem){$trayAttackStatusItem.Text=$status}
+    foreach($item in $attackItems){$item.IsEnabled=$enabled;$item.ToolTip=$status;$item.Header=$(if($room.open){'回桌面施放 · '}else{''})+$attackLabels[[string]$item.Tag]}
+    foreach($item in $trayAttackItems){$item.Enabled=$enabled;$item.ToolTipText=$status;$item.Text=$(if($room.open){'回桌面施放 · '}else{''})+$attackLabels[[string]$item.Tag]}
     foreach($pair in $characterItems){
         if($pair.item -is [System.Windows.Controls.MenuItem]){$pair.item.IsChecked=$state.character -eq $pair.id}
         else{$pair.item.Checked=$state.character -eq $pair.id}
@@ -27,8 +49,11 @@ function Initialize-CharacterMenu {
         $item.Tag=$entry.id;$item.IsCheckable=$true;$script:characterItems+=@{item=$item;id=$entry.id}
     }
     $group=Add-Menu '劍術 · 蓮' $null
+    $script:attackLabels=@{}
+    $script:attackStatusItem=Add-Menu '選擇招式即可施放。' $null $group;$attackStatusItem.IsEnabled=$false
     foreach($entry in @($characterCatalog.characters | Where-Object id -eq 'ren')[0].attacks){
-        $item=Add-Menu $entry.name {param($s,$e);$null=Start-Attack ([string]$s.Tag)} $group
+        $attackLabels[[string]$entry.id]=$entry.name
+        $item=Add-Menu $entry.name {param($s,$e);$null=Request-Attack ([string]$s.Tag)} $group
         $item.Tag=$entry.id;$script:attackItems+=$item
     }
     $menu.Add_Opened({Update-CharacterMenus})
@@ -41,13 +66,14 @@ function Initialize-CharacterTray {
         $script:characterItems+=@{item=$item;id=$entry.id}
     }
     $group=[System.Windows.Forms.ToolStripMenuItem]::new('劍術 · 蓮');[void]$trayMenu.Items.Add($group)
+    $script:trayAttackStatusItem=[System.Windows.Forms.ToolStripMenuItem]::new('選擇招式即可施放。');$trayAttackStatusItem.Enabled=$false;[void]$group.DropDownItems.Add($trayAttackStatusItem)
     foreach($entry in @($characterCatalog.characters | Where-Object id -eq 'ren')[0].attacks){
         $item=[System.Windows.Forms.ToolStripMenuItem]::new($entry.name);$item.Tag=$entry.id
-        $item.Add_Click({param($s,$e);$null=Start-Attack ([string]$s.Tag)});[void]$group.DropDownItems.Add($item)
+        $item.Add_Click({param($s,$e);$null=Request-Attack ([string]$s.Tag)});[void]$group.DropDownItems.Add($item)
         # WinForms uses Enabled, WPF uses IsEnabled. Keep a separate collection.
         $script:trayAttackItems+=,$item
     }
-    $trayMenu.Add_Opening({Update-CharacterMenus;foreach($item in $trayAttackItems){$item.Enabled=Test-AttackAllowed}})
+    $trayMenu.Add_Opening({Update-CharacterMenus})
 }
 function Get-WorkArea {
     $area=[System.Windows.Forms.Screen]::FromHandle($hwnd).WorkingArea

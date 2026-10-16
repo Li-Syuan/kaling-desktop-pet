@@ -1,6 +1,6 @@
 # 咖凌與蓮 · Windows 桌面寵物
 
-**v1.3.2 整合版（蓮＋專屬小屋）**：新增精緻 Q 版蓮、角色切換，以及花瓣斬／殘影連斬／龍影大招。
+**v1.3.3 整合版（蓮＋專屬小屋）**：新增精緻 Q 版蓮、角色切換，以及花瓣斬／殘影連斬／龍影大招。
 
 下載整合包後完整解壓縮，先關閉舊版，再雙擊 `Start.vbs` 或 `Start.bat`。右鍵 → **角色 → 蓮**；再選 **劍術 · 蓮**。也可從系統匣操作。
 
@@ -12,9 +12,9 @@
 
 ![蓮](assets/characters/ren/portrait.png)
 
-生活小屋已整合：換角會取消原活動，兩角色共用房間與玩具位置。咖凌保留五組專用小屋動作；蓮暫以摸頭、坐姿、睡眠、揮手與探頭呈現小屋互動，尚無專用抱枕／被窩素材。劍術僅在桌面可用，進屋會清除特效。Windows 版與 Codex 原生 Pets 套件分開。
+生活小屋已整合：換角會取消原活動，兩角色共用房間與玩具位置。咖凌保留五組專用小屋動作；蓮暫以摸頭、坐姿、睡眠、揮手與探頭呈現小屋互動，尚無專用抱枕／被窩素材。小屋的劍術選單會顯示「回桌面施放」，選招後收合小屋並施放。進屋仍會清除特效。Windows 版與 Codex 原生 Pets 套件分開。
 
-下載 [v1.3.2 Windows 整合包](https://github.com/Li-Syuan/kaling-desktop-pet/releases/download/v1.3.2/KalingPet-Windows.zip)。本包包含蓮與角色專屬生活小屋；舊版 `v1.3.0` 及 `v1.3.0-ren.1` 保留。
+下載 [v1.3.3 Windows 整合包](https://github.com/Li-Syuan/kaling-desktop-pet/releases/download/v1.3.3/KalingPet-Windows.zip)。本包包含蓮與角色專屬生活小屋；舊版 `v1.3.0` 及 `v1.3.0-ren.1` 保留。
 
 ---
 
@@ -23,6 +23,14 @@
 紅髮異色瞳的 Windows 桌面夥伴。**v1.3 加入可收合的斜角生活小屋**：陪她吃點心、鑽被窩、抱枕放空，拖動玩具逗她玩。三套服裝都支援完整小屋互動。
 
 ![咖凌走進小床、鑽被窩與醒來](animations/room/bed.gif)
+
+## 使用 GitHub Code ZIP
+
+**Code → Download ZIP 已包含完整的蓮、技能、特效和兩套小屋**，不需要另抓素材。下載 [main 原始碼 ZIP](https://github.com/Li-Syuan/kaling-desktop-pet/archive/refs/heads/main.zip) 後，先從系統匣關閉舊程式，再「全部解壓縮」，進入 `kaling-desktop-pet-main`，雙擊 `Start.bat` 或 `Start.vbs`。
+
+施放技能：右鍵角色或系統匣 → **角色 → 蓮** → **劍術 · 蓮** → 選擇招式。小屋內選擇「回桌面施放 · 招式」會自動收合並出招。技能選單第一列會說明目前狀態：計時中須先暫停，安靜陪伴須先關閉，隱藏／拖曳中須先恢復操作。
+
+`preview.html` 是動畫圖鑑，不能控制正在執行的桌面角色。請勿直接在壓縮檔內啟動，也不要只複製 `pet.ps1`；整個資料夾必須一起保留。舊程式若仍在執行，單一實例限制會讓新啟動程序退出。
 
 ## 下載與開始
 
@@ -119,7 +127,7 @@ v1.1／v1.2 設定可直接沿用，保留既有衣服與偏好；新增小屋�
 - `assets/outfits/`：圖集、衣櫃縮圖、動作數量設定與 [生成提示詞](assets/outfits/prompts.json)。
 - `animations/<服裝>/`：每套二十四組 GIF；GIF 為粉色底預覽，桌面實際使用透明 PNG。
 - 原本的 `spritesheet.png` 與九組 GIF 保留，供既有素材使用者延續使用。
-- **整合版原始碼驗收：135 項狀態測試、374 項 WPF／原生整合檢查通過**，另有圖集透明度、邊界、空格、動畫差異與離線圖鑑邏輯檢查。
+- **整合版原始碼驗收：135 項狀態測試、407 項 WPF／原生整合檢查通過**，另有圖集透明度、邊界、空格、動畫差異與離線圖鑑邏輯檢查。
 
 ```powershell
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\tests\State.Tests.ps1
