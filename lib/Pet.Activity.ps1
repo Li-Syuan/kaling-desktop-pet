@@ -2,6 +2,7 @@
 $script:activity=@{kind='idle';generation=0}
 $script:trayAttackItems=@();$script:fxWindow=$null;$script:fxFrames=@{};$script:attackItems=@();$script:characterItems=@()
 function Stop-Activity {
+    if($worldWindow){Close-World}
     if($playWindow){Close-Play}
     Cancel-CareActivity
     if($activity.kind -eq 'attack'){

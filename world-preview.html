@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>我們的小世界 · 2.0</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f5f3e9;color:#294a3d;font:16px/1.7 system-ui,"Microsoft JhengHei",sans-serif}main{max-width:1200px;margin:0 auto;padding:48px 24px}.eyebrow{font-size:12px;letter-spacing:.2em;color:#758371}h1{font-size:clamp(32px,5vw,58px);line-height:1.2;margin:12px 0}p{max-width:760px;color:#657765}.lead{font-size:19px}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:28px 0 18px}button,a.link{border:1px solid #b3c4a8;border-radius:22px;padding:9px 17px;background:#fffdf4;color:#345341;font:inherit;cursor:pointer;text-decoration:none}button[aria-selected=true]{background:#345c47;color:white;border-color:#345c47}button:focus-visible,a:focus-visible{outline:3px solid #ca9e49;outline-offset:3px}.frame{background:#e2e9da;border:1px solid #d6dfca;border-radius:20px;overflow:hidden;box-shadow:0 16px 40px #28452c12}.frame img,.frame video{display:block;width:100%;height:auto;max-height:76vh;object-fit:contain;background:#e3e8db}.caption{background:#fffdf7;padding:18px 24px;min-height:90px}h2{font-size:21px;margin:0}.caption p{margin:4px 0 0}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:28px 0}.card{background:#fffdf7;border:1px solid #dce2d3;padding:22px;border-radius:16px}.card h3{margin:0 0 7px;font-size:18px}.card p{margin:0;font-size:14px}footer{border-top:1px solid #d5ddcb;padding-top:22px;margin-top:34px;font-size:13px;color:#788573}.links{display:flex;flex-wrap:wrap;gap:10px;margin:24px 0}[hidden]{display:none!important}@media(max-width:650px){main{padding:26px 15px}.cards{grid-template-columns:1fr;gap:10px}.caption{padding:15px}button{font-size:14px;padding:8px 13px}.lead{font-size:16px}}
+</style></head><body><main>
+<div class="eyebrow">MAPLE COMPANIONS · WINDOWS · 2.0</div><h1>我們的小世界</h1><p class="lead">蓮擦著劍，綠水靈追球鑽進葉堆。<br>你伸手摸摸牠，今天又多了一段小故事。</p>
+<p>這裡展示實際 WPF 程式畫面與錄製動畫。互動遊玩請完整解壓縮下載包，執行 <strong>Start.exe</strong>，右鍵 →「小世界 · 一起生活」。</p>
+<nav class="tabs" id="tabs" aria-label="預覽場景"></nav>
+<section class="frame"><img id="scene" src="docs/world-window.png" alt="小世界操作視窗"><video id="movie" src="docs/world-sword.mp4" controls muted loop playsinline preload="metadata" hidden aria-label="實際 WPF 擦劍追球動畫"></video><div class="caption"><h2 id="title"></h2><p id="description"></p></div></section>
+<div class="cards"><article class="card"><h3>一起住，也各有個性</h3><p>五位角色可選不同搭檔，咖凌保留三套衣服。喝茶、玩球、摸摸與整理會留下各自的習慣。</p></article><article class="card"><h3>收藏住進日常裡</h3><p>釣來的魚進水族箱、種過的花放上花台。六個擺設區能交換位置，角色會自己使用家具。</p></article><article class="card"><h3>去外面帶點回憶</h3><p>森林與溪畔各有三個相遇事件。完成旅行帶回紀念物，還能拍照留下兩位夥伴的模樣。</p></article></div>
+<div class="links"><a class="link" href="https://github.com/Li-Syuan/kaling-desktop-pet/releases/tag/v2.0.0">Windows 下載</a><a class="link" href="docs/WORLD.md">完整操作說明</a><a class="link" href="play-preview.html">十種小日子</a><a class="link" href="preview.html">角色動畫圖鑑</a></div>
+<footer>新楓之谷同人桌面程式，非官方產品。角色外觀沿用已確認的比例；安靜、專注及隱藏偏好照常保留。照片只擷取程式自己的場景。</footer>
+</main><script>
+const scenes=[
+ ['一起生活','world-window.png','搭檔可以更換，互動對象可以指定。右側選劇場，或讓日常自然發生。'],
+ ['擦劍與追球',null,'40 秒實際程式動畫：擦劍、推球、鑽進葉堆、探頭，再回來一起坐。'],
+ ['森林旅行','world-forest-complete.png','走過樹洞與落葉，遇見小驚喜。三次選擇完成後才帶回紀念物。'],
+ ['溪畔旅行','world-pond.png','沿著溪邊看看小魚與發亮的石頭，可以帶一位搭檔同行。'],
+ ['咖凌制服','world-kaling-uniform.png','整理蝴蝶結，再伸個懶腰；衣裝與相處習慣都會保留。'],
+ ['咖凌睡衣','world-kaling-pajamas.png','拉好睡衣領口，慢慢醒來。每套服裝都有自己的六張招牌動作。'],
+ ['咖凌帽 T','world-kaling-hoodie.png','扶好貓耳帽緣，笑著伸展。換裝後再進庭院就會沿用。'],
+ ['怪物夥伴','world-ribbon-pig.png','菇菇寶貝、緞帶肥肥與綠水靈都有專屬動作，能與其他角色任意搭配。']
+];
+const tabs=document.getElementById('tabs'),picture=document.getElementById('scene'),movie=document.getElementById('movie');
+function select(i){const [title,file,description]=scenes[i];document.getElementById('title').textContent=title;document.getElementById('description').textContent=description;picture.hidden=!file;movie.hidden=!!file;if(file){movie.pause();picture.src='docs/'+file;picture.alt=title+'的實際 WPF 畫面'};[...tabs.children].forEach((b,n)=>b.setAttribute('aria-selected',n===i?'true':'false'));}
+scenes.forEach(([title],i)=>{const b=document.createElement('button');b.textContent=title;b.type='button';b.addEventListener('click',()=>select(i));tabs.append(b)});select(0);
+</script></body></html>

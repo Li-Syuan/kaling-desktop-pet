@@ -1,7 +1,7 @@
 ﻿# WPF presentation for the pure care model. A single task owns any care performance.
 $script:careTask=$null;$script:careWindows=@{};$script:careRoomVisuals=@{};$script:careArtCache=@{};$script:careNotice=0.0;$script:careVisualTime=0.0
 function Get-ActiveCare {return $state.care.characters[$state.character]}
-function Test-CarePaused {return -not $state.care.enabled -or $closing -or $manualHidden -or $fullscreenHidden -or $state.quiet -or $state.pomo.status -eq 'running' -or $null -ne $playWindow}
+function Test-CarePaused {return -not $state.care.enabled -or $closing -or $manualHidden -or $fullscreenHidden -or $state.quiet -or $state.pomo.status -eq 'running' -or $null -ne $playWindow -or $null -ne $worldWindow}
 function Get-CareText([string]$Key) {
     if($character.careDialogue.$Key){return [string]$character.careDialogue.$Key}
     $words=@{
@@ -110,10 +110,10 @@ $script:careEffects=@()
 function Show-CareCleanEffect($Mess) {
     if($manualHidden -or $fullscreenHidden -or -not $state.care.enabled){return}
     if($Mess.place -eq 'desktop'){$win=New-CareWindow $Mess $true;$win.Show();$script:careEffects+=@{window=$win;left=.65}}
-    elseif($room.open){$im=[System.Windows.Controls.Image]::new();$im.Source=Get-CareArt 'bubbles';$im.Width=60;$im.Height=60;$im.IsHitTestVisible=$false;$p=Get-RoomPoint $Mess.u $Mess.v;Place-RoomVisual $im ($p.x-30) ($p.y-55) 1000;[void]$room.canvas.Children.Add($im);$script:careEffects+=@{visual=$im;canvas=$room.canvas;left=.65}}
+    elseif($Mess.place -eq 'room' -and $room.open){$im=[System.Windows.Controls.Image]::new();$im.Source=Get-CareArt 'bubbles';$im.Width=60;$im.Height=60;$im.IsHitTestVisible=$false;$p=Get-RoomPoint $Mess.u $Mess.v;Place-RoomVisual $im ($p.x-30) ($p.y-55) 1000;[void]$room.canvas.Children.Add($im);$script:careEffects+=@{visual=$im;canvas=$room.canvas;left=.65}}
 }
 function Sync-CareMesses {
-    if(-not $loaded){return};$c=Get-ActiveCare;$visible=$state.care.enabled -and -not $manualHidden -and -not $fullscreenHidden -and -not $closing -and $null -eq $playWindow
+    if(-not $loaded){return};$c=Get-ActiveCare;$visible=$state.care.enabled -and -not $manualHidden -and -not $fullscreenHidden -and -not $closing -and $null -eq $playWindow -and $null -eq $worldWindow
     if(-not $visible -and $careEffects.Count){foreach($fx in @($careEffects)){if($fx.window){$fx.window.Close()};if($fx.visual){$fx.canvas.Children.Remove($fx.visual)}};$script:careEffects=@()}
     $desktop=@{};if($visible){foreach($m in $c.messes){if($m.place -eq 'desktop'){$desktop[$m.id]=$m}}}
     foreach($id in @($careWindows.Keys)){if(-not $desktop.ContainsKey($id)){$careWindows[$id].Close();$careWindows.Remove($id)}}

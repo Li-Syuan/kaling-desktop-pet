@@ -76,7 +76,7 @@ namespace KalingPlay {
         protected override void OnRender(DrawingContext d) {
             base.OnRender(d);double scale=Math.Min(ActualWidth/800,ActualHeight/460);if(scale<=0)return;
             d.PushTransform(new ScaleTransform(scale,scale));d.PushClip(new RectangleGeometry(new Rect(0,0,800,460),20,20));
-            if(PhotoSource!=null){d.DrawImage(PhotoSource,new Rect(0,0,800,460));d.Pop();d.Pop();return;}
+            if(PhotoSource!=null){double fit=Math.Min(800/PhotoSource.Width,460/PhotoSource.Height);double pw=PhotoSource.Width*fit,ph=PhotoSource.Height*fit;Rect(d,0,0,800,460,"#F6F1E5");d.DrawImage(PhotoSource,new Rect((800-pw)/2,(460-ph)/2,pw,ph));d.Pop();d.Pop();return;}
             Sky(d);var s=Session;
             if(Mode=="garden") {
                 Actor(d,97,426,15,120);

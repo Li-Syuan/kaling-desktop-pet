@@ -1,0 +1,17 @@
+{
+  "tool": "built-in image_gen",
+  "outfits": {
+    "uniform": {
+      "reference": "assets/outfits/uniform/portrait.png",
+      "prompt": "Use attached Kaling portrait as exact identity AND exact outfit reference. Make a transparent sprite sheet with 6 full-body poses in a 3-column by 2-row grid, generous clear margins, same head size and proportions in every cell, no captions or grid. Preserve her orange-gold eye on viewer left, cyan eye on viewer right, red hair shape and long twin tails, pink hair bows, face, outfit and shoes exactly. Row 1: neutral starting pose; adjusting the pink bow at her chest with both hands, then straightening her sleeves; same action finished and smiling with hands lowering. Row 2: preparing to stretch by bringing hands together; stretching both arms above her head gently, feet still on ground; relaxed finished stretch, one hand beside cheek, eyes softly closed. No extra props or accessories, no extra limbs, no background, no shadows connecting cells. Copy the reference style and body-to-head ratio; only change gestures."
+    },
+    "pajamas": {
+      "reference": "assets/outfits/pajamas/portrait.png",
+      "prompt": "Use attached Kaling portrait as exact identity AND exact outfit reference. Make a transparent sprite sheet with 6 full-body poses in a 3-column by 2-row grid, generous clear margins, same head size and proportions in every cell, no captions or grid. Preserve her orange-gold eye on viewer left, cyan eye on viewer right, red hair shape and long twin tails, pink hair bows, face, outfit and shoes exactly. Row 1: neutral starting pose; gently straightening her lavender pajama collar and sleeves; same action finished and smiling with hands lowering. Row 2: preparing to stretch by bringing hands together; stretching both arms above her head gently, feet still on ground; relaxed finished stretch, one hand beside cheek, eyes softly closed. No extra props or accessories, no extra limbs, no background, no shadows connecting cells. Copy the reference style and body-to-head ratio; only change gestures."
+    },
+    "hoodie": {
+      "reference": "assets/outfits/hoodie/portrait.png",
+      "prompt": "Use attached Kaling portrait as exact identity AND exact outfit reference. Make a transparent sprite sheet with 6 full-body poses in a 3-column by 2-row grid, generous clear margins, same head size and proportions in every cell, no captions or grid. Preserve her orange-gold eye on viewer left, cyan eye on viewer right, red hair shape and long twin tails, pink hair bows, face, outfit and shoes exactly. Row 1: neutral starting pose; gently adjusting the cream cat-ear hood using both hands at the sides of the hood; same action finished and smiling with hands lowering. Row 2: preparing to stretch by bringing hands together; stretching both arms above her head gently, feet still on ground; relaxed finished stretch, one hand beside cheek, eyes softly closed. No extra props or accessories, no extra limbs, no background, no shadows connecting cells. Copy the reference style and body-to-head ratio; only change gestures."
+    }
+  }
+}

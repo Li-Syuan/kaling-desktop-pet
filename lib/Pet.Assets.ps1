@@ -32,10 +32,11 @@ function Select-Character([string]$Id) {
     Sync-CareMesses;Update-CareMenus
     Show-Bubble (Get-CharacterText 'hello' '你好！今天也一起度過吧。')
 }
-function Get-OutfitAssets([string]$Id) {
-    $cacheKey=$state.character+'/'+$Id
+function Get-OutfitAssets([string]$Id,[string]$CharacterId=$state.character) {
+    $cacheKey=$CharacterId+'/'+$Id
     if($script:outfitCache.ContainsKey($cacheKey)){return $script:outfitCache[$cacheKey]}
-    $entry=@($script:catalog.outfits | Where-Object id -eq $Id)[0]
+    $definition=@($characterCatalog.characters | Where-Object id -eq $CharacterId)[0]
+    $entry=@($definition.outfits | Where-Object id -eq $Id)[0]
     if(-not $entry){throw 'Unknown outfit'}
     $atlas=[System.Windows.Media.Imaging.BitmapImage]::new()
     $atlas.BeginInit();$atlas.CacheOption='OnLoad';$atlas.UriSource=[Uri](Join-Path $script:root $entry.atlas);$atlas.EndInit();$atlas.Freeze()

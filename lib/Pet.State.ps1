@@ -1,12 +1,13 @@
 ﻿. (Join-Path $PSScriptRoot 'Pet.Room.Model.ps1')
 . (Join-Path $PSScriptRoot 'Pet.Care.Model.ps1')
 . (Join-Path $PSScriptRoot 'Pet.Play.State.ps1')
+. (Join-Path $PSScriptRoot 'Pet.World.State.ps1')
 function New-PetState {
     return @{
         version=3; character='ren'; characterOutfits=(New-CharacterOutfits); left=$null; top=$null; scale=1.5; mode='stay'; look=$true
         bubbles=$true; stories=$true; quiet=$false; autoHide=$true; clickThrough=$false
         focusMinutes=25; shortMinutes=5; longMinutes=15; mood='calm'; outfit='original';care=(New-CareState)
-        pomo=@{phase='focus'; status='ready'; remaining=1500.0; rounds=0; total=0};home=(New-HomeState);play=(New-PlayState)
+        pomo=@{phase='focus'; status='ready'; remaining=1500.0; rounds=0; total=0};home=(New-HomeState);play=(New-PlayState);world=(New-WorldState)
     }
 }
 function Read-PetState([string]$Directory) {
@@ -44,6 +45,7 @@ function Read-PetState([string]$Directory) {
         $state.care=Read-CareState $data.care
         $state.home=Read-HomeState $data.home
         $state.play=Read-PlayState $data.play
+        $state.world=Read-WorldState $data.world
         $p=$data.pomo
         if($p.phase -notin @('focus','short','long') -or $p.status -notin @('ready','running','paused')){throw 'Invalid timer state'}
         foreach($name in @('remaining','rounds','total')){

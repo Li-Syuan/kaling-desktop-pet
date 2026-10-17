@@ -1,4 +1,4 @@
-﻿param([switch]$SelfTest,[string]$TestDataDirectory,[switch]$PhysicalInputTest,[switch]$PlayTestsOnly)
+﻿param([switch]$SelfTest,[string]$TestDataDirectory,[switch]$PhysicalInputTest,[switch]$PlayTestsOnly,[switch]$WorldTestsOnly,[switch]$WorldPreview)
 $ErrorActionPreference='Stop'
 $script:root=$PSScriptRoot
 if($SelfTest){
@@ -20,6 +20,7 @@ Add-Type -AssemblyName PresentationFramework,PresentationCore,WindowsBase,System
 Add-Type -Path (Join-Path $root 'lib\Pet.Native.cs')
 Add-Type -Path @((Join-Path $root 'lib\Pet.Life.cs'),(Join-Path $root 'lib\Pet.Life.Art.cs'),(Join-Path $root 'lib\Pet.Life.Visual.cs')) -ReferencedAssemblies @([System.Windows.Media.DrawingImage].Assembly.Location,[System.Windows.Point].Assembly.Location,'System.Xaml','System.Core')
 Add-Type -Path @((Join-Path $root 'lib\Pet.Play.Model.cs'),(Join-Path $root 'lib\Pet.Play.Visual.cs')) -ReferencedAssemblies @([System.Windows.Media.DrawingImage].Assembly.Location,[System.Windows.FrameworkElement].Assembly.Location,[System.Windows.Point].Assembly.Location,'System.Xaml','System.Core')
+Add-Type -Path @((Join-Path $root 'lib\Pet.World.Model.cs'),(Join-Path $root 'lib\Pet.World.Visual.cs')) -ReferencedAssemblies @([System.Windows.Media.DrawingImage].Assembly.Location,[System.Windows.FrameworkElement].Assembly.Location,[System.Windows.Point].Assembly.Location,'System.Xaml','System.Core')
 . (Join-Path $root 'lib\Pet.State.ps1')
 . (Join-Path $root 'lib\Pet.Assets.ps1')
 . (Join-Path $root 'lib\Pet.Activity.ps1')
@@ -29,6 +30,7 @@ Add-Type -Path @((Join-Path $root 'lib\Pet.Play.Model.cs'),(Join-Path $root 'lib
 . (Join-Path $root 'lib\Pet.Life.ps1')
 . (Join-Path $root 'lib\Pet.Play.ps1')
 . (Join-Path $root 'lib\Pet.Play.Photo.ps1')
+. (Join-Path $root 'lib\Pet.World.ps1')
 $script:state=Read-PetState $dataDirectory
 $script:app=[System.Windows.Application]::new();$app.ShutdownMode='OnExplicitShutdown'
 $script:clock=[Diagnostics.Stopwatch]::StartNew()
@@ -163,6 +165,10 @@ function End-Pointer {
 function Update-Visibility {
     if(($manualHidden -or $fullscreenHidden) -and $careTask){Cancel-CareActivity}
     Sync-CareMesses
+    if($worldWindow){
+        if($manualHidden -or $fullscreenHidden){Close-World;return}
+        if($w.IsVisible){$w.Hide()};if($room.open -and $room.window.IsVisible){$room.window.Hide()};return
+    }
     if($playWindow){
         if($manualHidden -or $fullscreenHidden){Close-Play;return}
         if($w.IsVisible){$w.Hide()};if($room.open -and $room.window.IsVisible){$room.window.Hide()};return
@@ -294,6 +300,7 @@ $null=Add-Tray '關閉桌面寵物' {Close-Pet}
 Initialize-CharacterTray
 Initialize-CareMenus
 Initialize-PlayMenus
+Initialize-WorldMenus
 $tray.ContextMenuStrip=$trayMenu;$tray.Add_DoubleClick({$script:manualHidden=$false;Update-Visibility});$tray.Visible=$true
 $img.Add_MouseLeftButtonDown({param($s,$e);Begin-Pointer (Cursor-Position) ($e.GetPosition($img).Y/$img.ActualHeight) ($e.ClickCount -eq 2);[void]$img.CaptureMouse();$e.Handled=$true})
 $img.Add_MouseMove({if($drag){Move-Pointer (Cursor-Position)}})
@@ -326,13 +333,15 @@ $timer.Add_Tick({
         $event=Step-Pomodoro $state $delta;Handle-TimerEvent $event
         Update-Care $delta
         Update-Play $delta
+        Update-World $delta
         if($peeking -and $now -ge $actionUntil){Exit-Peek}
         if($now -ge $nextPoll){
-            $script:nextPoll=$now+500;$monitorHandle=if($room.open){$room.hwnd}else{$hwnd};$script:fullscreenHidden=$state.autoHide -and [KalingNative]::IsFullscreen([KalingNative]::GetForegroundWindow(),$monitorHandle)
+            $script:nextPoll=$now+500;$monitorHandle=if($worldWindow){$world.hwnd}elseif($room.open){$room.hwnd}else{$hwnd};$script:fullscreenHidden=$state.autoHide -and [KalingNative]::IsFullscreen([KalingNative]::GetForegroundWindow(),$monitorHandle)
             Update-Visibility;Update-Badge;if($room.open){Keep-RoomVisible}elseif(-not $drag){Keep-Visible}
         }
         if($now -ge $nextSave){Save-Settings;$script:nextSave=$now+10000}
         if($bubble.Visibility -eq 'Visible' -and $now -ge $bubbleUntil){Hide-Bubble}
+        if($worldWindow){return}
         if($room.open){Update-Room $delta;return}
         if($pendingClick -and -not $drag -and $now -ge $pendingClick.due){$action=$pendingClick.action;$script:pendingClick=$null;$null=Invoke-Interaction $action}
         if($activity.kind -eq 'attack'){Step-Attack $now;return}
@@ -363,7 +372,7 @@ $timer.Add_Tick({
         while($now -ge $nextFrame){$script:frame=if($row -eq 16){[math]::Min($frame+1,$counts[$row]-1)}else{($frame+1)%$counts[$row]};$img.Source=$frames["$row,$frame"];$script:nextFrame+=$durations[$row][$frame]}
     }catch{$_ | Out-String | Add-Content -LiteralPath $log -Encoding UTF8;Close-Pet}finally{if(-not $closing){try{Update-CareVisual;Update-LifeVisual}catch{$_ | Out-String | Add-Content -LiteralPath $log -Encoding UTF8;Close-Pet}}}
 })
-$w.Add_Closing({$script:closing=$true;Close-Play;Close-CareWindows;Stop-Activity;if($fxWindow){$fxWindow.Close();$script:fxWindow=$null};Pause-Pomodoro $state;Save-Settings})
+$w.Add_Closing({$script:closing=$true;Close-World;Close-Play;Close-CareWindows;Stop-Activity;if($fxWindow){$fxWindow.Close();$script:fxWindow=$null};Pause-Pomodoro $state;Save-Settings})
 $w.Add_Closed({
     $timer.Stop();if($room.open){Close-Room};if($settingsWindow){$settingsWindow.Close()};if($wardrobeWindow){$wardrobeWindow.Close()}
     foreach($id in $hotkeys){[void][KalingNative]::UnregisterHotKey($hwnd,$id)}

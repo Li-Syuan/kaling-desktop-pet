@@ -142,6 +142,7 @@ function Update-Room([double]$Delta) {
     if($room.time -ge $room.nextFrame){$script:frame=if($room.phase -in @('bed-sleep','box-peek')){3}elseif($room.phase -eq 'box-enter'){[math]::Min($frame+1,2)}elseif($room.phase -eq 'waking'){0}elseif($row -in @(16,23)){[math]::Min($frame+1,$counts[$row]-1)}else{($frame+1)%$counts[$row]};$room.nextFrame=$room.time+$durations[$row][$frame]/1000.0};Render-Room;Update-CareVisual
 }
 function Close-Room([switch]$FromWindow) {
+    if($worldWindow){Close-World}
     if($playWindow){Close-Play}
     if(-not $room.open){return};Cancel-RoomActivity
     $state.home.left=$room.window.Left;$state.home.top=$room.window.Top;$room.open=$false;if(-not $FromWindow){$room.window.Close()};$room.window=$null;$room.hwnd=[IntPtr]::Zero
@@ -149,6 +150,7 @@ function Close-Room([switch]$FromWindow) {
     if(-not $closing){Update-Visibility;Keep-Visible}
 }
 function Show-Room([switch]$Passive) {
+    if($worldWindow){Close-World}
     if($playWindow){Close-Play}
     if($room.open){if(-not $manualHidden -and -not $fullscreenHidden){$room.window.Show();if(-not $Passive){[void]$room.window.Activate()}};return}
     Mark-Activity;$script:pendingClick=$null;$script:drag=$false;$img.ReleaseMouseCapture();Hide-Bubble

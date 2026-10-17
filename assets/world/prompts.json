@@ -1,0 +1,8 @@
+{
+  "tool": "built-in image_gen",
+  "garden": "Create a polished game environment illustration for a cozy MapleStory-inspired desktop companion's living garden, no characters, no text, no interface. Wide 16:9 landscape, orthographic slightly elevated front view, hand-painted 2D fantasy game art with clean elegant linework and warm luminous colors. In the distant upper left a charming small ivory-and-dark-wood Asian cottage, teal tiled roof, open sliding doorway, plum blossom branch, welcoming tiny porch. Far right a little reflecting pond and arched wooden bridge leading to a forest path in the distance. Background dense soft jade green canopy and blue airy hills. Important gameplay composition: bottom 60 percent is a spacious mostly empty warm cream-colored courtyard/grass clearing, flat gentle perspective, suitable for placing two chibi sprites and movable props. Keep center and lower left/right unobstructed. Thin stone pathway horizontally near bottom, a few tiny clovers at outer edges. No furniture in foreground, no animals, no humans, no sword, no large plants covering foreground. Premium charming miniature world, crisp details at rear but calm readable foreground. Full bleed background, opaque.",
+  "rules": [
+    "Preserve authored alpha and original sprite proportions.",
+    "Slime: thin line with circular green tip; black round eyes with gold plus signs."
+  ]
+}

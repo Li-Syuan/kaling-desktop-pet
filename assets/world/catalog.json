@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "propsComponentOrder": [1, 2, 4, 6, 0, 3, 5, 7, 8, 11, 13, 14, 9, 10, 12, 15],
+  "renHeadAnchors": [130, 522, 911, 1312, 135, 540, 926, 1297],
+  "renScale": 0.365,
+  "stories": [
+    {"id":"sword","name":"擦劍與追球"},
+    {"id":"snack","name":"偷吃躲箱"},
+    {"id":"leaves","name":"落葉小秘密"},
+    {"id":"tea","name":"留一杯茶"},
+    {"id":"box","name":"紙箱讓座"},
+    {"id":"rain","name":"雨下共傘"}
+  ],
+  "furniture": [
+    {"id":"hammock","name":"搖搖吊床"},
+    {"id":"swing","name":"青葉鞦韆"},
+    {"id":"leaves","name":"落葉堆"},
+    {"id":"basket","name":"玩具籃"},
+    {"id":"aquarium","name":"收藏水族箱"},
+    {"id":"flowers","name":"窗邊花台"},
+    {"id":"stone","name":"溪流寶石"},
+    {"id":"shell","name":"珍珠貝殼"},
+    {"id":"mushroom","name":"森林小菇"}
+  ]
+}

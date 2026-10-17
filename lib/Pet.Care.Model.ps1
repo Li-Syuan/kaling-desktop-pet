@@ -25,6 +25,7 @@ function Read-CareState($Data) {
             if($c.messes.Count -ge 3){break}
             if($m.id -notmatch '^[a-zA-Z0-9-]{1,40}$' -or $seen.ContainsKey([string]$m.id)){continue}
             if($m.place -eq 'desktop' -and (Test-CareNumber $m.x -100000 100000) -and (Test-CareNumber $m.y -100000 100000)){$c.messes+=@{id=[string]$m.id;place='desktop';x=[double]$m.x;y=[double]$m.y};$seen[[string]$m.id]=$true}
+            elseif($m.place -eq 'world' -and (Test-CareNumber $m.x 95 805) -and (Test-CareNumber $m.y 395 460)){$c.messes+=@{id=[string]$m.id;place='world';x=[double]$m.x;y=[double]$m.y};$seen[[string]$m.id]=$true}
             elseif($m.place -eq 'room' -and (Test-CareNumber $m.u .06 .94) -and (Test-CareNumber $m.v .06 .94) -and (Test-RoomFloor $m.u $m.v)){$c.messes+=@{id=[string]$m.id;place='room';u=[double]$m.u;v=[double]$m.v};$seen[[string]$m.id]=$true}
         }
     };return $result
