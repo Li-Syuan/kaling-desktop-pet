@@ -81,5 +81,25 @@ Assert (-not (Test-RoomDrop 'box' .35 .65 (New-HomeState))) 'box footprint canno
 Assert (-not (Test-RoomDrop 'ball' .92 .92 (New-HomeState))) 'ball radius stays within floor boundary'
 $targets=@(@{u=.45;v=.45},@{u=.38;v=.63},@{u=.70;v=.40},@{u=.40;v=.18},@{u=.54;v=.67},@{u=.77;v=.90},@{u=.20;v=.33},@{u=.06;v=.40},@{u=.94;v=.94})
 foreach($start in $targets){foreach($goal in $targets){$path=@(Get-RoomPath $start $goal);$valid=$path.Count -gt 0;$previous=$start;foreach($node in $path){$valid=$valid -and (Test-RoomSegment $previous $node);$previous=$node};Assert $valid 'furniture routes avoid every obstacle including endpoint connectors'}}
+Add-Type -TypeDefinition @'
+using System;using System.IO;using System.Threading;using System.Threading.Tasks;
+public static class PetStateFileLock {
+ public static Task Hold(string path,int milliseconds){
+  var ready=new ManualResetEventSlim(false);
+  var task=Task.Run(()=>{using(var file=new FileStream(path,FileMode.Open,FileAccess.Read,FileShare.Read)){ready.Set();Thread.Sleep(milliseconds);}});
+  if(!ready.Wait(3000))throw new Exception("Could not acquire test lock");ready.Dispose();return task;
+ }
+}
+'@
+$retryState=New-PetState;$retryState.scale=1.0;Write-PetState $retryState $OutputDirectory
+$settingsPath=Join-Path $OutputDirectory 'settings.json';$lockTask=[PetStateFileLock]::Hold($settingsPath,120)
+$retryState.scale=2.0;Write-PetState $retryState $OutputDirectory;$lockTask.Wait()
+Assert ((Read-PetState $OutputDirectory).scale -eq 2.0) 'short Windows file lock recovers through bounded atomic save retries'
+$backupData=Get-Content ($settingsPath+'.bak') -Raw|ConvertFrom-Json
+Assert ($backupData.scale -eq 1.0) 'save retry preserves the previous valid backup'
+$lockTask=[PetStateFileLock]::Hold($settingsPath,700);$rejected=$false;$retryState.scale=1.5
+try{Write-PetState $retryState $OutputDirectory}catch{$rejected=$true};$lockTask.Wait()
+Assert ($rejected -and (Read-PetState $OutputDirectory).scale -eq 2.0) 'persistent file lock reports failure without truncating saved progress'
+Assert (@(Get-ChildItem $OutputDirectory -Filter '*.tmp').Count -eq 0) 'failed save removes only its own temporary file'
 @{ok=$true;checks=@($checks);count=$checks.Count} | ConvertTo-Json -Depth 4 | Set-Content (Join-Path $OutputDirectory 'state-tests.json') -Encoding UTF8
 Write-Output "PASS: $($checks.Count) state checks"

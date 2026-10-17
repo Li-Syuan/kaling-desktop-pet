@@ -1,0 +1,8 @@
+{
+  "tool": "image_gen built-in",
+  "props": {
+    "file": "props.png",
+    "prompt": "Create a polished 4 by 4 transparent game prop atlas for a cozy MapleStory-inspired desktop pet playroom, soft high-resolution 2D hand-painted game art, dark warm fine outlines and restrained cel shading, cream/pastel/forest palette. NO characters. Exactly 16 isolated objects, one in each equally sized grid cell with wide transparent margins, complete outlines, NO labels, numbers or grid. Consistent small-object scale. Row 1 left to right: a tiny pink round fish facing left; a tiny blue striped fish facing left; a tiny golden fish facing left; a small orange five-point starfish. Row 2: terracotta flowerpot with soil only; the same pot with two-leaf seedling; the same pot with a closed pink bud; the same pot with blooming pink cosmos flower. Row 3: same pot with blooming yellow sunflower; same pot with blooming purple bell flowers; a small mint watering can; a little red-white fishing bobber. Row 4: small wicker picnic basket with folded cream cloth; a folded-out pink and cream checked picnic blanket seen gently from above, no objects on it; round chocolate chip cookie; a smooth small gray pebble. Every item entirely inside its cell, very generous transparent gutters. True transparent background, no ground shadows or glow. Intended for cropping and scaling into a WPF game."
+  },
+  "alpha": "Preserve generated PNG and alpha byte-for-byte; crop only at runtime."
+}

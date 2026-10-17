@@ -1,11 +1,12 @@
 ﻿. (Join-Path $PSScriptRoot 'Pet.Room.Model.ps1')
 . (Join-Path $PSScriptRoot 'Pet.Care.Model.ps1')
+. (Join-Path $PSScriptRoot 'Pet.Play.State.ps1')
 function New-PetState {
     return @{
         version=3; character='ren'; characterOutfits=(New-CharacterOutfits); left=$null; top=$null; scale=1.5; mode='stay'; look=$true
         bubbles=$true; stories=$true; quiet=$false; autoHide=$true; clickThrough=$false
         focusMinutes=25; shortMinutes=5; longMinutes=15; mood='calm'; outfit='original';care=(New-CareState)
-        pomo=@{phase='focus'; status='ready'; remaining=1500.0; rounds=0; total=0};home=(New-HomeState)
+        pomo=@{phase='focus'; status='ready'; remaining=1500.0; rounds=0; total=0};home=(New-HomeState);play=(New-PlayState)
     }
 }
 function Read-PetState([string]$Directory) {
@@ -42,6 +43,7 @@ function Read-PetState([string]$Directory) {
         $state.outfit=$state.characterOutfits[$state.character]
         $state.care=Read-CareState $data.care
         $state.home=Read-HomeState $data.home
+        $state.play=Read-PlayState $data.play
         $p=$data.pomo
         if($p.phase -notin @('focus','short','long') -or $p.status -notin @('ready','running','paused')){throw 'Invalid timer state'}
         foreach($name in @('remaining','rounds','total')){
@@ -62,7 +64,12 @@ function Write-PetState($State,[string]$Directory) {
     $path=Join-Path $Directory 'settings.json';$temp=Join-Path $Directory ('settings.'+[guid]::NewGuid().ToString('N')+'.tmp')
     try {
         [IO.File]::WriteAllText($temp,($State | ConvertTo-Json -Depth 9),[Text.UTF8Encoding]::new($false))
-        if([IO.File]::Exists($path)){[IO.File]::Replace($temp,$path,$path+'.bak',$true)}else{[IO.File]::Move($temp,$path)}
+        # Indexers and antivirus may briefly hold the destination or backup on Windows.
+        # Keep atomic replacement and its backup; only retry transient IO failures.
+        for($attempt=0;$attempt -lt 5;$attempt++){
+            try{if([IO.File]::Exists($path)){[IO.File]::Replace($temp,$path,$path+'.bak',$true)}else{[IO.File]::Move($temp,$path)};break}
+            catch [IO.IOException]{if($attempt -eq 4 -or -not [IO.File]::Exists($temp)){throw};Start-Sleep -Milliseconds (20*($attempt+1))}
+        }
     } finally {if([IO.File]::Exists($temp)){[IO.File]::Delete($temp)}}
 }
 function Get-PhaseSeconds($State,[string]$Phase) {

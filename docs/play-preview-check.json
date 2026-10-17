@@ -1,0 +1,106 @@
+{
+  "ok": true,
+  "checked": [
+    {
+      "width": 1240,
+      "feature": 1,
+      "variants": 5
+    },
+    {
+      "width": 1240,
+      "feature": 2,
+      "variants": 0
+    },
+    {
+      "width": 1240,
+      "feature": 3,
+      "variants": 2
+    },
+    {
+      "width": 1240,
+      "feature": 4,
+      "variants": 0
+    },
+    {
+      "width": 1240,
+      "feature": 5,
+      "variants": 0
+    },
+    {
+      "width": 1240,
+      "feature": 6,
+      "variants": 0
+    },
+    {
+      "width": 1240,
+      "feature": 7,
+      "variants": 4
+    },
+    {
+      "width": 1240,
+      "feature": 8,
+      "variants": 0
+    },
+    {
+      "width": 1240,
+      "feature": 9,
+      "variants": 2
+    },
+    {
+      "width": 1240,
+      "feature": 10,
+      "variants": 0
+    },
+    {
+      "width": 390,
+      "feature": 1,
+      "variants": 5
+    },
+    {
+      "width": 390,
+      "feature": 2,
+      "variants": 0
+    },
+    {
+      "width": 390,
+      "feature": 3,
+      "variants": 2
+    },
+    {
+      "width": 390,
+      "feature": 4,
+      "variants": 0
+    },
+    {
+      "width": 390,
+      "feature": 5,
+      "variants": 0
+    },
+    {
+      "width": 390,
+      "feature": 6,
+      "variants": 0
+    },
+    {
+      "width": 390,
+      "feature": 7,
+      "variants": 4
+    },
+    {
+      "width": 390,
+      "feature": 8,
+      "variants": 0
+    },
+    {
+      "width": 390,
+      "feature": 9,
+      "variants": 2
+    },
+    {
+      "width": 390,
+      "feature": 10,
+      "variants": 0
+    }
+  ],
+  "pageErrors": []
+}

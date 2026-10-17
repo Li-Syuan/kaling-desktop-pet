@@ -1,10 +1,10 @@
-# 綠水靈 · v1.7.0
+# 綠水靈 · v1.8.0 細線圓球修正
 
 右鍵角色或系統匣 → **角色 → 綠水靈**。新安裝仍預設蓮；既有選角、尺寸、位置、番茄鐘與照顧進度保留。綠水靈從自己的獨立生活狀態開始。
 
 ## 造型與動作
 
-依 [Nexon Peak 怪物圖鑑](https://peak.nexon.com/en/post/1534) 的[綠水靈遊戲內動畫](https://peak-file.nexon.com/uploads/20260527_0331_e94d062d.gif)重畫，保留圓潤綠色果凍身體、彎曲觸角與末端小球。眼睛依使用者最新修正採用**黑色圓眼，內含金色十字**；眨眼與睡眠時使用閉眼線條。這是同人重繪，並非官方發布素材。
+依 [Nexon Peak 怪物圖鑑](https://peak.nexon.com/en/post/1534) 的[綠水靈遊戲內動畫](https://peak-file.nexon.com/uploads/20260527_0331_e94d062d.gif)重畫，保留圓潤綠色果凍身體。v1.8.0 再對照 [Nexon 官方 20 週年活動圖](https://maplestory.nexon.com/promotion/20th/2023/20230420/PartyQuest/1st/0066j34qbi3x3s63jvxi4wg)，將頭頂改成**一條細深色線連著一顆綠色圓球**，移除原本粗綠色管狀觸角；母圖與全部 16 個姿態同步修正。眼睛依使用者最新修正採用**黑色圓眼，內含金色十字**；眨眼與睡眠時使用閉眼線條。這是同人重繪，並非官方發布素材。
 
 使用內建 `image_gen` 生成，[母圖](../assets/characters/slime/master.png)、[16 姿態圖集](../assets/characters/slime/poses.png)及[完整提示詞與來源](../assets/characters/slime/prompts.json)均隨專案保存。生成 PNG 與 alpha 原樣保留，未以程式重畫或改色。
 
@@ -22,7 +22,9 @@
 ![木箱探頭](slime-home-box.png)
 ![泡泡浴](care-slime-bath.png)
 
-## 驗收
+## v1.7.0 加入時的驗收
+
+最新 v1.8.0 的完整回歸與解壓啟動驗證見 [新版本驗收](PLAY-VALIDATION.md)。
 
 - WPF 整合測試 1,194 項通過，涵蓋五角色選單、全部動作、小屋、玩具、餵食與照顧、番茄鐘，以及蓮技能取消；[完整結果](slime-integration.json)。
 - 狀態測試 135 項、照顧模型 44 項、怪物存檔 19 項通過。包括由四角色存檔升級，保留既有進度並新增綠水靈。

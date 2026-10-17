@@ -2,6 +2,7 @@
 $script:activity=@{kind='idle';generation=0}
 $script:trayAttackItems=@();$script:fxWindow=$null;$script:fxFrames=@{};$script:attackItems=@();$script:characterItems=@()
 function Stop-Activity {
+    if($playWindow){Close-Play}
     Cancel-CareActivity
     if($activity.kind -eq 'attack'){
         $w.Left=$activity.originLeft;$img.RenderTransform=[System.Windows.Media.Transform]::Identity

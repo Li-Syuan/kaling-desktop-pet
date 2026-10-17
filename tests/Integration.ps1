@@ -19,6 +19,11 @@ function Invoke-IntegrationTests {
         $stream=[IO.File]::Create((Join-Path $dataDirectory $Name));try{$encoder.Save($stream)}finally{$stream.Dispose()}
     }
     function Pump-For([int]$Milliseconds){$end=$clock.ElapsedMilliseconds+$Milliseconds;while($clock.ElapsedMilliseconds -lt $end){Pump;Start-Sleep -Milliseconds 15}}
+    if($PlayTestsOnly){
+        . (Join-Path $root 'tests\Play.Integration.ps1')
+        @{ok=$true;suite='play';count=$checks.Count;checks=@($checks)}|ConvertTo-Json -Depth 4|Set-Content (Join-Path $dataDirectory 'integration.json') -Encoding UTF8
+        return
+    }
     Check ($frames.Count -eq 133) 'uniform loads 133 frames'
     $seen=@{}
     foreach($outfit in @('uniform','pajamas','hoodie')){
@@ -212,6 +217,7 @@ public static class KalingTestNative {
     . (Join-Path $root 'tests\Care.Integration.ps1')
     . (Join-Path $root 'tests\Monsters.Integration.ps1')
     . (Join-Path $root 'tests\Life.Integration.ps1')
+    . (Join-Path $root 'tests\Play.Integration.ps1')
     $limitations.Add('Physical mixed-DPI multi-monitor transitions are not covered by this single-desktop test.')
     $limitations.Add('Sleep is tested through elapsed-gap logic; physical suspend/resume is not forced.')
     @{ok=$true;count=$checks.Count;checks=@($checks);limitations=@($limitations)} | ConvertTo-Json -Depth 4 | Set-Content (Join-Path $dataDirectory 'integration.json') -Encoding UTF8

@@ -1,7 +1,7 @@
 ﻿# WPF presentation for the pure care model. A single task owns any care performance.
 $script:careTask=$null;$script:careWindows=@{};$script:careRoomVisuals=@{};$script:careArtCache=@{};$script:careNotice=0.0;$script:careVisualTime=0.0
 function Get-ActiveCare {return $state.care.characters[$state.character]}
-function Test-CarePaused {return -not $state.care.enabled -or $closing -or $manualHidden -or $fullscreenHidden -or $state.quiet -or $state.pomo.status -eq 'running'}
+function Test-CarePaused {return -not $state.care.enabled -or $closing -or $manualHidden -or $fullscreenHidden -or $state.quiet -or $state.pomo.status -eq 'running' -or $null -ne $playWindow}
 function Get-CareText([string]$Key) {
     if($character.careDialogue.$Key){return [string]$character.careDialogue.$Key}
     $words=@{
@@ -40,7 +40,7 @@ function Begin-CareMeal([string]$Food,[string]$Place,[double]$Seconds) {
     if($state.care.enabled){$script:careTask=@{kind='food';food=$Food;place=$Place;remaining=$Seconds;character=$state.character}}
 }
 function Complete-PendingCareMeal {
-    if($careTask -and $careTask.kind -eq 'food' -and $careTask.character -eq $state.character){$food=$careTask.food;$script:careTask=$null;$null=Complete-CareMeal (Get-ActiveCare) $food (Get-Random -Minimum 480 -Maximum 721);Notify-Life 'snack';Save-Settings}
+    if($careTask -and $careTask.kind -eq 'food' -and $careTask.character -eq $state.character){$food=$careTask.food;$script:careTask=$null;$null=Complete-CareMeal (Get-ActiveCare) $food (Get-Random -Minimum 480 -Maximum 721);Add-PlayEvent (Get-PlayCare) ('meal-'+$food) ('慢慢享用了一份'+@{cookie='餅乾';pudding='布丁';tea='茶'}[$food]+'。');Notify-Life 'snack';Save-Settings}
 }
 function Add-CareHappiness([double]$Amount=4) {if($state.care.enabled){$c=Get-ActiveCare;$c.happiness=[math]::Min(100.0,$c.happiness+$Amount)}}
 function Request-CareAction([string]$Action,[switch]$Automatic) {
@@ -60,6 +60,7 @@ function Complete-CareRoomAction {
     $task=$careTask;$script:careTask=$null;$c=Get-ActiveCare
     if($task.kind -eq 'toilet'){$null=Complete-CareToilet $c $task.guided;Show-Bubble (Get-CareText 'done')}
     elseif($task.kind -eq 'bath'){$c.hygiene=100.0;$c.happiness=[math]::Min(100.0,$c.happiness+12);Show-Bubble (Get-CareText 'clean')}
+    Add-PlayEvent (Get-PlayCare) $task.kind $(if($task.kind -eq 'bath'){'洗了泡泡澡，香香地回來了。'}else{'順利找到廁所，記住今天的小進步。'})
     Cancel-RoomActivity
     if($task.returnDesktop){Close-Room}
     $script:careTask=@{kind='relief';place=$(if($room.open){'room'}else{'desktop'});remaining=2.4;character=$state.character}
@@ -112,7 +113,7 @@ function Show-CareCleanEffect($Mess) {
     elseif($room.open){$im=[System.Windows.Controls.Image]::new();$im.Source=Get-CareArt 'bubbles';$im.Width=60;$im.Height=60;$im.IsHitTestVisible=$false;$p=Get-RoomPoint $Mess.u $Mess.v;Place-RoomVisual $im ($p.x-30) ($p.y-55) 1000;[void]$room.canvas.Children.Add($im);$script:careEffects+=@{visual=$im;canvas=$room.canvas;left=.65}}
 }
 function Sync-CareMesses {
-    if(-not $loaded){return};$c=Get-ActiveCare;$visible=$state.care.enabled -and -not $manualHidden -and -not $fullscreenHidden -and -not $closing
+    if(-not $loaded){return};$c=Get-ActiveCare;$visible=$state.care.enabled -and -not $manualHidden -and -not $fullscreenHidden -and -not $closing -and $null -eq $playWindow
     if(-not $visible -and $careEffects.Count){foreach($fx in @($careEffects)){if($fx.window){$fx.window.Close()};if($fx.visual){$fx.canvas.Children.Remove($fx.visual)}};$script:careEffects=@()}
     $desktop=@{};if($visible){foreach($m in $c.messes){if($m.place -eq 'desktop'){$desktop[$m.id]=$m}}}
     foreach($id in @($careWindows.Keys)){if(-not $desktop.ContainsKey($id)){$careWindows[$id].Close();$careWindows.Remove($id)}}

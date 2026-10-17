@@ -1,5 +1,9 @@
 # 楓之谷桌面夥伴 · Windows 桌面寵物
 
+**v1.8.0 一起玩**：新增泡泡追逐、接點心、紙箱猜猜樂、池塘釣魚、盆栽花園、節奏跳跳、窗外天氣、野餐時光、拍照相簿、生活日記與紀念章。五位角色都能玩，咖凌三套服裝也保留。綠水靈的頭頂同步修正為**細線連一顆綠色圓球**。右鍵或系統匣 → **一起玩 · 十種小日子…**。[玩法與操作](docs/PLAY.md) · [離線玩法預覽](play-preview.html) · [驗收](docs/PLAY-VALIDATION.md)。
+
+![一起玩的實際視窗](docs/play-window.png)
+
 **v1.7.0 綠水靈加入**：黑色圓眼內的金色十字、圓潤果凍身體與小球觸角；有彈跳、摸摸、三種點心、小屋及電子雞生活。右鍵 → **角色 → 綠水靈**。[造型與驗收](docs/SLIME.md)。
 
 ![綠水靈的動作](docs/slime-poses.png)
@@ -22,7 +26,7 @@
 
 生活小屋已整合：換角會取消原活動，五位角色共用房間與玩具位置。咖凌保留五組專用小屋動作；蓮暫以摸頭、坐姿、睡眠、揮手與探頭呈現小屋互動，尚無專用抱枕／被窩素材。小屋的劍術選單會顯示「回桌面施放」，選招後收合小屋並施放。進屋仍會清除特效。Windows 版與 Codex 原生 Pets 套件分開。
 
-下載 [v1.7.0 Windows 整合包](https://github.com/Li-Syuan/kaling-desktop-pet/releases/download/v1.7.0/KalingPet-Windows.zip)。本包包含五位角色、完整生活系統、角色主題小屋、蓮的新版日常與三位怪物的日常動作；既有設定會保留。
+下載 [v1.8.0 Windows 整合包](https://github.com/Li-Syuan/kaling-desktop-pet/releases/download/v1.8.0/KalingPet-Windows.zip)。本包包含五位角色、完整生活系統、角色主題小屋、蓮的新版日常與三位怪物的日常動作；既有設定會保留。
 
 ---
 
