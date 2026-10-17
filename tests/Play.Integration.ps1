@@ -6,6 +6,10 @@ function Play-Click($Button){
     $event=if($Button -is [Windows.Controls.MenuItem]){[Windows.Controls.MenuItem]::ClickEvent}else{[Windows.Controls.Button]::ClickEvent}
     try{$Button.RaiseEvent([Windows.RoutedEventArgs]::new($event))}catch{$Error|Select-Object -First 3|Format-List * -Force|Out-String|Set-Content (Join-Path $dataDirectory 'play-event-error.txt');throw};Pump
 }
+function Get-PlayFileHash([string]$Path){
+    $stream=[IO.File]::OpenRead($Path);$sha=[Security.Cryptography.SHA256]::Create()
+    try{return [Convert]::ToBase64String($sha.ComputeHash($stream))}finally{$sha.Dispose();$stream.Dispose()}
+}
 function Capture-Play([string]$Name,[switch]$Window){
     $visual=if($Window){$playWindow}else{$play.stage};$visual.InvalidateVisual();$visual.UpdateLayout();Pump
     $width=if($Window){[int][math]::Ceiling($visual.ActualWidth)}else{800};$height=if($Window){[int][math]::Ceiling($visual.ActualHeight)}else{460}
@@ -80,15 +84,15 @@ $c=Get-PlayCare;Check ($c.photos.Count -eq 1 -and $play.stage.PhotoSource) 'phot
 $file=$c.photos[0].file;$path=Get-PlayPhotoPath $file;$bitmap=[Windows.Media.Imaging.BitmapImage]::new([Uri]$path)
 Check ($bitmap.PixelWidth -eq 800 -and $bitmap.PixelHeight -eq 460 -and (Get-Item $path).Length -gt 10000) 'postcard contains full-size WPF art';$bitmap=$null
 Check (Export-PlayPhoto $file (Join-Path $dataDirectory 'play-postcard-export.png')) 'postcard exports through production IO helper'
-Check ((Get-FileHash $path).Hash -eq (Get-FileHash (Join-Path $dataDirectory 'play-postcard-export.png')).Hash) 'export preserves PNG bytes'
+Check ((Get-PlayFileHash $path) -eq (Get-PlayFileHash (Join-Path $dataDirectory 'play-postcard-export.png'))) 'export preserves PNG bytes'
 Capture-Play 'play-album.png';Capture-Play 'play-window.png' -Window
 Play-Click $play.featureButtons.journal;Check ($play.stage.JournalLines.Count -gt 0 -and $play.stage.StampLabels.Count -ge 4) 'journal shows actual events and earned stamps';Capture-Play 'play-journal.png'
 Save-Settings;$saved=Read-PetState $dataDirectory;Check ($saved.play.weather -eq 'night' -and $saved.play.frame -eq 'mint' -and $saved.play.characters.slime.photos[0].file -eq $file -and $saved.play.characters.slime.flowers[1] -eq 1) 'weather frame photo and flower persist together'
 Play-Click $play.featureButtons.photo;$null=Load-PlayPhoto $file;Check ($play.photoFile -eq $file) 'album reopens saved photo after page change'
 Check (Remove-PlayPhoto $file) 'explicit delete removes chosen photo';Check (-not (Test-Path $path) -and (Get-PlayCare).photos.Count -eq 0 -and (Get-PlayCare).stamps -contains 'photo') 'photo deletion preserves earned memory stamp'
-$play.caption.Text='第一張';$null=Save-PlayPhoto;$firstFile=$play.photoFile;$firstHash=(Get-FileHash (Get-PlayPhotoPath $firstFile)).Hash
+$play.caption.Text='第一張';$null=Save-PlayPhoto;$firstFile=$play.photoFile;$firstHash=Get-PlayFileHash (Get-PlayPhotoPath $firstFile)
 $play.caption.Text='換了短句的第二張';$play.photoFrame.SelectedIndex=1;$null=Save-PlayPhoto;$secondFile=$play.photoFile
-Check ($secondFile -ne $firstFile -and (Get-FileHash (Get-PlayPhotoPath $secondFile)).Hash -ne $firstHash) 'new photo immediately uses changed scene instead of cached album bitmap'
+Check ($secondFile -ne $firstFile -and (Get-PlayFileHash (Get-PlayPhotoPath $secondFile)) -ne $firstHash) 'new photo immediately uses changed scene instead of cached album bitmap'
 $null=Remove-PlayPhoto $firstFile;$null=Remove-PlayPhoto $secondFile
 Close-Play;Show-Room;Pump;$roomLeft=$room.window.Left;$roomTop=$room.window.Top;Show-Play;Pump
 Check (-not $w.IsVisible -and -not $room.window.IsVisible -and $playWindow.IsVisible) 'opening from home hides both previous actor surfaces'
