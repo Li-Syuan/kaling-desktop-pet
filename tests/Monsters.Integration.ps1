@@ -2,8 +2,8 @@
 Close-Room;Close-CareWindows;Stop-Activity;Reset-Pomodoro $state
 $state.quiet=$false;$state.stories=$false;$state.look=$false;$state.mode='stay';$state.care.enabled=$false
 $script:manualHidden=$false;$script:fullscreenHidden=$false;Update-Visibility
-Check ($characterCatalog.characters.Count -eq 4 -and $characterItems.Count -eq 8) 'four identities available in context and tray menus'
-foreach($id in @('mushroom','ribbon-pig')){
+Check ($characterCatalog.characters.Count -eq 5 -and $characterItems.Count -eq 10) 'five identities available in context and tray menus'
+foreach($id in @('mushroom','ribbon-pig','slime')){
     Select-Character 'ren';$null=Start-Attack 'dragon';$left=$activity.originLeft;$top=$w.Top
     $pair=@($characterItems | Where-Object {$_.id -eq $id -and $_.item -is [System.Windows.Controls.MenuItem]})[0]
     $pair.item.RaiseEvent([System.Windows.RoutedEventArgs]::new([System.Windows.Controls.MenuItem]::ClickEvent));Pump
@@ -35,11 +35,13 @@ foreach($id in @('mushroom','ribbon-pig')){
     Show-Wardrobe;Pump;Check ($wardrobeButtons.Count -eq 1 -and $wardrobeButtons.ContainsKey('original')) "$id appearance menu has own form only";$wardrobeWindow.Close()
     Show-Room;Pump;Check ($room.theme -eq $id -and -not $w.IsVisible) "$id forest home has single actor";Capture-Room ($id+'-home-overview.png')
     Request-RoomAction 'bed';Await-RoomPhase 'bed-sleep';Capture-Room ($id+'-home-bed.png')
+    if($id -eq 'slime'){Check ($room.actor.Clip.Rect.Height -eq 144 -and [Windows.Controls.Canvas]::GetTop($room.actor) -eq ($room.pose.y-180)) 'Slime bed keeps short face visible above blanket'}
     Request-RoomAction 'wake';Await-RoomPhase 'stretch'
     Request-RoomAction 'sofa';Await-RoomPhase 'sofa';Check ($row -eq 22) "$id sofa stays on rest animation"
     foreach($food in @('cookie','pudding','tea')){Request-RoomAction $food;Await-RoomPhase 'food';Check ($row -eq @{cookie=12;pudding=13;tea=14}[$food]) "$id room $food uses matching pose"}
     Request-RoomAction 'ball';Await-RoomPhase 'ball-tap';Check ($row -eq 24) "$id pushes toy with its own animation"
     Request-RoomAction 'box';Await-RoomPhase 'box-hide';Check ($room.actor.Visibility -eq 'Hidden') "$id fully hides inside box";Await-RoomPhase 'box-peek';Capture-Room ($id+'-home-box.png')
+    if($id -eq 'slime'){Check ([Windows.Controls.Canvas]::GetTop($room.actor) -eq ($room.pose.y-177)) 'Slime peeks above box front'}
     Start-Timer;$remain=$state.pomo.remaining;Select-Character 'ren';Select-Character $id
     Check ($state.pomo.status -eq 'running' -and $state.pomo.remaining -eq $remain -and -not $w.IsVisible) "$id switch keeps focus and a single room actor";Reset-Pomodoro $state
     $script:manualHidden=$true;Update-Visibility;Select-Character $id;Check (-not $room.window.IsVisible -and -not $w.IsVisible) "$id switch respects hidden state"

@@ -3,6 +3,12 @@ function Resolve-RoomRow([int]$Row) {
     if($character.roomRows -and $null -ne $character.roomRows.([string]$Row)){return [int]$character.roomRows.([string]$Row)}
     return $Row
 }
+# Short, low-bodied characters need different furniture anchors and head clipping.
+function Get-RoomClipHeight([double]$Fallback) {
+    $presentation=$character.roomPresentation.($room.phase)
+    if($presentation -and $null -ne $presentation.clipHeight){return [double]$presentation.clipHeight}
+    return $Fallback
+}
 $script:room=@{open=$false;window=$null;hwnd=[IntPtr]::Zero;phase='idle';task='';u=.45;v=.45;path=@();step=0;until=0.0;time=0.0;idle=0.0;nextAuto=40.0;nextFrame=0.0;drag=$null;roll=$null;pose=$null;foodCount=0;petCount=0}
 function Add-RoomImage([string]$Name,[double]$Width,[double]$Height) {
     $i=[System.Windows.Controls.Image]::new();$i.Source=Get-RoomBitmap $Name;$i.Width=$Width;$i.Height=$Height;$i.Stretch='Fill';[void]$room.canvas.Children.Add($i);return $i
@@ -23,8 +29,9 @@ function Render-Room {
     foreach($kind in @('ball','box')){$p=Get-RoomPoint $state.home[$kind].u $state.home[$kind].v;$visual=$room.visuals[$kind];Place-RoomVisual $visual ($p.x-$visual.Width/2) ($p.y-$visual.Height) ([int]$p.y)}
     $p=Get-RoomPoint $room.u $room.v;$z=[int]$p.y
     if($room.pose){$p=$room.pose;$z=$p.z}
-    $room.actor.Source=$frames["$row,$frame"];$room.actor.Visibility='Visible';Place-RoomVisual $room.actor ($p.x-72) ($p.y-153) $z
-    $room.actor.Clip=if($room.phase -in @('bed-tuck','bed-sleep','waking')){[System.Windows.Media.RectangleGeometry]::new([System.Windows.Rect]::new(0,0,144,110))}else{$null}
+    $presentation=$character.roomPresentation.($room.phase);$offsetY=if($presentation){[double]$presentation.y}else{0.0}
+    $room.actor.Source=$frames["$row,$frame"];$room.actor.Visibility='Visible';Place-RoomVisual $room.actor ($p.x-72) ($p.y-153+$offsetY) $z
+    $room.actor.Clip=if($room.phase -in @('bed-tuck','bed-sleep','waking')){[System.Windows.Media.RectangleGeometry]::new([System.Windows.Rect]::new(0,0,144,(Get-RoomClipHeight 110)))}else{$null}
     if($room.phase -eq 'box-hide'){$room.actor.Visibility='Hidden'}
     $room.bedFront.Visibility=if($room.phase -in @('bed-tuck','bed-sleep','waking')){'Visible'}else{'Hidden'}
     $room.boxFront.Visibility=if($room.phase -in @('box-enter','box-hide','box-peek')){'Visible'}else{'Hidden'}

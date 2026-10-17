@@ -411,5 +411,125 @@
       "box": "藏好鼻子……哎呀被發現了。",
       "wardrobe": "看看今天的模樣。"
     }
+  },
+  "slime": {
+    "id": "slime",
+    "title": "綠水靈 · 啵啵森林小窩",
+    "background": "#E8F4DF",
+    "foreground": "#224B31",
+    "button": "#DCF0BD",
+    "border": "#8FC06A",
+    "welcome": "啵！進來一起彈一下。",
+    "assets": {
+      "room": {
+        "file": "assets/room/forest/room.png"
+      },
+      "bed": {
+        "file": "assets/room/ren/furniture.png",
+        "rect": [
+          41,
+          59,
+          500,
+          510
+        ]
+      },
+      "sofa": {
+        "file": "assets/room/ren/furniture.png",
+        "rect": [
+          566,
+          121,
+          507,
+          440
+        ]
+      },
+      "wardrobe": {
+        "file": "assets/room/ren/furniture.png",
+        "rect": [
+          1141,
+          26,
+          350,
+          551
+        ]
+      },
+      "table": {
+        "file": "assets/room/ren/furniture.png",
+        "rect": [
+          69,
+          657,
+          422,
+          313
+        ]
+      },
+      "box": {
+        "file": "assets/room/ren/furniture.png",
+        "rect": [
+          578,
+          570,
+          473,
+          398
+        ]
+      },
+      "ball": {
+        "file": "assets/room/ren/furniture.png",
+        "rect": [
+          1183,
+          684,
+          234,
+          239
+        ]
+      },
+      "toilet": {
+        "file": "assets/care/props.png",
+        "rect": [
+          34,
+          40,
+          470,
+          463
+        ]
+      },
+      "bath": {
+        "file": "assets/care/props.png",
+        "rect": [
+          559,
+          101,
+          549,
+          411
+        ]
+      }
+    },
+    "tooltips": {
+      "bed": "木床：休息／叫醒",
+      "sofa": "森林長椅：趴坐打盹",
+      "wardrobe": "看看現在的經典造型",
+      "table": "茶几：選點心",
+      "box": "木箱：躲貓貓／拖動",
+      "ball": "球：點擊或拖動來玩",
+      "toilet": "屏風廁所：有便意時點擊引導如廁",
+      "bath": "泡泡浴盆：洗香香、恢復清潔"
+    },
+    "dialogue": {
+      "hello": "啵！一起彈一下吧。",
+      "pet": "軟軟的，輕輕摸就好。",
+      "wave": "啵啵，我在這裡！",
+      "jump": "噗啾——彈！",
+      "cookie": "咔滋，餅乾黏住了。",
+      "pudding": "誰才是布丁？啵？",
+      "tea": "啵嚕，小口喝。",
+      "sit": "攤平一下，軟綿綿。",
+      "sleep": "啵……呼……",
+      "wake": "啵？天亮了嗎？",
+      "stretch": "伸長——再縮回來。",
+      "spin": "轉一圈，還是軟軟的。",
+      "peek": "你看不到我……啵！",
+      "smug": "啵哼！今天也亮晶晶。",
+      "focus": "先軟軟地陪你，休息再玩球。",
+      "rest": "軟軟地陪你再努力一輪。",
+      "bed": "啵……呼……",
+      "sofa": "攤平一下，軟綿綿。",
+      "food": "咔滋，餅乾黏住了。",
+      "ball": "啵！球球也會彈。",
+      "box": "你看不到我……啵！",
+      "wardrobe": "黑眼金十字，今天也亮晶晶。"
+    }
   }
 }

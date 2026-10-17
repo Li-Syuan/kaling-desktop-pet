@@ -142,7 +142,7 @@ function Update-CareVisual {
         $room.careScreen.Visibility=if($room.phase -eq 'care-toilet'){'Visible'}else{'Hidden'}
         $room.careFoam.Visibility=if($room.phase -eq 'care-bath'){'Visible'}else{'Hidden'}
         if($room.phase -eq 'care-toilet'){$room.actor.Visibility='Hidden'}
-        if($room.phase -eq 'care-bath'){$room.actor.Clip=[System.Windows.Media.RectangleGeometry]::new([System.Windows.Rect]::new(0,0,144,110));$room.careFoam.Opacity=1.0}
+        if($room.phase -eq 'care-bath'){$room.actor.Clip=[System.Windows.Media.RectangleGeometry]::new([System.Windows.Rect]::new(0,0,144,(Get-RoomClipHeight 110)));$room.careFoam.Opacity=1.0}
     }
 }
 function Update-Care([double]$Delta) {

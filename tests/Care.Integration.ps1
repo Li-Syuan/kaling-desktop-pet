@@ -3,7 +3,7 @@ Stop-Activity;Close-Room;Reset-Pomodoro $state;$state.quiet=$false;$state.autoHi
 $script:manualHidden=$false;$script:fullscreenHidden=$false;Update-Visibility
 function Care-Step([int]$Count){for($k=0;$k -lt $Count;$k++){Update-Care .1;if($room.open){Update-Room .1};Update-CareVisual};Pump}
 function Care-Ready {Cancel-CareActivity;if($room.open){Cancel-RoomActivity};$script:cooldownUntil=0;$script:actionUntil=0;$script:drag=$false;$script:pendingClick=$null;$script:careNotice=120}
-foreach($pair in @(@('ren','original'),@('kaling','uniform'),@('kaling','pajamas'),@('kaling','hoodie'),@('mushroom','original'),@('ribbon-pig','original'))){
+foreach($pair in @(@('ren','original'),@('kaling','uniform'),@('kaling','pajamas'),@('kaling','hoodie'),@('mushroom','original'),@('ribbon-pig','original'),@('slime','original'))){
  Select-Character $pair[0];Select-Outfit $pair[1];$state.care.characters[$state.character]=New-CharacterCare;$c=Get-ActiveCare;Care-Ready
  foreach($f in 0..7){$art=Get-CareArt 'reaction' $f;Check ($art.IsFrozen -and $art.PixelHeight -gt 0) "$($pair -join '/') care frame $f is valid"}
  $before=$c.satiety;$null=Invoke-Interaction 'cookie';Check ($c.satiety -eq $before -and $careTask.kind -eq 'food') 'feeding waits for completed animation'
@@ -34,8 +34,8 @@ foreach($pair in @(@('ren','original'),@('kaling','uniform'),@('kaling','pajamas
  Care-Ready;$c.hygiene=12;Show-Room;Pump
  Check (Request-CareAction 'bath') 'bath available from room'
  for($k=0;$k -lt 240 -and $room.phase -ne 'care-bath';$k++){Care-Step 1}
- Check ($room.phase -eq 'care-bath' -and $room.actor.Clip.Rect.Height -eq 110 -and $room.careFoam.Visibility -eq 'Visible') 'bath uses head-only clipping and foam occlusion'
- Care-Step 8;Render-Room;Check ($room.actor.Clip.Rect.Height -eq 110) 'redraw retains bath clipping';if($state.character -eq 'ren'){Capture-Room 'care-ren-bath.png'}
+ Check ($room.phase -eq 'care-bath' -and $room.actor.Clip.Rect.Height -eq $(if($state.character -eq 'slime'){144}else{110}) -and $room.careFoam.Visibility -eq 'Visible') 'bath uses head-only clipping and foam occlusion'
+ Care-Step 8;Render-Room;Check ($room.actor.Clip.Rect.Height -eq $(if($state.character -eq 'slime'){144}else{110})) 'redraw retains bath clipping';if($state.character -in @('ren','slime')){Capture-Room ('care-'+$state.character+'-bath.png')}
  Care-Step 90;Check ($room.open -and -not $w.IsVisible -and $c.hygiene -gt 99) 'bath restores hygiene and stays in already-open house'
  Care-Ready;$c.satiety=40;$c.meals=0;Request-RoomAction 'cookie';Await-RoomPhase 'food';Check ($c.meals -eq 0) 'room meal also waits until finished';Care-Step 35;Check ($c.meals -eq 1) 'room meal commits exactly once'
  Care-Ready;$c.urge=0;$c.autoTried=$true;Update-Care .1;Care-Step 26;Sync-CareMesses

@@ -92,7 +92,7 @@ Show-Room;Update-LifeVisual
 Check (-not $lifeActive -and -not $w.IsVisible -and $room.window.IsVisible) 'life: entering room leaves only room actor'
 Close-Room;Set-Animation 0 0;Update-CareVisual;Update-LifeVisual
 Check ($lifeActive) 'life: closing room returns to layered desktop'
-foreach($id in @('kaling','mushroom','ribbon-pig','ren')){
+foreach($id in @('kaling','mushroom','ribbon-pig','slime','ren')){
  Select-Character $id;Update-CareVisual;Update-LifeVisual
  Check ($lifeActive -eq ($id -eq 'ren') -and $null -eq $lifeTransition) "life: switch $id has no leftover rig or blend"
 }

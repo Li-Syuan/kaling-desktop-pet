@@ -1,0 +1,24 @@
+{
+  "tool": "image_gen built-in",
+  "reference": {
+    "page": "https://peak.nexon.com/en/post/1534",
+    "image": "https://peak-file.nexon.com/uploads/20260527_0331_e94d062d.gif"
+  },
+  "master": {
+    "file": "master.png",
+    "prompt": "Edit ONLY the two eyes of this exact green Slime character. Each eye must be a small BLACK ROUND DISC with a clearly visible GOLDEN YELLOW PLUS SIGN (+) INSIDE the black disc. The plus sign is the golden pupil/highlight, centered entirely inside the circular black eye with a visible black border all around it. Two black circular eyes, each containing one gold cross. NOT cross-shaped eye silhouettes. NOT plain gold eyes. Keep eye centers and spacing unchanged, keep the eyes small relative to the body. Preserve absolutely everything else in the input: green jelly body outline and proportions, curved top antenna ending in green ball, w-shaped mouth, shading, colors, framing, transparency. No other changes."
+  },
+  "poses": {
+    "file": "poses.png",
+    "prompt": "Create a 4 columns by 4 rows character pose atlas from this EXACT green Slime master. Preserve its identity, green jelly shading, wide rounded base, small w mouth, and curved top antenna ending in a green ball. Crucial eye design: every OPEN EYE is a SMALL BLACK CIRCLE containing a GOLDEN YELLOW PLUS SIGN (+), a gold cross inside black round eyes. NO bare cross-shaped eyes, no plain black oval eyes. Closed eyes may be short arcs only. Keep no limbs, ears, clothes, leaves, or accessories. Same scale and overall width across poses. Exactly 16 isolated full-body poses, one centered in each equal grid cell with ample transparent gaps, nothing crossing a cell border. True transparent background, no grid, labels, shadows, or scene. All antenna tips fully visible. Reading left-to-right, top-to-bottom: Row 1: (1) neutral as master; (2) gentle blink closed eyes; (3) small hop squash facing left with round black/gold-cross eyes; (4) slightly stretched hop facing left, same eyes. Row 2: (5) being petted, happy closed eyes and soft squish; (6) sad small downturned mouth but SAME black circle gold-cross eyes; (7) uncomfortable needing toilet with tense mouth but SAME black circle gold-cross eyes; (8) pleased proud tilt, SAME black circle gold-cross eyes. Row 3: (9) nibbling a small chocolate chip cookie in front of mouth, SAME black circle gold-cross eyes; (10) enjoying small caramel pudding near mouth, closed happy eyes; (11) sipping a small teacup near mouth, SAME black circle gold-cross eyes; (12) relaxed flattened jelly with sleepy closed eyes. Row 4: (13) sleeping, very low flat body, closed eyes and antenna lowered, no text; (14) stretching taller, smile and SAME black circle gold-cross eyes; (15) peeking, low crouching body with SAME black circle gold-cross eyes, no box drawn; (16) gently bumping a small peach-colored ball at side with jelly body, SAME black circle gold-cross eyes. Snacks and ball are tiny props touching the jelly; NO hands or feet. Stay very close to the provided master in proportions and rendering. The sixteen separate poses will be cropped into animation frames."
+  },
+  "identity": [
+    "black round eyes containing a gold plus cross",
+    "green jelly body and broad rounded base",
+    "curved antenna with a round green ball",
+    "small w mouth"
+  ],
+  "alpha": "Generated PNG and alpha preserved byte-for-byte",
+  "originalMasterPrompt": "Create ONE full-body character master of MapleStory's classic green Slime (綠水靈), faithfully redrawing the attached ORIGINAL IN-GAME sprite frames. Image 1 is the taller bounce silhouette; image 2 is the relaxed shape and face. Preserve the actual game's green slime identity and proportions: a low round bulbous lime-green jelly body with a soft broad continuous base, a narrow flexible tapered extension rising from the top and curving to the RIGHT, ending in one tiny round GREEN ball. The top appendage is part of the slime, NOT a plant sprout: NO leaves, NO flower, NO separate brown stem. Two very small dark oval eyes, tiny highlights and a tiny understated w-shaped mouth near the middle of the body. Neutral grounded pose, slightly wider body than tall, no arms, legs, ears or clothing. Green light-to-dark two-tone shading and a modest pale jelly highlight following the game sprite, retain clean dark green-brown outlines. Make a restrained clean high-resolution 2D game illustration faithful to this sprite, not a 3D toy and not a generic RPG slime. Keep eyes tiny, no eyelashes, blush stickers, big mouth or extra accessories. Entire character including the tiny ball and thin curved top tip must remain visible. Single isolated character centered with ample 15 percent transparent margin, true transparent background, no ground shadow, no scenery, no text, no border, no aura or glow.",
+  "correction": "User: 黑色圓眼搭金色十字; supersedes original oval eyes and bare plus-shaped eyes."
+}
